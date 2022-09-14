@@ -2,6 +2,7 @@ import React from "react";
 import { Outlet, Link } from "react-router-dom";
 
 import Header from "./components/Header"
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -13,10 +14,11 @@ function App() {
                 marginBottom: "0px"
             }
         }>
-        <Link to = "/main" style = {{ marginLeft: "20px" } } > MainWindow </Link> |{" "}
+        <Link to = "/Home" style = {{ marginLeft: "20px" } } > MainWindow </Link> |{" "}
         </nav> 
         <Header/>
-        <Outlet/>
+        <Outlet className="main-content"/>
+        <Footer/>
     </div>
   );
 }

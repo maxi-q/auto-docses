@@ -1,15 +1,26 @@
 import React from "react";
-import logo from '../images/logo.png';
+import { Link } from 'react-router-dom'
+
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+
 
 const Head = () => {
     return(
-        <div className="header">
-            <div className="header_logo">
-                <img className="header_logo_img" src={logo}/>
-            </div>
-            <div className="header_home"></div>
-            <div className="header_about"></div>
-        </div>
+        <Navbar bg="light" expand="lg">
+        <Container>
+        <Navbar.Brand as={Link} to="/Home"> Auto Docses </Navbar.Brand>
+          
+          <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+          <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="me-auto">
+               <Nav.Link as={Link} to="/Home"> Home </Nav.Link>
+              <Nav.Link as={Link} to="/Home" href="#link"> Link </Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     )
 }
 

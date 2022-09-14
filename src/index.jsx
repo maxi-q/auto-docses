@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import App from './App';
-import './styles/style.css'
-import 'normalize.css'
+import ReactDOM from 'react-dom/client';
 import Main from './pages/main';
+import React from 'react';
+import App from './App';
+import 'normalize.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css'
+import './styles/style.css'
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App/>}>
-        <Route path='main' element={<Main/>}/>
+        <Route path='Home' element={<Main/>}/>
       </Route>
     </Routes>
   </BrowserRouter>
