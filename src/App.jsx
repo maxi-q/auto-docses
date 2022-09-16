@@ -17,7 +17,7 @@ function App() {
         <Link to = "/Home" style = {{ marginLeft: "20px" } } > MainWindow </Link> |{" "}
         </nav> 
         <Header/>
-        <Outlet className="main-content"/>
+        <main className="main-content"><Outlet/></main>
         <Footer/>
     </div>
   );

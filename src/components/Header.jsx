@@ -6,22 +6,22 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 
-const Head = () => {
+const Header = () => {
     return(
-        <Navbar bg="light" expand="lg">
-        <Container>
-        <Navbar.Brand as={Link} to="/Home"> Auto Docses </Navbar.Brand>
-          
-          <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-               <Nav.Link as={Link} to="/Home"> Home </Nav.Link>
-              <Nav.Link as={Link} to="/Home" href="#link"> Link </Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+        <Navbar as='header' bg="light" expand="lg">
+          <Container>
+          <Navbar.Brand as={Link} to="/Home"> Auto Docses </Navbar.Brand>
+            
+            <Navbar.Toggle aria-controls="basic-navbar-nav"/>
+            <Navbar.Collapse id="basic-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link as={Link} to="/Home"> Home </Nav.Link>
+                <Nav.Link as={Link} to="/Home" href="#link"> Link </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Container>
+        </Navbar>
     )
 }
 
-export default Head;
+export default Header;
