@@ -1,0 +1,52 @@
+/* gradient background */
+.css-selector {
+    background: linear-gradient(87deg, #2c4cd0, #f53329, #99479a, #819a4f);
+    background-size: 800% 800%;
+
+    -webkit-animation: AnimationName 60s ease infinite;
+    -moz-animation: AnimationName 60s ease infinite;
+    animation: AnimationName 60s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:76% 0%}
+    50%{background-position:25% 100%}
+    100%{background-position:76% 0%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:76% 0%}
+    50%{background-position:25% 100%}
+    100%{background-position:76% 0%}
+}
+@keyframes AnimationName {
+    0%{background-position:76% 0%}
+    50%{background-position:25% 100%}
+    100%{background-position:76% 0%}
+}
+
+/* jumping text */
+
+.waviy {
+    position: relative;
+    -webkit-box-reflect: below -20px linear-gradient(transparent, rgba(0,0,0,.2));
+    font-size: 60px;
+  }
+  .waviy span {
+    font-family: 'Alfa Slab One', cursive;
+    position: relative;
+    display: inline-block;
+    color: rgb(215, 200, 200);
+    text-transform: uppercase;
+    animation: waviy 2s infinite;
+    animation-delay: calc(.21s * var(--i));
+    
+  }
+  @keyframes waviy {
+    0%,40%,100% {
+      transform: translateY(0)
+    }
+    20% {
+      transform: translateY(-20px)
+    }
+}
+

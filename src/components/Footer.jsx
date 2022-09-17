@@ -12,9 +12,7 @@ const Footer = () => {
       <MDBContainer className='pt-4'>
         <section className='mb-4'>
           <MDBBtn
-
             rippleColor="dark"
-            link
             floating
             size="lg"
             className='text-dark m-1'

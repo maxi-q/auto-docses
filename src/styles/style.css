@@ -22,7 +22,8 @@ a {
 }
 
 .main-content{
-    min-height: 300px;
+    background-color: rgb(179, 208, 208);
+    min-height: 1000px;
     flex: 1 0 auto;
 }
 
