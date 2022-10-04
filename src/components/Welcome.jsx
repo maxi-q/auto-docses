@@ -1,28 +1,16 @@
-import React from 'react';
-import {createUseStyles} from 'react-jss'
+import React,{useState} from 'react';
+import Modal from './Modal';
 
-const useStyles = createUseStyles({
-     
-    body: {
-        width:'90%',
-        maxWidth:'800px',
-        minHeight:'30%',
-        backgroundColor:'#fccff0',
-        display: 'block',
-        position: 'fixed',
-        left:'50%',
-        marginLeft:'-100px',
-        textAlign: 'center',
-        zIndex:'999'
-      }
-})
 const Welcome = () => {
-    const classees = useStyles()
+    const [modalActive, setModalActive] = useState(true);
+
     return (
-        <div className={'' + classees.body}>
-            werxxx
-        </div>
-    );
-};
+        <>
+        <button className='open-btn' onClick={()=>{setModalActive(true)}}>Открыть модальное окно</button>
+        <Modal active={modalActive} setActive={setModalActive}/>
+        </>
+    )
+}
+
 
 export default Welcome;

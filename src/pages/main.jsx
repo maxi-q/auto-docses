@@ -1,6 +1,7 @@
 import React from "react";
 import {createUseStyles} from 'react-jss'
 import JumpWord from "../components/JumpWord";
+import Welcome from "../components/Welcome";
 
 const useStyles = createUseStyles({
   
@@ -34,16 +35,19 @@ const Main = () => {
     const classees = useStyles()
 
     return (
-       <div className={"d-flex w-100 mx-auto " + classees.body}>
-          <div className={" flex-grow-1 bd-highlight " + classees.first_item}>
-            <JumpWord cssSelector={classees.gradient} waviy={classees.waviy}/>
-          </div>
-          <div className={"p-2 w-25 flex-shrink-1 bd-highlight " + classees.second_item}>
-            <div>
-
+      <>
+        <div className={"d-flex w-100 mx-auto " + classees.body}>
+            <div className={" flex-grow-1 bd-highlight " + classees.first_item}>
+              <JumpWord cssSelector={classees.gradient} waviy={classees.waviy}/>
             </div>
-          </div>
-       </div>
+            <div className={"p-2 w-25 flex-shrink-1 bd-highlight " + classees.second_item}>
+              <div>
+
+              <Welcome/>
+              </div>
+            </div>
+        </div>
+      </>
     );
   }
 

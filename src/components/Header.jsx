@@ -8,7 +8,7 @@ import Navbar from 'react-bootstrap/Navbar';
 
 const Header = () => {
     return(
-        <Navbar as='header' bg="light" expand="lg" class="navbar navbar-light ">
+        <Navbar as='header' bg="light" expand="lg" className="navbar navbar-light ">
           <Container>
             <Navbar.Brand as={Link} to="/Home"> Auto Docses </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav"/>
