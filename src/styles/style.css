@@ -36,6 +36,38 @@ a {
     flex: 1 0 auto;
 }
 
+.loadPage {
+    padding-top: 3em;
+}
+
+.loadBox {
+    background: rgb(227, 227, 227);
+    padding: 4px;
+    min-height: 100px;
+    height: min-content;
+    border-radius: 12px;
+    margin: 0 7%;
+    display: flex;
+    flex-direction: column;
+}
+.loadBox h3 {
+    
+}
+.loadPage__openbtn {
+    border-radius: 12px;
+    margin-top: 20px;
+    border: none;
+    width: 140px;
+    background-color: rgb(166, 223, 67);
+}
+.loadPage__loadbtn{
+    border-radius: 12px;
+    margin-top: 10px;
+    border: 2px solid rgb(60, 107, 14);
+    width: 140px;
+    background-color: rgb(206, 233, 159);
+}
+
 .modalPLP {
     height: 100vh;
     width: 100vw;

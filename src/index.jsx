@@ -9,7 +9,7 @@ import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 import './styles/style.css'
 import './styles/hardcss.css'
 import Welcome from './components/Welcome';
-
+import LoadPage from './pages/LoadPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +17,10 @@ root.render(
     <Routes>
       <Route path="/" element={<App/>}>
         <Route path='Home' element={<Main/>}/>
+        <Route path='/LoadPage' element={<LoadPage/>}/>
       </Route>
+      
     </Routes>
   </BrowserRouter>
 );
+
