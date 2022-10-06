@@ -67,7 +67,19 @@ a {
     width: 140px;
     background-color: rgb(206, 233, 159);
 }
-
+.loadPage__input {
+    display: none;
+}
+.loadPage__peview {
+    display: flex;
+    flex-wrap: wrap;
+    padding: .5rem;
+}
+.loadPage__peview__image {
+    padding: .5rem;
+    width: 100px;
+    height: auto;
+}
 .modalPLP {
     height: 100vh;
     width: 100vw;
