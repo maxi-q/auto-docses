@@ -8,7 +8,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'mdb-react-ui-kit/dist/css/mdb.min.css'
 import './styles/style.css'
 import './styles/hardcss.css'
-import Welcome from './components/Welcome';
 import LoadPage from './pages/LoadPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

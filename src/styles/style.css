@@ -73,11 +73,12 @@ a {
 .loadPage__peview {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     padding: .5rem;
 }
 .loadPage__peview__image {
     padding: .5rem;
-    width: 100px;
+    width: 400px;
     height: auto;
 }
 .modalPLP {
