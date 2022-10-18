@@ -1,26 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import DocViewer, { DocViewerRenderers }  from 'react-doc-viewer';
-
-const trueUpload = (options = {}) => {
-    const input = document.querySelector("#file")
-    const preview = document.createElement('div')
-    preview.classList.add('loadPage__peview')
-
-    const open = document.createElement('button')
-
-    open.classList.add('loadPage__openbtn')
-    open.textContent = 'Открыть'
-    
-    if (options.multi) {
-        input.setAttribute('multiple', true)
-    }
-    if (options.accept && Array.isArray(options.accept)) {
-        input.setAttribute('accept', options.accept.join(','))
-    }
-}
+import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
 
 const LoadPage = () => {
     const [open, setOpen] = useState(true);
+    const [upload, setUpload] = useState(false);
     const [files, setFiles] = useState([]);
     const [src, setSrc] = useState([]);
 
@@ -28,20 +11,23 @@ const LoadPage = () => {
 
     let inputElement = '';
 
-    useEffect(() => {
-        trueUpload({
-            //multi: false,
-            //accept: ['.docx']
-        })
-        }, []);
-    const uploadClick = e => {
-        e.preventDefault()
+    const uploadClick = () => {
+        console.log(';загрузка на сервер...')
+    }
+    const openClick = e => {
+        e.stopPropagation()
         inputElement.click()
     }
     const changeHundler = (e) => {
         setFiles(Array.from(e.target.files))
     }
     useEffect(() => {
+        if (files.length == 0) {
+            setSrc([])
+            setUpload(false)
+            return
+        }
+        setUpload(true)
         files.forEach(file => {
             const reader = new FileReader()
             reader.onload = ev => {
@@ -51,24 +37,29 @@ const LoadPage = () => {
 
             reader.readAsDataURL(file)
         })
+        
     }, [files])
-
+    const doc = [{ uri: require("../tests/test5.jpg") }];
+    let a = 0
+    
     return (
         <>
         <div className={" loadPage"}>
             <div className={" loadBox "}>
                 <h3>Загрузка файлов</h3>
-                <label>
+                <div>
                     <input ref={input => {inputElement = input}} onChange={changeHundler} type="file" id="file" placeholder="Search" className='loadPage__input'/>
-                    {open ? (<button onClick={uploadClick} className='loadPage__openbtn'>Открыть</button>) : (nope)}
+                    {open ? (<button onClick={openClick} className='loadPage__openbtn'>Открыть</button>) : (nope)}
+                    {upload ? (<button onClick={uploadClick}></button>) : nope}
                     {src ? (<div className='loadPage__peview'>
                         {src.map(srcer => {
-                                console.log(srcer)
-                                // return <DocViewer key={srcer} pluginRenderers={DocViewerRenderers} documents={require('../tests/test1.docx')}/>
-                                return <img key={srcer} className='loadPage__peview__image' src={srcer}/>
+                            a+=1
+                            console.log(srcer)
+                                return <DocViewer key={a} pluginRenderers={DocViewerRenderers} documents={[{ uri: srcer}]}/>
+                                // return <DocViewer key={srcer.target.total} pluginRenderers={DocViewerRenderers} style={{width: "auto", height: 1000}} documents={srcer} />;
                         })}
                     </div>) : nope}
-                </label>
+                </div>
                 {/* <button className='loadPage__openbtn'>Открыть</button>
                 <button className='loadPage__loadbtn'>Загрузить</button> */}
             </div>
