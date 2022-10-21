@@ -56,9 +56,20 @@ a {
 .loadPage__openbtn {
     border-radius: 12px;
     margin-top: 20px;
-    border: none;
+    border: 4px solid rgb(166, 223, 67);
     width: 140px;
     background-color: rgb(166, 223, 67);
+}
+.loadPage__uploadbtn {
+    border-radius: 12px;
+    margin-left: 10px;
+    margin-top: 20px;
+    border: 4px solid rgb(166, 223, 67);
+    width: 140px;
+    background-color: rgb(255, 255, 255);
+}
+.loadPage__DocViewer {
+    
 }
 .loadPage__loadbtn{
     border-radius: 12px;
@@ -81,6 +92,7 @@ a {
     width: 400px;
     height: auto;
 }
+
 .modalPLP {
     height: 100vh;
     width: 100vw;

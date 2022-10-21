@@ -5,7 +5,7 @@ import React from 'react';
 import App from './App';
 import 'normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'mdb-react-ui-kit/dist/css/mdb.min.css'
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
 import './styles/style.css'
 import './styles/hardcss.css'
 import LoadPage from './pages/LoadPage';

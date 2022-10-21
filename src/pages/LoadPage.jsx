@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
+import { sendFile } from '../config/requests';
 
 const LoadPage = () => {
-    const [open, setOpen] = useState(true);
     const [upload, setUpload] = useState(false);
     const [files, setFiles] = useState([]);
     const [src, setSrc] = useState([]);
@@ -12,8 +12,10 @@ const LoadPage = () => {
     let inputElement = '';
 
     const uploadClick = () => {
-        console.log(';загрузка на сервер...')
+        sendFile(files)
+
     }
+
     const openClick = e => {
         e.stopPropagation()
         inputElement.click()
@@ -22,7 +24,7 @@ const LoadPage = () => {
         setFiles(Array.from(e.target.files))
     }
     useEffect(() => {
-        if (files.length == 0) {
+        if (files.length === 0) {
             setSrc([])
             setUpload(false)
             return
@@ -34,14 +36,11 @@ const LoadPage = () => {
                 const srcer = ev.target.result
                 setSrc([srcer])
             }
-
             reader.readAsDataURL(file)
         })
-        
     }, [files])
-    const doc = [{ uri: require("../tests/test5.jpg") }];
+
     let a = 0
-    
     return (
         <>
         <div className={" loadPage"}>
@@ -49,13 +48,11 @@ const LoadPage = () => {
                 <h3>Загрузка файлов</h3>
                 <div>
                     <input ref={input => {inputElement = input}} onChange={changeHundler} type="file" id="file" placeholder="Search" className='loadPage__input'/>
-                    {open ? (<button onClick={openClick} className='loadPage__openbtn'>Открыть</button>) : (nope)}
-                    {upload ? (<button onClick={uploadClick}></button>) : nope}
+                    <button onClick={openClick} className='loadPage__openbtn'>Открыть</button>
+                    {upload ? (<button onClick={uploadClick} className='loadPage__uploadbtn'>Загрузить</button>) : nope}
                     {src ? (<div className='loadPage__peview'>
                         {src.map(srcer => {
-                            a+=1
-                            console.log(srcer)
-                                return <DocViewer key={a} pluginRenderers={DocViewerRenderers} documents={[{ uri: srcer}]}/>
+                            return nope
                                 // return <DocViewer key={srcer.target.total} pluginRenderers={DocViewerRenderers} style={{width: "auto", height: 1000}} documents={srcer} />;
                         })}
                     </div>) : nope}
