@@ -18,4 +18,4 @@ export const sendFile = async (files) => {
             .then(js => console.log(js))
         )
         
-}
+} 
