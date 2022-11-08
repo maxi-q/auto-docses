@@ -1,21 +1,24 @@
 import React, {useState, useEffect} from 'react';
-import DocViewer, { DocViewerRenderers } from "react-doc-viewer";
-import { sendFile } from '../config/requests';
-import axios from "axios";
+import axios from 'axios'
+
+import { Viewer, Worker } from '@react-pdf-viewer/core';
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+
 
 const LoadPage = () => {
+    const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
+
     const [upload, setUpload] = useState(false);
     const [files, setFiles] = useState([]);
-    const [src, setSrc] = useState([]);
+    const [url, setUrl] = useState('');
 
     function nope () { return <></> }
 
     let inputElement = '';
-
-    const uploadClick = () => {
-        sendFile(files)
-
-    }
 
     const openClick = e => {
         e.stopPropagation()
@@ -25,42 +28,24 @@ const LoadPage = () => {
         setFiles(Array.from(e.target.files))
     }
     useEffect(() => {
-        if (files.length === 0) {
-            setSrc([])
-            setUpload(false)
-            return
-        }
-        setUpload(true)
-        files.forEach(file => {
-            const reader = new FileReader()
-            reader.onload = ev => {
-                const srcer = ev.target.result
-                setSrc([srcer])
-            }
-            reader.readAsDataURL(file)
-        })
+        if (Boolean(files.length)) 
+            setUrl([ URL.createObjectURL(files[0]) ])
+        else setUrl('')
+        setUpload(Boolean(files.length))
     }, [files])
 
     const sumbitFile = () => {
-        const dataArray = new FormData();
-        dataArray.append("uploadFile", files[0]);
-
-        
-        fetch('http://192.168.88.62:5000/load_file', {
-            method:'POST',
-            headers: new Headers({
-                'Content-Type': 'multipart/form-data',
-                "type": "formData"
-            }),
-            body: dataArray
+        const formData = new FormData();
+        files.forEach((file) => {
+            formData.append(`file`, file);
         })
-        .then((json) => json.json()
-            .then(js => console.log(js))
-        )
+        axios.post('http://192.168.0.107:5000/load_file', formData)
+        .then((json) => console.log(json))
         .catch(error => console.log(error, "error"))
 
     }
 
+    
     let a = 0
     return (
         <>
@@ -68,18 +53,22 @@ const LoadPage = () => {
             <div className={" loadBox "}>
                 <h3>Загрузка файлов</h3>
                 <div>
-                    <input ref={input => {inputElement = input}} onChange={changeHundler} type="file" id="file" placeholder="Search" className='loadPage__input'/>
+                    <input ref={input => {inputElement = input}} multiple="multiple" onChange={changeHundler} type="file" id="file" placeholder="Search" className='loadPage__input'/>
                     <button onClick={openClick} className='loadPage__openbtn'>Открыть</button>
                     {upload ? (<button onClick={sumbitFile} className='loadPage__uploadbtn'>Загрузить</button>) : nope()}
-                    {src ? (<div className='loadPage__peview'>
-                        {src.map(srcer => {
-                            return nope()
-                                // return <DocViewer key={srcer.target.total} pluginRenderers={DocViewerRenderers} style={{width: "auto", height: 1000}} documents={srcer} />;
+                    {upload ? (<div className='loadPage__peview'> 
+                        {url.map((urla, i) => {
+                            console.log(url)
+                            return(
+                                <Worker key={i} workerUrl="https://unpkg.com/pdfjs-dist@2.15.349/build/pdf.worker.js">
+                                    <Viewer className="loadPage__preview__Viever" plugins={[
+                                        defaultLayoutPluginInstance
+                                    ]} fileUrl={urla} />
+                                </Worker>
+                            )
                         })}
-                    </div>) : nope()}
+                    </div>) : <div className='loadPage__peview'>Файл не выбран</div>}
                 </div>
-                {/* <button className='loadPage__openbtn'>Открыть</button>
-                <button className='loadPage__loadbtn'>Загрузить</button> */}
             </div>
         </div>
         </>

@@ -50,9 +50,6 @@ a {
     display: flex;
     flex-direction: column;
 }
-.loadBox h3 {
-    
-}
 .loadPage__openbtn {
     border-radius: 12px;
     margin-top: 20px;
@@ -68,8 +65,8 @@ a {
     width: 140px;
     background-color: rgb(255, 255, 255);
 }
-.loadPage__DocViewer {
-    
+.loadPage__preview__Viever {
+    max-width: 1500px;   
 }
 .loadPage__loadbtn{
     border-radius: 12px;
