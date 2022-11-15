@@ -38,15 +38,22 @@ a {
 
 .loadPage {
     padding-top: 3em;
+    display: flex;
+}
+
+.autofill {
+    width: 250px;
+    height: 100vh;
+    background-color: azure;
 }
 
 .loadBox {
     background: rgb(227, 227, 227);
     padding: 4px;
-    min-height: 100px;
-    height: min-content;
+    min-height: 100vh;
     border-radius: 12px;
     margin: 0 7%;
+    flex: 1;
     display: flex;
     flex-direction: column;
 }
@@ -80,14 +87,25 @@ a {
 }
 .loadPage__peview {
     display: flex;
+    height: 100%;
+    
     flex-wrap: wrap;
     justify-content: center;
     padding: .5rem;
+}
+.div_loadBox {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 .loadPage__peview__image {
     padding: .5rem;
     width: 400px;
     height: auto;
+}
+
+.webviewer {
+    width: 100%;    
 }
 
 .modalPLP {
