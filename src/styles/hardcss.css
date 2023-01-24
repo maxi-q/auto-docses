@@ -142,22 +142,6 @@ aside.autofill input[type=text] {
   word-break: break-word; 
 }
 
-aside.autofill input[type=submit] {
-  background-color: #4990CD;
-  cursor: pointer;
-  display: block;
-  padding: 20px;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  border-radius: 5px;
-  border-width: 0px;
-  color: white;
-  font-size: 1.08em;
-  margin-top: 0px;
-  margin-left: auto;
-  border: 2px solid #4990CD;
-  font-family: 'Lato';
-}
 
 aside.autofill input[type=file] {
   background-color: white;

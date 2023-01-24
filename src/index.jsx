@@ -18,7 +18,6 @@ root.render(
         <Route path='Home' element={<Main/>}/>
         <Route path='/LoadPage' element={<LoadPage/>}/>
       </Route>
-      
     </Routes>
   </BrowserRouter>
 );

@@ -27,7 +27,8 @@ const LoadPage = () => {
           {
             path: '/lib',
             preloadWorker: 'office',
-            fullAPI: false
+            css: '../styles/trooncss.css',
+            fullAPI: false,
           },
           viewer.current
         ).then((instance) => {
@@ -62,7 +63,7 @@ const LoadPage = () => {
                                     <textarea rows={1.4} className='value-field' type='text' name={key}></textarea>
                                     <br/>
                                 </div>)})}
-                        {keys.length ? (<><input type='submit' value="Заполнить" name='Autofill'></input> <br/></>) : nope}
+                        {keys.length ? (<><input type='submit' className='auto-fill-button' value="Заполнить" name='Autofill'></input> <br/></>) : nope}
                         </>
                     )
                 });
@@ -116,7 +117,6 @@ const LoadPage = () => {
                 autofillMap[k] = String(autofillMap[k]);
             }
         }
-
         await documentViewer_S.getDocument().applyTemplateValues(autofillMap);
     }
 
