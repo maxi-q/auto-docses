@@ -5,7 +5,6 @@ function upload(selector) {
     const open = document.createElement('button')
     open.classList.add('loadPage__openbtn')
     open.textContent = 'Открыть'
-    console.log(document.querySelector("#file"))
     input.insertAdjacentElement('aftereend', open)
     
 }
