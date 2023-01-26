@@ -1,0 +1,1 @@
+export { LoadPage } from './components'

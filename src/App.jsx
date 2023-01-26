@@ -1,32 +1,36 @@
 import React from "react";
 import { Outlet, Link } from "react-router-dom";
-import Header from "./components/Header"
-import Footer from "./components/Footer";
-import Modal from "./components/Modal";
 
+import { Header } from "./modules"
+import { Footer } from "./modules"
+// import {Footer} from "./components/Footer";
 
-function App() {
+import styled from 'styled-components';
 
+export function App() {
   return (
-    <div className="App">
-      < nav style = {
-            {
-                borderBottom: "solid 1px",
-                paddingBottom: "1rem",
-                marginBottom: "0px"
-            }
-        }>
-        <Link to = "/Home" style = {{ marginLeft: "20px" } } > MainWindow </Link> |{" "}
-        </nav> 
-        <Header/>
-        <main className="main-content">
-          <Modal />
+    <>
+      < DeveloperNav>
+        <Link to="/Home" style={{ marginLeft: "20px" } }> MainWindow </Link> |{" "}
+        <Link to="/LoadPage"> LoadPage </Link> |{" "}
+      </DeveloperNav> 
+
+      <Header/>
+        <MainStyled>
           <Outlet/>
-        </main>
-        <Footer/>
-    </div>
+        </MainStyled>
+      <Footer/>
+    </>
   );
-  
 }
 
-export default App;
+const DeveloperNav = styled('nav')`
+  border-bottom: solid 1px;
+  padding-bottom: .5rem;
+  margin-bottom: 0px;
+`
+const MainStyled = styled.div`
+  background-color: rgb(179, 208, 208);
+  min-height: 1000px;
+  flex: 1 0 auto;
+`
