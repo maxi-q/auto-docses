@@ -1,46 +1,30 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-
+import { GradientBG } from '../../ui/GradientBG';
 export const JumpWord = () => {
+
+    const background = 'linear-gradient(87deg, #2c4cd0, #f53329, #99479a, #819a4f)'
+    
     return (
         <>
-            <Gradient>
+            <GradientBG linearGradient={ background }>
                 <Waviy>
-                <Waviyspan style={{"--i": 1}}>О</Waviyspan>
-                <Waviyspan style={{"--i": 2}}>Х</Waviyspan>
-                <Waviyspan style={{"--i": 3}}>Л</Waviyspan>
-                <Waviyspan style={{"--i": 4}}>А</Waviyspan>
-                <Waviyspan style={{"--i": 5}}>М</Waviyspan>
-                <Waviyspan style={{"--i": 6}}>О</Waviyspan>
-                <Waviyspan style={{"--i": 7}}>Н</Waviyspan>
-                <Waviyspan style={{"--i": 8}}>И</Waviyspan>
-                <Waviyspan style={{"--i": 9}}>С</Waviyspan>
-                <Waviyspan style={{"--i": 10}}>Т</Waviyspan>
+                    <Waviyspan style={{"--i": 1}}>О</Waviyspan>
+                    <Waviyspan style={{"--i": 2}}>Х</Waviyspan>
+                    <Waviyspan style={{"--i": 3}}>Л</Waviyspan>
+                    <Waviyspan style={{"--i": 4}}>А</Waviyspan>
+                    <Waviyspan style={{"--i": 5}}>М</Waviyspan>
+                    <Waviyspan style={{"--i": 6}}>О</Waviyspan>
+                    <Waviyspan style={{"--i": 7}}>Н</Waviyspan>
+                    <Waviyspan style={{"--i": 8}}>И</Waviyspan>
+                    <Waviyspan style={{"--i": 9}}>С</Waviyspan>
+                    <Waviyspan style={{"--i": 10}}>Т</Waviyspan>
                 </Waviy>
-            </Gradient>
+            </GradientBG>
         </>
     );
 };
-const bouncing = keyframes`
-            0%{background-position:76% 0%}
-            50%{background-position:25% 100%}
-            100%{background-position:76% 0%}
-`
 
-const Gradient = styled.div`
-        height:100%;
-        width:100%;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        background: linear-gradient(87deg, #2c4cd0, #f53329, #99479a, #819a4f);
-        background-size: 800% 800%;
-
-        -webkit-animation: AnimationName 60s ease infinite;
-        -moz-animation: AnimationName 60s ease infinite;
-        animation: ${bouncing} 60s ease infinite;
-
-`
 
 const Waviy = styled.div`
     margin-top: 16px;

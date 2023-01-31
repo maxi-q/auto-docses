@@ -1,11 +1,13 @@
 import styled from "styled-components";
+import { Button } from "../../../../../ui/Button";
 
 export const Aside = (props) => {
     return  (
         <>
             <AsideStyled>
                 <Title>{ props.documentName }</Title>
-                <br />
+                <Spacer />
+                <Spacer />
                 <StatusLoadKeys id="key-val-title">{ props.keyValues }</StatusLoadKeys>
                 <ActionLabel>{ props.actionLabel }</ActionLabel>
                 <form ref={props.autoFillForm} onSubmit={props.fillFile}>{ props.autoFills }</form>
@@ -13,10 +15,10 @@ export const Aside = (props) => {
                     <Title>Загрузка файла:</Title>
                     <ActionLabel>Выберите свой собственный шаблон документа</ActionLabel>
                     <Spacer />
-                    <CustomFileUpload>
+                    <Button>
                         <Input id="file-picker" type="file" accept=".docx"/>
                         Выбрать файл 
-                    </CustomFileUpload>
+                    </Button>
                     <FileStatus>{ props.fileUploaded }</FileStatus>
                 </SendGroup>
             </AsideStyled>
@@ -57,23 +59,29 @@ const SendGroup = styled.div`
 const Spacer = styled.div`
   height: 9px;
 `
-const CustomFileUpload = styled.div`
-    background-color: white;
-    cursor: pointer;
-    padding: 10px;
-    padding-bottom: 4px;
-    padding-top: 4px;
-    border-radius: 5px;
-    border: 2px solid #4990CD;
-    color: #4990CD;
-    font-size: 1.08em;
-    margin-top: 7px;
-    
-`
 const FileStatus = styled("span")`
-    margin-left:10px;
-    font-size: 1.0em;
+margin-left:10px;
+font-size: 1.0em;
 `
 const Input = styled.input`
     display:none;
 `
+
+
+
+
+
+
+
+// const CustomFileUpload = styled.div`
+//     background-color: white;
+//     cursor: pointer;
+//     padding: 10px;
+//     padding-bottom: 4px;
+//     padding-top: 4px;
+//     border-radius: 5px;
+//     border: 2px solid #4990CD;
+//     color: #4990CD;
+//     font-size: 1.08em;
+//     margin-top: 7px;
+// `

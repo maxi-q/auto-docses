@@ -12,7 +12,9 @@ export const Main = () => {
           <JumpWord />
         </LeftBlock>
         <RightBlock>
-          <Welcome />
+          <Welcome buttontext={"Открыть модальное окно"}>
+            Modal`s childrens
+          </Welcome>
         </RightBlock>
       </Body>
     );

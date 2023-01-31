@@ -1,29 +1,18 @@
-
-export { Main } from './Main'
-export { LoadPage } from './LoadPage'
-
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 
+import { Main } from './Main';
+import { LoadPage } from './LoadPage';
 
-
-
-// import { Route } from 'react-router-dom'
-
-// import React from 'react';
-
-// import { Main } from './Main';
-// import { LoadPage } from './LoadPage';
-
-// export const Pages = () => {
-//     return (
-//         <>
-//             <Route path='/' element={<App/>}>
-//                 <Route path='/Home' element={<Main/>}/>
-//                 <Route path='/LoadPage' element={<LoadPage/>}/>
-//             </Route>
-//         </>
-//     );
-// }
+export const Navigation = () => {
+	return (
+		<Routes>
+			<Route path='/Home' element={<Main/>}/>
+			<Route path='/LoadPage' element={<LoadPage/>}/>
+		</Routes>
+	);
+}
 
 
 

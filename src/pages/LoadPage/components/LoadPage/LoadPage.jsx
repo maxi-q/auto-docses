@@ -1,11 +1,13 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, createRef} from 'react';
 import WebViewer from '@pdftron/webviewer';
+import styled from 'styled-components';
 
 import { sumbitFiles, sumbitСhanges } from '../../api/cum'
-import { Aside } from './components/Aside';
-import { createRef } from 'react';
 import { LoadBox } from './components/LoadBox';
-import styled from 'styled-components';
+import { Input } from '../../../../ui/Input';
+import { Aside } from './components/Aside';
+import { Textarea } from '../../../../ui/Textarea';
+
 export const LoadPage = () => {
 
     const viewer = useRef();
@@ -24,56 +26,58 @@ export const LoadPage = () => {
     const [fillingMap, setFillingMap] = useState({});
 
     const autoFillForm = createRef();
-    useEffect(() => {
-        WebViewer(
-          {
-            path: '/lib',
-            preloadWorker: 'office',
-            fullAPI: false
-          },
-          viewer.current
-        ).then((instance) => {
-            const { documentViewer } = instance.Core
-            setInstance(instance)
-            setParentUrl(window.location.href)
-            setDocumentViewer(documentViewer)
-            
-            instance.UI.disableElements([ 'leftPanel', 'leftPanelButton', 'header' ]);
-            instance.UI.loadDocument(url[0], { filename: files[0].name });
+    // useEffect(() => {
+    //     WebViewer(
+    //       {
+    //         path: '/lib',
+    //         preloadWorker: 'office',
+    //         fullAPI: false,
+    //         charset: 'UTF-8'
+    //       },
+    //       viewer.current
+    //     ).then((instance) => {
+    //         const { documentViewer } = instance.Core
+    //         setInstance(instance)
+    //         setParentUrl(window.location.href)
+    //         setDocumentViewer(documentViewer)
+    //         instance.UI.setLanguage('ru');
+    //         instance.UI.disableElements([ 'leftPanel', 'leftPanelButton', 'header' ]);
+    //         instance.UI.loadDocument(url[0], { filename: files[0].name });
 
 
-            documentViewer.addEventListener('documentLoaded', async () => {
-                await documentViewer.getDocument().documentCompletePromise();
-                documentViewer.updateView();
-                const doc = documentViewer.getDocument();
+    //         documentViewer.addEventListener('documentLoaded', async () => {
+    //             await documentViewer.getDocument().documentCompletePromise();
+    //             documentViewer.updateView();
+    //             const doc = documentViewer.getDocument();
 
-                console.log(doc.filename, url[0])
+    //             console.log(doc.filename, url[0])
 
-                setActionLabel('Отправить для заполнения документа')
-                setAutofillHidden(false)
-                setDocumentName(doc.filename)
-                setKeyValues('Ключи документа:')
+    //             setActionLabel('Отправить для заполнения документа')
+    //             setAutofillHidden(false)
+    //             setDocumentName(doc.filename)
+    //             setKeyValues('Ключи документа:')
 
-                doc.getTemplateKeys().then(keys => {
-                    setAutoFills(
-                        <>
-                        {keys.map((key, i) => {
-                            return(
-                                <FeatureInput id={i}>
-                                    <KeyLable>{key}:</KeyLable>
-                                    <TextareaLable rows={1.4} type='text' name={key}></TextareaLable>
-                                </FeatureInput>)})}
-                        {keys.length ? (<><InputForm type='submit' value="Заполнить" name='Autofill'></InputForm> <br/></>) : nope}
-                        </>
-                    )
-                });
-            })
+    //             console.log(doc)
+    //             doc.getTemplateKeys().then(keys => {
+    //                 setAutoFills(
+    //                     <>
+    //                     {keys.map((key, i) => {
+    //                         return(
+    //                             <FeatureInput id={i}>
+    //                                 <KeyLable>{key}:</KeyLable>
+    //                                 <Textarea rows={1.4} type='text' name={key}></Textarea>
+    //                             </FeatureInput>)})}
+    //                     {keys.length ? (<><Input type='submit' value="Заполнить" name='Autofill'></Input> <br/></>) : nope}
+    //                     </>
+    //                 )
+    //             });
+    //         })
 
-            // instance.UI.disableFeatures([instance.Feature.Forms])
-            // instance.UI.enableFeatures([instance.Feature.ContentEdit]);
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [url]);
+    //         // instance.UI.disableFeatures([instance.Feature.Forms])
+    //         // instance.UI.enableFeatures([instance.Feature.ContentEdit]);
+    //     });
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [url]);
     
     useEffect(() => {
         if (Boolean(files.length)) 
@@ -154,7 +158,7 @@ export const LoadPage = () => {
                     fileUploaded={fileUploaded}
                     autoFillForm={autoFillForm}
             />
-            <LoadBox
+            {/* <LoadBox
                 setInputElement={setInputElement}
                 changeHundler={changeHundler}
                 openClick={openClick}
@@ -163,7 +167,7 @@ export const LoadPage = () => {
                 files={files}
                 url={url}
                 viewer={viewer}
-            />
+            /> */}
         </LoadPageStyled>
         </>
     );
@@ -177,14 +181,7 @@ const KeyLable = styled("span")`
 font-size: 1.0em;
 color:#767676;
 `
-const TextareaLable = styled.textarea`
-    margin-left:0px;
-    margin-bottom:20px;
-    min-height: 31px;
-    font-style: italic;
-    word-break: break-word;
 
-`
 const InputForm = styled.input`
     background-color: #4990CD;
     cursor: pointer;

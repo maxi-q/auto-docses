@@ -1,27 +1,26 @@
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
+import {Link, BrowserRouter } from "react-router-dom";
 
+import { Navigation } from "./pages";
 import { Header } from "./modules"
 import { Footer } from "./modules"
-// import {Footer} from "./components/Footer";
 
 import styled from 'styled-components';
 
 export function App() {
-  return (
-    <>
-      < DeveloperNav>
-        <Link to="/Home" style={{ marginLeft: "20px" } }> MainWindow </Link> |{" "}
-        <Link to="/LoadPage"> LoadPage </Link> |{" "}
-      </DeveloperNav> 
-
-      <Header/>
-        <MainStyled>
-          <Outlet/>
-        </MainStyled>
-      <Footer/>
-    </>
-  );
+	return (
+		<BrowserRouter>
+			< DeveloperNav>
+				<Link to="/Home" style={{ marginLeft: "20px" } }> MainWindow </Link> |{" "}
+				<Link to="/LoadPage"> LoadPage </Link> |{" "}
+			</DeveloperNav> 
+			<Header/>
+			<MainStyled>
+				<Navigation />
+			</MainStyled>
+			<Footer/>
+		</BrowserRouter>
+	);
 }
 
 const DeveloperNav = styled('nav')`

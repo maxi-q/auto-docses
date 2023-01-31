@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Modal = ({active, setActive}) => {
+export const Modal = ({active, setActive, children}) => {
     return (
-        <ModalPLP active={active} onClick={() => setActive(false)}>
+        <ModalBG active={active} onClick={() => setActive(false)}>
             <ModalContent onClick={() => setActive(false)}>
-                asdqw
+                {children}
             </ModalContent>
-        </ModalPLP>
+        </ModalBG>
     );
 }
 
@@ -17,7 +17,7 @@ const ModalContent = styled.div`
         background: rgb(227, 227, 227);
         pointer-events: all;
 `
-const ModalPLP = styled.div`
+const ModalBG = styled.div`
     height: 100vh;
     width: 100vw;
     background: rgba(0,0,0,0.4);
