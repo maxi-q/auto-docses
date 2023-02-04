@@ -1,5 +1,5 @@
 
 
 export const SearchQuery = () => {
-    return ''
+  return ''
 }

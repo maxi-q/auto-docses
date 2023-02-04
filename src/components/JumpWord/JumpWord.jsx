@@ -1,29 +1,31 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import { GradientBG } from '../../ui/GradientBG';
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
+
+import { GradientBG } from '@ui/GradientBG'
+
 export const JumpWord = () => {
 
-    const background = 'linear-gradient(87deg, #2c4cd0, #f53329, #99479a, #819a4f)'
-    
-    return (
-        <>
-            <GradientBG linearGradient={ background }>
-                <Waviy>
-                    <Waviyspan style={{"--i": 1}}>О</Waviyspan>
-                    <Waviyspan style={{"--i": 2}}>Х</Waviyspan>
-                    <Waviyspan style={{"--i": 3}}>Л</Waviyspan>
-                    <Waviyspan style={{"--i": 4}}>А</Waviyspan>
-                    <Waviyspan style={{"--i": 5}}>М</Waviyspan>
-                    <Waviyspan style={{"--i": 6}}>О</Waviyspan>
-                    <Waviyspan style={{"--i": 7}}>Н</Waviyspan>
-                    <Waviyspan style={{"--i": 8}}>И</Waviyspan>
-                    <Waviyspan style={{"--i": 9}}>С</Waviyspan>
-                    <Waviyspan style={{"--i": 10}}>Т</Waviyspan>
-                </Waviy>
-            </GradientBG>
-        </>
-    );
-};
+  const background = 'linear-gradient(87deg, #2c4cd0, #f53329, #99479a, #819a4f)'
+  
+  return (
+    <>
+      <GradientBG linearGradient={ background }>
+        <Waviy>
+          <Waviyspan style={{'--i': 1}}>О</Waviyspan>
+          <Waviyspan style={{'--i': 2}}>Х</Waviyspan>
+          <Waviyspan style={{'--i': 3}}>Л</Waviyspan>
+          <Waviyspan style={{'--i': 4}}>А</Waviyspan>
+          <Waviyspan style={{'--i': 5}}>М</Waviyspan>
+          <Waviyspan style={{'--i': 6}}>О</Waviyspan>
+          <Waviyspan style={{'--i': 7}}>Н</Waviyspan>
+          <Waviyspan style={{'--i': 8}}>И</Waviyspan>
+          <Waviyspan style={{'--i': 9}}>С</Waviyspan>
+          <Waviyspan style={{'--i': 10}}>Т</Waviyspan>
+        </Waviy>
+      </GradientBG>
+    </>
+  )
+}
 
 
 const Waviy = styled.div`

@@ -1,1 +1,1 @@
-export { LoadPage } from './components'
+export { LoadPage } from './LoadPage'

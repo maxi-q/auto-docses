@@ -1,10 +1,9 @@
-import { Outlet } from "react-router-dom";
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Button = ({children ,...props}) => {
-    return(
-        <SButton { ...props } >{children}</SButton>
-    )
+  return(
+    <SButton { ...props } >{children}</SButton>
+  )
 }
 
 const SButton = styled.button`
@@ -16,4 +15,4 @@ const SButton = styled.button`
   border: 2px solid #42AAFF;
   border-radius: 3px;
   display: block;
-`;
+`

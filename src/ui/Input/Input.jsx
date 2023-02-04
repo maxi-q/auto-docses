@@ -1,9 +1,9 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const Input = ({children, ...props}) => {
-    return(
-        <InputForm {...props}>{children}</InputForm>
-    )
+  return(
+    <InputForm {...props}>{children}</InputForm>
+  )
 }
 const InputForm = styled.input`
     background-color: #4990CD;

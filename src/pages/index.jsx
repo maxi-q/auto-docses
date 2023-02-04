@@ -1,17 +1,16 @@
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 
-
-import { Main } from './Main';
-import { LoadPage } from './LoadPage';
+import { Main } from './Main'
+import { LoadPage } from './LoadPage'
 
 export const Navigation = () => {
-	return (
-		<Routes>
-			<Route path='/Home' element={<Main/>}/>
-			<Route path='/LoadPage' element={<LoadPage/>}/>
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path="/Home" element={<Main/>}/>
+      <Route path="/LoadPage" element={<LoadPage/>}/>
+    </Routes>
+  )
 }
 
 

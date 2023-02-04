@@ -1,14 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 
 export const Modal = ({active, setActive, children}) => {
-    return (
-        <ModalBG active={active} onClick={() => setActive(false)}>
-            <ModalContent onClick={() => setActive(false)}>
-                {children}
-            </ModalContent>
-        </ModalBG>
-    );
+  return (
+    <ModalBG active={active} onClick={() => setActive(false)}>
+      <ModalContent onClick={() => setActive(false)}>
+        {children}
+      </ModalContent>
+    </ModalBG>
+  )
 }
 
 const ModalContent = styled.div`
@@ -27,9 +27,8 @@ const ModalBG = styled.div`
     justify-content: center;
     top: 0;
     left: 0;
-    pointer-events: ${props => props.active ? "all" : "none"};
+    pointer-events: ${props => props.active ? 'all' : 'none'};
 
     transition: 0.5s;
     opacity: ${props => props.active ? 1 : 0};
-    
-`;
+`
