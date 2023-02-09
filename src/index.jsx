@@ -1,9 +1,12 @@
 import ReactDOM from 'react-dom/client'
 import React from 'react'
 
-import 'normalize.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'mdb-react-ui-kit/dist/css/mdb.min.css'
+// Импортируйте наш пользовательский CSS
+import './scss/styles.scss'
+import './scss/styles.css'
+
+// Импортируйте весь JS Bootstrap
+import * as bootstrap from 'bootstrap'
 
 import { App } from './App'
 
@@ -13,4 +16,7 @@ root.render(
   <App />
 )
 
-// Из pages взять index с роутами
+const devMode = process.env.NODE_ENV === 'development'
+if(devMode && module && module.hot) {
+  module.hot.accept()
+}

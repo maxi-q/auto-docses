@@ -1,17 +1,11 @@
-// import mammoth from "mammoth"
+
 
 export const convertToHTML = (path) => {
   let html, messages
-
-
-  // mammoth.convertToHtml({path: path})
-  // .then(result => {
-  //     html = result.value; // The generated HTML
-  //     messages = result.messages; // Any messages, such as warnings during conversion
-  // })
-  // .catch(function(error) {
-  //     console.error(error);
-  // });
-
+  path = path.props.children
+  console.log(path)
+  // API_ZAMZAR
+  const apiKey = "a6ee8b623c046a1868aa7e97dfb434fbcd8fae6b"
+  
   return { html, messages }
 }

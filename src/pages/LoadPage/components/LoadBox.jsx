@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 
 import { convertToHTML } from '../helpers/convertToHTML'
@@ -9,8 +10,9 @@ export const LoadBox = (props) => {
   if(props.url) {
     preview = props.url.map((item, i) => <p key={i}>{item}</p>)
   }
-
-  convertToHTML(preview[0])
+  if (preview[0]){
+    convertToHTML(preview[0])
+  }
 
   return<>
     <LoadDivStyled>
