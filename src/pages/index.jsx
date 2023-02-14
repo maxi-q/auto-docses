@@ -3,12 +3,14 @@ import { Route, Routes } from 'react-router-dom'
 
 import { Main } from './Main'
 import { LoadPage } from './LoadPage'
+import { Profile } from './Profile'
 
 export const Navigation = () => {
   return (
     <Routes>
       <Route path="/Home" element={<Main/>}/>
       <Route path="/LoadPage" element={<LoadPage/>}/>
+      <Route path="/Profile" element={<Profile/>}/>
     </Routes>
   )
 }

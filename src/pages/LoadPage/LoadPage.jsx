@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef, createRef} from 'react'
+import { Viewer, Worker } from '@react-pdf-viewer/core';
 import styled from 'styled-components'
 
 import { Aside, LoadBox } from './components'
@@ -7,80 +8,98 @@ import { sumbitFiles, sumbitСhanges } from './api/cum'
 export const LoadPage = () => {
 
   const autoFillForm = createRef()
-  const viewer = useRef()
 
   const [documentName, setDocumentName] = useState('Имя документа')
-  const [autofillHidden, setAutofillHidden] = useState(true)
   const [keyValues, setKeyValues] = useState('Ждет файл...')
-  const [fileUploaded, setFileUploaded] = useState('')
   const [inputElement, setInputElement] = useState('')
-  const [actionLabel, setActionLabel] = useState('')
   const [upload, setUpload] = useState(() => false)
   const [autoFills, setAutoFills] = useState(null)
-  const [fillingMap, setFillingMap] = useState({})
-  const [docxHTML, setDocxHTML] = useState(<></>)
   const [files, setFiles] = useState(() => [])
   const [url, setUrl] = useState(() => '')
+  const [keys, setKeys] = useState([])
 
   useEffect(() => {
-    // сменить рендереный файл
-  }, [url])
+    if (!files.length) return
+  
+    const fileArray = files.map(file => URL.createObjectURL(file))
+    setUrl( fileArray )
+    setUpload(Boolean(fileArray.length))
 
-  useEffect(() => {
-    if (Boolean(files.length)) 
-      setUrl( files.map(file => URL.createObjectURL(file) ) )
-    else setUrl('')
-    setUpload(Boolean(files.length))
+    const file = files[0]
+    setDocumentName(file.name)
+
+    // Отправить док-мент
+
+    // Получить ключи
+    setKeys(['NAME','STREET','SOMEKEYS'])
   }, [files])
 
-  useEffect(() => {
-    sumbitСhanges(fillingMap)
-  }, [fillingMap])
+  const firstUpdate = useRef(true);
+  useEffect(()=>{
+    if (firstUpdate.current) { 
+      firstUpdate.current = false
+      return
+    }
+
+    setAutoFills(
+      <>
+        {keys.map((key, i) => (
+        <>
+          <FeatureInput id={i}>
+            <KeyLable>{key}:</KeyLable>
+            <TextareaLable rows={1.4} type='text' name={key}></TextareaLable>
+          </FeatureInput>
+        </>
+      ))}
+      {keys.length ? (<><InputForm type='submit' value="Заполнить" name='Autofill'></InputForm> <br/></>) : nope}
+      </>
+    )
+    setKeyValues('Заполните поля')
+  },[keys])
 
   const fillFile = (e) => {
-    e.preventDefault()
-    // autofillDoc()
+    e.preventDefault();
+    fillDocument();
+  }
+  const fillDocument = () => {
+    // Отправить на сервер, получить норм документ, SetFiles
+    console.log(keyValues)
+    return
   }
   const openClick = e => {
     e.preventDefault()
     inputElement.click()
+    // Запускает changeHundler
   }
   const changeHundler = (e) => {
-    setFiles(Array.from(e.target.files))
-    loadDoc(Array.from(e.target.files))
-  }
-  const loadDoc = async (file) => {
-    if(file) {
-      // await instance.loadDocument(URL.createObjectURL(file), { filename: file.name });
-      setFileUploaded('Файл загружен')
+    if(Boolean(e.target.files.length)){
+      setFiles(Array.from(e.target.files))
     }
   }
+  function nope () { return <></> }
 
   return (
     <>
       <LoadPageStyled>
-        <Aside  
-          documentName={documentName}
-          keyValues={keyValues}
-          statusLabel={actionLabel}
-          fillFile={fillFile}
-          autoFills={autoFills}
-          autofillHidden={autofillHidden}
-          fileUploaded={fileUploaded}
-          autoFillForm={autoFillForm}
-        />
-        <LoadBox
-          setInputElement={setInputElement}
-          changeHundler={changeHundler}
-          openClick={openClick}
-          upload={upload}
-          sumbitFiles={sumbitFiles}
-          files={files}
-          url={url}
-          viewer={viewer}
-          docxHTML={docxHTML}
-          setDocxHTML={setDocxHTML}
-        />
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.3.122/build/pdf.worker.min.js">
+          <Aside  
+            documentName={documentName}
+            keyValues={keyValues}
+            autoFills={autoFills}
+            fillFile={fillFile}
+            autoFillForm={autoFillForm}
+          />
+
+          <LoadBox
+            setInputElement={setInputElement}
+            changeHundler={changeHundler}
+            openClick={openClick}
+            upload={upload}
+            sumbitFiles={sumbitFiles}
+            files={files}
+            url={url}
+          />
+        </Worker>
       </LoadPageStyled>
     </>
   )
@@ -90,11 +109,40 @@ const LoadPageStyled = styled.div`
   padding-top: 3em;
   display: flex;
 `
+const TextareaLable = styled.textarea`
+  margin-left:0px;
+  margin-bottom:20px;
+  min-height: 31px;
+  font-style: italic;
+  word-break: break-word;
+
+`
+const KeyLable = styled("span")`
+  font-size: 1.0em;
+  color:#767676;
+`
+const FeatureInput = styled.div`
+display:flex;
+  justify-content: space-between;
+  align-items: start;
+`
+const InputForm = styled.input`
+  background-color: #4990CD;
+  cursor: pointer;
+  display: block;
+  padding: 20px;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  border-radius: 5px;
+  border-width: 0px;
+  color: white;
+  font-size: 1.08em;
+  margin-top: 0px;
+  margin-left: auto;
+  border: 2px solid #4990CD;
+`
 
 export default LoadPage
-
-
-
 
 
 
@@ -175,28 +223,31 @@ export default LoadPage
 //     const autofillMap = {};
 //     for (let i = 0, element; (element = elements[i++]); ) {
 //         if (element.type === 'textarea' && element.value.length > 0) {
-//             try {
-//             const json = JSON.parse(element.value);
-//             autofillMap[element.name] = json;
+  //             try {
+    //             const json = JSON.parse(element.value);
+    //             autofillMap[element.name] = json;
 //             } catch (e) {
-//             autofillMap[element.name] = element.value.toString();
+  //             autofillMap[element.name] = element.value.toString();
 //             }
 //         }
 //     }
 //     setFillingMap(autofillMap)
 //     for (const entry in autofillMap) {
 //         if (autofillMap[entry].hasOwnProperty('image_url')) {
-//             const path = autofillMap[entry]['image_url'];
+  //             const path = autofillMap[entry]['image_url'];
 //             if (path.substr(0, 4) !== 'http') {
-//             autofillMap[entry]['image_url'] = parentUrl + path;
-//             }
+  //             autofillMap[entry]['image_url'] = parentUrl + path;
+  //             }
 //         }
 //     }
 //     for (var k in autofillMap){
 //         if (autofillMap.hasOwnProperty(k))
 //         {
-//             autofillMap[k] = String(autofillMap[k]);
-//         }
-//     }
-//     await documentViewer_S.getDocument().applyTemplateValues(autofillMap);
-// }
+  //             autofillMap[k] = String(autofillMap[k]);
+  //         }
+  //     }
+  //     await documentViewer_S.getDocument().applyTemplateValues(autofillMap);
+  // }
+
+
+

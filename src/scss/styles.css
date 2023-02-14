@@ -1,2 +1,12 @@
 @import "~normalize.css/normalize.css";
 @import "~mdb-react-ui-kit/dist/css/mdb.min.css";
+@import '@react-pdf-viewer/core/lib/styles/index.css';
+@import '@react-pdf-viewer/toolbar/lib/styles/index.css';
+@import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+.rpv-core__textbox {
+    width: auto;
+}  
+.rpv-core__viewer {
+    background-color: transparent;
+    height: 90vh !important;
+}
