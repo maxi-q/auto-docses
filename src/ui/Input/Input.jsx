@@ -20,4 +20,8 @@ const InputForm = styled.input`
   margin-top: 0px;
   margin-left: auto;
   border: 2px solid #4990CD;
+
+  &::-webkit-input-placeholder {
+    color: white;
+  }
 `
