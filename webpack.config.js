@@ -11,6 +11,7 @@ module.exports = {
   entry: { myAppName: path.resolve(__dirname, './src/index.jsx') },
   output: {
     path: path.resolve(__dirname, './dist'),
+    publicPath: '/',
     filename: production ? '[name].[contenthash].js' : '[name].js',
   },
   devtool: 'inline-source-map',
@@ -53,8 +54,10 @@ module.exports = {
         ]
       },
       {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
-        type: 'asset/resource'
+        test: /\.(jpg|png)$/,
+        use: {
+          loader: 'url-loader',
+        },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
@@ -70,6 +73,7 @@ module.exports = {
       '@consts': path.resolve(__dirname, 'src/consts'),
       '@assets': path.resolve(__dirname, 'src/assets'),
       '@hooks': path.resolve(__dirname, 'src/hooks'),
+      '@api': path.resolve(__dirname, 'src/API'),
       '@ui': path.resolve(__dirname, 'src/ui'),
     },
     extensions: ['*', '.js', '.jsx', '.scss'],

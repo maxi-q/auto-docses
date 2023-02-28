@@ -1,16 +1,30 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useParams } from 'react-router-dom'
 
 import { Main } from './Main'
 import { LoadPage } from './LoadPage'
 import { Profile } from './Profile'
+import { DocumentPage } from './DocumentPage'
+import { Authorization, Registration } from './Authorization'
 
-export const Navigation = () => {
+const GetParam = () => {
+  const params = useParams();
+    const prodId = params.id;
+  return <>
+  {prodId}
+  </>
+}
+export const Navigation = (props) => {
   return (
     <Routes>
-      <Route path="/Home" element={<Main/>}/>
-      <Route path="/LoadPage" element={<LoadPage/>}/>
-      <Route path="/Profile" element={<Profile/>}/>
+      <Route path="Auth" element={<Authorization {...props}/>}/>
+      <Route path="Reg" element={<Registration {...props}/>}/>
+      <Route path="Home" element={<Main {...props}/>}/>
+      <Route path="LoadPage" element={<LoadPage {...props}/>}/>
+      <Route path="Profile" element={<Profile {...props}/>}/>
+      <Route path="document" element={<DocumentPage {...props}/>}>
+        <Route path=":id" element={<GetParam/>}/>
+      </Route>
     </Routes>
   )
 }

@@ -3,7 +3,7 @@ import { Viewer, Worker } from '@react-pdf-viewer/core';
 import styled from 'styled-components'
 
 import { Aside, LoadBox } from './components'
-import { sumbitFiles, sumbitСhanges } from './api/cum'
+import { sumbitFiles, sumbitСhanges } from '@api/documents/cum'
 
 export const LoadPage = () => {
 
@@ -27,8 +27,15 @@ export const LoadPage = () => {
 
     const file = files[0]
     setDocumentName(file.name)
+    console.log(file)
 
     // Отправить док-мент
+    
+    // const blob = sumbitFiles(file)
+    // console.log(typeof blob)
+    // const mmmurl = URL.createObjectURL(blob);
+    // setUrl( [mmmurl] )
+
 
     // Получить ключи
     setKeys(['NAME','STREET','SOMEKEYS'])

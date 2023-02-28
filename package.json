@@ -44,6 +44,8 @@
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "extract-word-docs": "^1.1.4",
+    "google-fonts-webpack-plugin": "^0.4.4",
+    "js-base64": "^3.7.5",
     "mammoth": "^1.5.1",
     "mdb-react-ui-kit": "^5.1.0",
     "normalize.css": "^8.0.1",
@@ -51,6 +53,7 @@
     "pdfjs-dist": "^3.3.122",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
+    "react-bootstrap-icons": "^1.10.2",
     "react-dom": "^18.2.0",
     "react-pdf": "^6.2.2",
     "react-router-dom": "^6.8.0",
@@ -58,6 +61,7 @@
     "stream-browserify": "^3.0.0",
     "styled-components": "^5.3.6",
     "ts-loader": "^9.4.2",
+    "url-loader": "^4.1.1",
     "util": "^0.12.5"
   },
   "browser": {

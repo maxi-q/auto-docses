@@ -8,12 +8,26 @@ export const Button = ({children ,...props}) => {
 }
 
 const SButton = styled.button`
-  display: inline-block;
-  color: #003153;
-  font-size: 1em;
-  margin: 1em;
-  padding: 0.25em 1em;
-  border: 2px solid #42AAFF;
-  border-radius: 3px;
+
   display: block;
+  padding: 0.25em 1em;
+  
+  background-color: #4990CD;
+  color: white;
+  
+  cursor: pointer;
+  font-size: 1.08em;
+  
+  border: 2px solid #4990CD;
+  border-radius: 5px;
+  box-shadow: 2px 2px 4px 0px rgba(34, 60, 80, 0.3);
+
+  transition: all .1s linear;
+
+  &:hover {
+    color: rgb(220,220,220);
+    background-color: #336c9d;
+    border-color: #336c9d;
+    box-shadow: 6px 3px 13px 4px rgba(34, 60, 80, 0.45);
+  }
 `

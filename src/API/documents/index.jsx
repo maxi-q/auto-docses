@@ -1,0 +1,1 @@
+export {sumbitFiles, sumbitСhanges, getAllfiles, getfile} from './cum'
