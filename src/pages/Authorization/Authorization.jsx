@@ -1,81 +1,52 @@
-import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import React from 'react'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { Button, Input } from '@ui';
+import { FormWhisValidate } from './modules/FormWhisValidate';
 
+import { fechDataForRegistration } from '@api/user/fechDataForRegistration';
+import { Tseaetr } from '@api/user/fetchDecorator';
 export const Registration = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [rePassword, setRePassword] = useState('')
-
-  const emailHandler = (e) => {
-    setEmail(e.target.value);
-  };
-  const passwordHandler = (e) => {
-      setPassword(e.target.value);
-  };
-  const rePasswordHandler = (e) => {
-      setRePassword(e.target.value);
-  };
-  useEffect(() => {
-    console.log(email, password, rePassword)
-}, [password]);
-
-const regProfile = async () => {
-    console.log({
-      'name': email,
-      'password': password
-    })
-  const options = {
-    method: "POST",
-    headers: new Headers({
-        'Content-Type': 'application/json',
-    }),
-    body: JSON.stringify({
-        'email': 'maxim@gmail.com',
-        'username': email,
-        'password': password
-    })
-  };
-  fetch('http://192.168.220.174:8000/api/v1/jwt/create/', options)
-  .then((json) => {
-      console.log(json.status)
-      json.json().then(ds=>console.log(ds))
-  })
-  .catch((err) => {
-      console.log(err)
-  })
-    
-}
+  const onSubmit = data => console.log(data);
 
   return <>
     <Body>
       <Window>
-      <Window.Title>Окно регистрации</Window.Title>
-        <Input onChange={emailHandler} placeholder="Почта"></Input>
-        <Input onChange={passwordHandler} type="password" placeholder="Пароль"></Input>
-        <Input onChange={rePasswordHandler} type="password" placeholder="Повторить пароль"></Input>
-        <RButton onClick={regProfile}>Регистрация</RButton>
+        <FormWhisValidate onSubmit={onSubmit}>
+          <Window.Title>Окно регистрации</Window.Title>
+
+          <Input name="login" placeholder="Логин" validate="login"/>
+          <Input name="email" placeholder="Почта" validate="email"/>
+          <Input name="password"  type="password" placeholder="Пароль" validate="password"/>
+          <Input name="rePassword" type="password" placeholder="Повторить пароль" validate="password"/>
+
+          <Input name="About" type="textarea" placeholder="textarea" />
+          <Input name="date" type="date" placeholder="date" />
+
+          <RButton>Авторизация</RButton>
+        </FormWhisValidate>
         <Link to="/Auth">Уже зарегестрированы? Вход</Link>
-      </Window>
+      </Window >
     </Body>
   </>
 }
 
 export const Authorization = () => {
-  const [login, setLogin] = useState('')
-  const [password, setPassword] = useState('')
-
+  const onSubmit = data => console.log(data);
 
   return <>
     <Body>
       <Window>
-        <Window.Title>Окно авторизации</Window.Title>
-        <Input type="password" placeholder="Почта"></Input>
-        <Input placeholder="Пароль"></Input>
-        <RButton>Авторизация</RButton>
+        <FormWhisValidate onSubmit={onSubmit}>
+          <Window.Title>Окно авторизации</Window.Title>
+
+          <Input name="login" type="text" placeholder="Логин" validate="login"/>
+          <Input name="password" type="password" placeholder="Пароль" validate="password"/>
+
+          <RButton>Авторизация</RButton>
+        </FormWhisValidate>
         <Link to="/Reg">Еще не зарегестрированы? Регистрация</Link>
       </Window >
     </Body>
@@ -89,6 +60,7 @@ const Body = styled.div`
   justify-content: center;
   align-items: center;
 `
+
 const Window = styled(Card)`
   min-width: 300px;
   min-height:100px;
