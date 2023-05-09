@@ -8,11 +8,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const production = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  entry: { myAppName: path.resolve(__dirname, './src/index.jsx') },
+  entry: { myAppName: path.resolve(__dirname, './src/index.tsx') },
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/',
     filename: production ? '[name].[contenthash].js' : '[name].js',
+    assetModuleFilename: 'assets/[hash][ext][query]'
   },
   devtool: 'inline-source-map',
   module: {
@@ -24,6 +25,11 @@ module.exports = {
         
       },
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.css$/,
         exclude: /node_modules/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
@@ -31,6 +37,7 @@ module.exports = {
       },
       {
         test: /\.(scss)$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'style-loader'
@@ -55,12 +62,14 @@ module.exports = {
       },
       {
         test: /\.(jpg|png)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'url-loader',
         },
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        exclude: /node_modules/,
         type: 'asset/resource'
       },
     ],
@@ -76,7 +85,7 @@ module.exports = {
       '@api': path.resolve(__dirname, 'src/API'),
       '@ui': path.resolve(__dirname, 'src/ui'),
     },
-    extensions: ['*', '.js', '.jsx', '.scss'],
+    extensions: ['*', '.js', '.jsx', '.scss','.tsx', '.ts'],
     fallback: { 
       "util": require.resolve("util/"),
       "path": require.resolve("path-browserify"),
@@ -102,6 +111,8 @@ module.exports = {
       filename: production ? '[name].[contenthash].css' : '[name].css',
     }),
   ],
+  externals: {
+  },              
   devServer: {
     static: './dist',
     historyApiFallback: true,

@@ -1,2 +1,2 @@
-export { Authorization, Registration } from './Authorization'
+export { Authorization, Registration } from './Authorization.tsx'
 

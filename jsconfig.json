@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "module": "commonjs",
+      "paths": {
+        "@components/*": ["./src/components/*"],
+        "@constants/*": ["./src/constants/*"],
+        "@helpers/*": ["./src/helpers/*"],
+        "@modules/*": ["./src/modules/*"],
+        "@assets/*": ["./src/assets/*"],
+        "@hooks/*": ["./src/hooks/*"],
+        "@api/*": ["./src/API/*"],
+        "@ui/*": ["./src/ui/*"],
+      }
+    }
+  }

@@ -1,72 +1,57 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { JumpWord, Welcome } from '@components'
+import { Card } from '@ui'
 
 
 
 export const Main = () => {
   return (
     <>
-    <Body>
-      <LeftBlock>
-        <JumpWord />
-      </LeftBlock>
-      <RightBlock>
-        <Welcome buttontext={'Открыть модальное окно'}>
-          Modal`s childrens
-        </Welcome>
-      </RightBlock>
-      
-    </Body>
-      <svg width={'220px'} height={'300px'} viewBox={'-120 -100 250 200'}>
-          <g transform='rotate(0)'>
-            <polygon points={'0,0 0,-120 -35,-60'} fill={'#E49B0F'}/>
-            <polygon points={'0,0 0,-120 35,-60'} fill={'#EFD334'}/>
-          </g>
-          <g transform='rotate(60)'>
-            <polygon points={'0,0 0,-120 -35,-60'} fill={'#E49B0F'}/>
-            <polygon points={'0,0 0,-120 35,-60'} fill={'#EFD334'}/>
-          </g>
-          <g transform='rotate(120)'>
-            <polygon points={'0,0 0,-120 -35,-60'} fill={'#E49B0F'}/>
-            <polygon points={'0,0 0,-120 35,-60'} fill={'#EFD334'}/>
-          </g>
-          <g transform='rotate(180)'>
-            <polygon points={'0,0 0,-120 -35,-60'} fill={'#E49B0F'}/>
-            <polygon points={'0,0 0,-120 35,-60'} fill={'#EFD334'}/>
-          </g>
-          <g transform='rotate(240)'>
-            <polygon points={'0,0 0,-120 -35,-60'} fill={'#E49B0F'}/>
-            <polygon points={'0,0 0,-120 35,-60'} fill={'#EFD334'}/>
-          </g>
-          <g transform='rotate(300)'>
-            <polygon points={'0,0 0,-120 -35,-60'} fill={'#E49B0F'}/>
-            <polygon points={'0,0 0,-120 35,-60'} fill={'#EFD334'}/>
-          </g>
-      </svg>
+      <Body>
+        <MainCard>
+          <Title>
+            Автоматическое заполнение документов
+          </Title>
+          <SubCard>
+            321
+          </SubCard>
+        <Split/>
+          <Text>
+          321
+          </Text>
+        </MainCard>
+      </Body>
     </>
   )
 }
+const Title = styled.h1`
+  font-size: 20px;
+`
+const Text = styled.p`
 
+`
+const MainCard = styled(Card)`
+  min-width: 250px;
+  width: 700px;
+  padding: 20px;
+  height: 500px;
+`
+const SubCard = styled(Card)`
+  background-color: rgb(0,0,0, 0.01);
+`
+const Split = styled.div`
+  background-color: rgb(0,0,0, 0.4);
+  height: 3px;
+  margin: 20px -20px;
+`
 const Body = styled.div`
   padding: 20px 0 0 0;
   background-color: transparent;
   min-height: 500px;
   display:flex;
+  justify-content: center;
   width: 100%;
   margin-right: auto;
   margin-left: auto;
-`
-const LeftBlock = styled.div`
-  flex-grow: 1;
-  display: flex;
-  background-color: #6495ED;
-`
-
-const RightBlock = styled.div`
-  padding: .5rem;
-  width: 25%;
-  flex-shrink: 1;
-  background-color: #EE2C2C;
 `

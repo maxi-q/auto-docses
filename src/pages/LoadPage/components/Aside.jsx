@@ -1,17 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button } from '@ui/Button'
+import { Button, Input } from '@ui';
+
+
 
 export const Aside = (props) => {
+
   return  (
     <>
       <AsideStyled>
         <Title>{ props.documentName }</Title>
         <Spacer />
         <Spacer />
-        <StatusLoadKeys id="key-val-title">{ props.keyValues }</StatusLoadKeys>
+        <StatusLoadKeys id="key-val-title">{ props.formAction }</StatusLoadKeys>
         <ActionLabel>{ props.actionLabel }</ActionLabel>
-        <FormFills ref={props.autoFillForm} onSubmit={props.fillFile}>{ props.autoFills }</FormFills>
+
+        { props.FormWhisFills }
+
       </AsideStyled>
     </>
   )
@@ -55,11 +60,8 @@ const Spacer = styled.div`
   height: 9px;
 `
 const FileStatus = styled('span')`
-margin-left:10px;
-font-size: 1.0em;
-`
-const Input = styled.input`
-  display:none;
+  margin-left:10px;
+  font-size: 1.0em;
 `
 
 

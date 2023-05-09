@@ -2,18 +2,19 @@ import React, {useState, useEffect, useRef, createRef} from 'react'
 import { Viewer, Worker } from '@react-pdf-viewer/core';
 import styled from 'styled-components'
 
-import { Aside, LoadBox } from './components'
+import { FormWithValidate } from '@components/FormWithValidate'
 import { sumbitFiles, sumbitСhanges } from '@api/documents/cum'
+import { Button, Input } from '@ui';
+
+import { Aside, LoadBox } from './components'
 
 export const LoadPage = () => {
 
-  const autoFillForm = createRef()
-
   const [documentName, setDocumentName] = useState('Имя документа')
-  const [keyValues, setKeyValues] = useState('Ждет файл...')
+  const [formAction, setFormAction] = useState('Ждет файл...')
   const [inputElement, setInputElement] = useState('')
   const [upload, setUpload] = useState(() => false)
-  const [autoFills, setAutoFills] = useState(null)
+  const [FormWhisFills, setFormWhisFills] = useState(null)
   const [files, setFiles] = useState(() => [])
   const [url, setUrl] = useState(() => '')
   const [keys, setKeys] = useState([])
@@ -27,7 +28,6 @@ export const LoadPage = () => {
 
     const file = files[0]
     setDocumentName(file.name)
-    console.log(file)
 
     // Отправить док-мент
     
@@ -36,43 +36,47 @@ export const LoadPage = () => {
     // const mmmurl = URL.createObjectURL(blob);
     // setUrl( [mmmurl] )
 
-
     // Получить ключи
     setKeys(['NAME','STREET','SOMEKEYS'])
   }, [files])
 
   const firstUpdate = useRef(true);
+
+  const onSubmit = data => fillFile(data);
+
   useEffect(()=>{
     if (firstUpdate.current) { 
       firstUpdate.current = false
       return
     }
 
-    setAutoFills(
+    setFormWhisFills(
       <>
-        {keys.map((key, i) => (
-        <>
-          <FeatureInput id={i}>
-            <KeyLable>{key}:</KeyLable>
-            <TextareaLable rows={1.4} type='text' name={key}></TextareaLable>
-          </FeatureInput>
-        </>
-      ))}
-      {keys.length ? (<><InputForm type='submit' value="Заполнить" name='Autofill'></InputForm> <br/></>) : nope}
+        <FormWithValidate onSubmit={onSubmit}>
+          {keys.map((key, i) => (
+              <FeatureInput key={i} >
+                <KeyLable>{key}:</KeyLable>
+                <Input rows={1.4} type="textarea" name={key}/>
+              </FeatureInput>
+          ))}
+          <Button name="Заполнить" value="Заполнить">Заполнить документ</Button>
+        </FormWithValidate>
       </>
     )
-    setKeyValues('Заполните поля')
+    setFormAction('Заполните поля')
   },[keys])
+ // 
 
-  const fillFile = (e) => {
-    e.preventDefault();
+
+  const fillFile = (data) => {
+    console.log(data)
     fillDocument();
   }
   const fillDocument = () => {
-    // Отправить на сервер, получить норм документ, SetFiles
-    console.log(keyValues)
+    console.log(formAction)
     return
   }
+
   const openClick = e => {
     e.preventDefault()
     inputElement.click()
@@ -83,18 +87,16 @@ export const LoadPage = () => {
       setFiles(Array.from(e.target.files))
     }
   }
-  function nope () { return <></> }
-
+  
   return (
     <>
       <LoadPageStyled>
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.3.122/build/pdf.worker.min.js">
           <Aside  
             documentName={documentName}
-            keyValues={keyValues}
-            autoFills={autoFills}
+            formAction={formAction}
+            FormWhisFills={FormWhisFills}
             fillFile={fillFile}
-            autoFillForm={autoFillForm}
           />
 
           <LoadBox
@@ -116,14 +118,7 @@ const LoadPageStyled = styled.div`
   padding-top: 3em;
   display: flex;
 `
-const TextareaLable = styled.textarea`
-  margin-left:0px;
-  margin-bottom:20px;
-  min-height: 31px;
-  font-style: italic;
-  word-break: break-word;
 
-`
 const KeyLable = styled("span")`
   font-size: 1.0em;
   color:#767676;
@@ -132,21 +127,6 @@ const FeatureInput = styled.div`
 display:flex;
   justify-content: space-between;
   align-items: start;
-`
-const InputForm = styled.input`
-  background-color: #4990CD;
-  cursor: pointer;
-  display: block;
-  padding: 20px;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  border-radius: 5px;
-  border-width: 0px;
-  color: white;
-  font-size: 1.08em;
-  margin-top: 0px;
-  margin-left: auto;
-  border: 2px solid #4990CD;
 `
 
 export default LoadPage
