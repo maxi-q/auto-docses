@@ -5,12 +5,12 @@ type IValidator<T> = {
 }
 
 export enum FieldNames {
-	login,
-	field,
-	email,
-	password,
-	select,
-	username,
+	login = 'login',
+	field = 'field',
+	email = 'email',
+	password = 'password',
+	select = 'select',
+	username = 'username',
 }
 
 const validator: IValidator<typeof FieldNames> = {
@@ -61,4 +61,5 @@ const validator: IValidator<typeof FieldNames> = {
 		},
 	},
 }
+
 export default validator

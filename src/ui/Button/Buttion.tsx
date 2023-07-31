@@ -6,10 +6,11 @@ import { COLORS } from '../../constants/style/COLORS'
 type ButtonType = {
 	children: ReactNode
   onClick?: MouseEventHandler<HTMLButtonElement>
+	type?: "button" | "submit" | "reset" | undefined
 }
 
-export const Button = ({ children, onClick, ...props }: ButtonType) => {
-	return <SButton onClick={onClick} {...props}>{children}</SButton>
+export const Button = ({ children, onClick, type, ...props }: ButtonType) => {
+	return <SButton onClick={onClick} type={type} {...props}>{children}</SButton>
 }
 
 const SButton = styled.button`

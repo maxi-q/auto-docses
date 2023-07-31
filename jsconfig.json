@@ -12,5 +12,8 @@
         "@api/*": ["./src/API/*"],
         "@ui/*": ["./src/ui/*"],
       }
-    }
+    },
+  "include": ["src", "**/*.js", "**/*.jsx"],
+  "exclude": ["node_modules", "build"]
+
   }

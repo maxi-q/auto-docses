@@ -1,41 +1,62 @@
-import React, { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BrowserRouter } from 'react-router-dom'
 import styled from 'styled-components'
-import {Link, BrowserRouter } from 'react-router-dom'
 
+import { Footer, Header } from './modules'
 import { Navigation } from './pages'
-import { Header } from './modules'
-import { Footer } from './modules'
 
+import './API/user/fetchDecorator'
 
+import { IUser } from '@api/user/profileData'
+import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
+import { AuthContext, UserContext } from './contexts'
+
+import { Navigate } from 'react-router-dom'
 
 export function App() {
-  const [background, setBackground] = useState('');
-  return (
-    <BrowserRouter>
-      < DeveloperNav>
-        <Link to="/Home" style={{marginLeft: '20px'}}> MainWindow </Link> |{' '}
-        <Link to="/LoadPage"> LoadPage </Link> |{' '}
-        <Link to="/Profile"> Profile </Link> |{' '}
-        <Link to="/document"> document </Link> |{' '}
-        <Link to="/Auth"> Авторизация </Link> |{' '}
-        
-      </DeveloperNav> 
-      <Header/>
-      <MainStyled background={background}>
-        <Navigation />
-      </MainStyled>
-      <Footer/>
-    </BrowserRouter>
-  )
+	const [background, setBackground] = useState('')
+	const [loggedIn, setLoggedIn] = useState<Boolean>(false)
+	const [user, setUser] = useState<IUser>({
+		id: '',
+		username: '',
+		email: '',
+		first_name: '',
+		last_name: '',
+		date_joined: '',
+	})
+	const [may, setMay] = useState(false)
+	useEffect(() => {
+		fetchVerifyJWT()
+			.then(data => {
+				if (data.status != 400) {
+					setLoggedIn(true)
+				}
+				setMay(true)
+			})
+	}, [])
+
+	return (
+		<AuthContext.Provider value={loggedIn}>
+			<UserContext.Provider value={user}>
+				<BrowserRouter>
+					<Header />
+					<MainStyled background={background}>
+						{may && <Navigation setLoggedIn={setLoggedIn} setUser={setUser} />}
+					</MainStyled>
+					<Footer />
+				</BrowserRouter>
+			</UserContext.Provider>
+		</AuthContext.Provider>
+	)
 }
 
 const DeveloperNav = styled('nav')`
-  border-bottom: solid 1px;
-  padding-bottom: .5rem;
-  margin-bottom: 0px;
+	border-bottom: solid 1px;
+	padding-bottom: 0.5rem;
+	margin-bottom: 0px;
 `
 const MainStyled = styled.div<{ background: string }>`
-  background-color: ${ props => props.background };
-  min-height: 1000px;
-  flex: 1 0 auto;
+	background-color: ${props => props.background};
+	min-height: 1000px;
+	flex: 1 0 auto;
 `

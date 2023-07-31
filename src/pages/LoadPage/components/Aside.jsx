@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Button, Input } from '@ui';
+import { COLORS } from '@constants/style/COLORS'
 
 
 
@@ -15,7 +16,7 @@ export const Aside = (props) => {
         <StatusLoadKeys id="key-val-title">{ props.formAction }</StatusLoadKeys>
         <ActionLabel>{ props.actionLabel }</ActionLabel>
 
-        { props.FormWhisFills }
+        { props.FormWithFills }
 
       </AsideStyled>
     </>
@@ -33,8 +34,7 @@ const AsideStyled = styled('aside')`
   height: 100vh;
   font-size: 0.9em;
   overflow-y: auto;
-    
-`
+  `
 const Title = styled.h2`
   margin-bottom: 0;
   font-size: 1.3em;
@@ -42,7 +42,7 @@ const Title = styled.h2`
   color:#373737;
 `
 const StatusLoadKeys = styled.h1`
-  margin-bottom: 0.5em;
+  margin-bottom: -15px;
   font-size: 1.3em;
   font-style: normal;
   color:#373737;

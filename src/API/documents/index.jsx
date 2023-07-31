@@ -1,1 +1,1 @@
-export {sumbitFiles, sumbitСhanges, getAllfiles, getfile} from './cum'
+export { getAllFiles, getFile, submitChanges, submitFiles } from './CRUD'

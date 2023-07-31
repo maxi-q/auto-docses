@@ -25,9 +25,13 @@ const FormWithValidate = ({ defaultValues, children, onSubmit }: FormType) => {
 		<FormProvider {...methods}>
 			<Form onSubmit={handleSubmit(onSubmit)}>
 				{React.Children.map(children, child => {
-					if (!React.isValidElement<EnrichedChildrenType>(child)) {
+					if (
+						!React.isValidElement<EnrichedChildrenType>(child) ||
+						!child.props.name
+					) {
 						return child
 					}
+
 					return React.createElement(child.type, {
 						...{
 							...child.props,

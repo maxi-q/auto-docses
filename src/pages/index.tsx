@@ -5,7 +5,7 @@ import { Main } from './Main'
 import { LoadPage } from './LoadPage'
 import { Profile } from './Profile'
 import { DocumentPage } from './DocumentPage'
-import { Authorization, Registration } from './Authorization'
+import { Authorization, EmailConfirm, Registration } from './Authorization'
 
 
 const GetParam = () => {
@@ -16,15 +16,21 @@ const GetParam = () => {
   </>
 }
 
-export const Navigation: FC = (props) => {
+type NavigationType = {
+  setUser: Function
+  setLoggedIn: Function
+}
+
+export const Navigation = (props: NavigationType) => {
   return (
     <Routes>
       <Route path="Auth" element={<Authorization {...props}/>}/>
-      <Route path="Reg" element={<Registration {...props}/>}/>
-      <Route path="Home" element={<Main {...props}/>}/>
-      <Route path="LoadPage" element={<LoadPage {...props}/>}/>
+      <Route path="Registration" element={<Registration {...props}/>}/>
+      <Route path="Home" element={<Main />}/>
+      <Route path="LoadPage" element={<LoadPage />}/>
       <Route path="Profile" element={<Profile {...props}/>}/>
-      <Route path="document" element={<DocumentPage {...props}/>}>
+
+      <Route path="document" element={<DocumentPage />}>
         <Route path=":id" element={<GetParam/>}/>
       </Route>
     </Routes>

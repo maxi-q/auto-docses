@@ -1,4 +1,10 @@
 const path = require('path')
+const dotenv = require('dotenv').config( {
+  path: path.join(__dirname, '.env')
+} );
+
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
@@ -22,7 +28,6 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader'],
-        
       },
       {
         test: /\.tsx?$/,
@@ -33,7 +38,6 @@ module.exports = {
         test: /\.css$/,
         exclude: /node_modules/,
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
-
       },
       {
         test: /\.(scss)$/,
@@ -99,7 +103,13 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
+      'process.env': JSON.stringify(dotenv.parsed),
       
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+          { from: 'public/public' }
+      ]
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({

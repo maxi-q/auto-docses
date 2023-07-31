@@ -2,6 +2,8 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { CaretRightFill, Clock, Folder, Person } from 'react-bootstrap-icons';
 
+import { COLORS } from '../../constants/style/COLORS';
+
 type HideButtonType = {
   children: ReactNode
   folder?: boolean
@@ -18,8 +20,8 @@ const SButton = styled.button<{active: boolean}>`
   display: flex;
   width: 80%;
 
-  background-color:  ${props => props.active ? "rgba(232,240,254, .9)": "transparent"};
-  color: ${props => props.active ? "rgb(24,90,188)": "#003153"};
+  background-color:  ${props => props.active ? `${COLORS.blue100}E6`: "transparent"};
+  color: ${props => props.active ? `${COLORS.blue700}`: "#003153"};
   font-size: 1em;
 
   padding:  6px 0 6px 3px;

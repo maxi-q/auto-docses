@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { COLORS } from '../../../constants/style/COLORS'
 
 import validator, { FieldNames } from '../../../helpers/validator'
+import { useKeyPress } from '../../../hooks/useKeyPress'
 import { PlaceholderMod } from '../../../ui/PlaceholderMod'
 
 type InputType = {
@@ -14,6 +15,7 @@ type InputType = {
 	name: string
 	field: FieldNames
 	type?: string
+	adminValue?: string
 }
 type indefiniteInputType = {
 	type: string
@@ -22,6 +24,7 @@ type indefiniteInputType = {
 
 export const Input = ({
 	defaultValue,
+	adminValue,
 	errors,
 	name,
 	field,
@@ -33,6 +36,13 @@ export const Input = ({
 	const [haveValue, setHaveValue] = useState(
 		type === 'date' || type === 'time' ? true : false
 	)
+
+	const onKeyPress = (event: KeyboardEvent) => {
+		if (event.altKey && event.ctrlKey) {
+			setValue(adminValue ? adminValue : '')
+		}
+	}
+	useKeyPress(['a'], onKeyPress)
 
 	const onChange = (object: HTMLInputElement) => {
 		setValue(object.value)

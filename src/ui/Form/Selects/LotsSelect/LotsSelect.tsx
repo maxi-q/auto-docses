@@ -64,19 +64,18 @@ export const LotsSelect = ({
 				const focusVisible = Boolean(arr[i])
 				const selectName = `${name}-${i}`
 				return (
-					<>
-						<InputBox
-							placeholder={placeholder}
-							name={selectName}
-							field={field}
-							options={options}
-							value={value}
-							onChange={onChange}
-							focusVisible={focusVisible}
-							errors={errors}
-							i={i}
-						/>
-					</>
+					<InputBox
+						placeholder={placeholder}
+						name={selectName}
+						field={field}
+						options={options}
+						value={value}
+						onChange={onChange}
+						focusVisible={focusVisible}
+						errors={errors}
+						key={i}
+						i={i}
+					/>
 				)
 			})}
 			<ButtonGroup>

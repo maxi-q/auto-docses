@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 type CardType = {
-	className: string
+	className?: string
 	children: ReactNode
 }
 

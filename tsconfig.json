@@ -24,18 +24,17 @@
     "removeComments": true,
     "resolveJsonModule": true,
     "strict": true,
-    "target": "ES2018"
+    "target": "ES2018",
+    "paths": {
+        "@components/*": ["./src/components/*"],
+        "@constants/*": ["./src/constants/*"],
+        "@helpers/*": ["./src/helpers/*"],
+        "@modules/*": ["./src/modules/*"],
+        "@assets/*": ["./src/assets/*"],
+        "@hooks/*": ["./src/hooks/*"],
+        "@api/*": ["./src/API/*"],
+        "@ui/*": ["./src/ui/*"],
+    },
   },
-  "paths": {
-      "@components/*": ["./src/components/*"],
-      "@constants/*": ["./src/constants/*"],
-      "@helpers/*": ["./src/helpers/*"],
-      "@modules/*": ["./src/modules/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@hooks/*": ["./src/hooks/*"],
-      "@api/*": ["./src/API/*"],
-      "@ui/*": ["./src/ui/*"],
-  },
-  
-  
+  "include": ["src", "@types/png.d.ts", "**/*.ts", "**/*.tsx"]
 }
