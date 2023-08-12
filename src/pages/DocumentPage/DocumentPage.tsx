@@ -1,30 +1,28 @@
 import { Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 
-import { documentFileType } from '../../API/documents/CRUD'
-import { getAllFiles } from '../../API/documents'
 
 import { DocumentCard } from './modules/DocumentCard'
 import { Button } from '../../ui'
 
 import photo from '../../assets/images/document.png'
 
-interface ICards {
-	files?: Array<documentFileType>
-}
+// interface ICards {
+// 	files?: Array<documentFileType>
+// }
 
-const Cards = ({ files }: ICards) => {
-	if (!files) {
-		return <p>No render documents</p>
-	}
-	return (
-		<>
-			{files.map((file, id) => (
-				<DocumentCard file={file} key={id} />
-			))}
-		</>
-	)
-}
+// const Cards = ({ files }: ICards) => {
+// 	if (!files) {
+// 		return <p>No render documents</p>
+// 	}
+// 	return (
+// 		<>
+// 			{files.map((file, id) => (
+// 				<DocumentCard file={file} key={id} />
+// 			))}
+// 		</>
+// 	)
+// }
 
 //   <Card style={{ width: '15rem', backgroundColor: 'rgb(190, 190, 190)', margin:'5px' }}>
 //   <Card.Img variant="top" src={file.photo} />
@@ -67,21 +65,21 @@ export const DocumentPage = () => {
 			refresh: refresh
 		})
 	}
-	const files = getAllFiles()
-	if (!files) {
-		return <p>No render documents</p>
-	}
-	console.log(files)
-	files[0] ? (files[0].photo = photo) : undefined
-	files[1] ? (files[1].photo = photo) : undefined
+	// // const files = getAllFiles()
+	// if (!files) {
+	// 	return <p>No render documents</p>
+	// }
+	// console.log(files)
+	// files[0] ? (files[0].photo = photo) : undefined
+	// files[1] ? (files[1].photo = photo) : undefined
 
 	return (
 		<>
-			<Button onClick={checkAll}>Добавить документ</Button>
+			{/* <Button onClick={checkAll}>Добавить документ</Button>
 			<Disc>
 				<Cards files={files} />
 			</Disc>
-			<Outlet />
+			<Outlet /> */}
 		</>
 	)
 }

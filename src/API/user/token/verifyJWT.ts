@@ -12,27 +12,22 @@ export interface IVerifyJWTCallback {
 }
 
 export const fetchVerifyJWT = async (): Promise<IVerifyJWTCallback> => {
-  const access = localStorage.getItem("access")
+	const access = localStorage.getItem('access')
 	const options = {
 		method: 'POST',
 		headers: new Headers({
 			'Content-Type': 'application/json',
 		}),
 		body: JSON.stringify({
-			"token": access
+			token: access,
 		}),
 	}
 
 	const response = await fetchM(ServerURL + 'auth/jwt/verify/', options)
-	// , 'getJWTToken'
-	const data: IVerifyJWTCallbackData = await response.json()
-
-	console.log(response)
-	console.log(data)
 
 	if (response.status == 200) {
-    return { status: 200 }
+		return { status: 200 }
 	}
-  localStorage.setItem('access', '')
+	localStorage.setItem('access', '')
 	return { status: 400 }
 }

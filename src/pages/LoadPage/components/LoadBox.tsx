@@ -1,78 +1,48 @@
 import styled from 'styled-components'
 
-import { toolbarPlugin } from '@react-pdf-viewer/toolbar'
-import React from 'react'
+import { ButtonCircle } from '@ui/ButtonCircle'
+import { useNavigate, useParams } from 'react-router-dom'
 import { COLORS } from '../../../constants/style/COLORS'
 import { Button } from '../../../ui'
 
 interface ILoadBox {
-	url: Array<string>
-	setInputElement: Function
-	changeHandler: React.ChangeEventHandler
-	openClick: React.MouseEventHandler
-	submitFiles: Function
-	upload: boolean
-	files: Array<File>
 	viewer: any
+	maxPage: number
 }
 
-export const LoadBox = ({
-	url,
-	setInputElement,
-	changeHandler,
-	openClick,
-	submitFiles,
-	upload,
-	files,
-	viewer
-}: ILoadBox) => {
-	const toolbarPluginInstance = toolbarPlugin()
-	const { Toolbar } = toolbarPluginInstance
+export const LoadBox = ({ viewer, maxPage }: ILoadBox) => {
+	const navigate = useNavigate()
+	const params = useParams()
 
-	function nope() {
-		return <></>
+	const prodId = params.id
+	const nowDocumentIndex = Number(params.index) || 0
+
+	const Minus = () => {
+		if (nowDocumentIndex > 0) {
+			navigate(`/LoadPage/${prodId}/${nowDocumentIndex - 1}`)
+		}
 	}
-
-	let preview: Array<React.ReactNode> = []
-
-	if (url) {
-		preview = url.map((item, i) => <p key={i}>{item}</p>)
+	const Plus = () => {
+		if (nowDocumentIndex < maxPage - 1) {
+			navigate(`/LoadPage/${prodId}/${nowDocumentIndex + 1}`)
+		}
 	}
-
 	return (
 		<>
 			<LoadDivStyled>
-				<Title>Загрузка файлов</Title>
+				<Title>Предпросмотр</Title>
+				<ButtonsBlock>
+					<ButtonCircle onClick={Minus}>-</ButtonCircle>
+					<NowPage>
+						{nowDocumentIndex + 1}/{maxPage}
+					</NowPage>
+					<ButtonCircle onClick={Plus}>+</ButtonCircle>
+				</ButtonsBlock>
+
 				<LoadBoxStyled>
-					<NoneInput
-						ref={input => {
-							setInputElement(input)
-						}}
-						multiple={true}
-						onChange={changeHandler}
-						type='file'
-						id='file'
-						placeholder='Search'
-					/>
-					<ButtonsBlock>
-						<OpenButton onClick={openClick}>Открыть</OpenButton>
-						{upload ? (
-							<UploadButton onClick={() => submitFiles(files)}>
-							Загрузить
-						</UploadButton>
-						) : (
-							nope()
-						)}
-					</ButtonsBlock>
-					{upload ? (
-						<Preview>
-							{url.map((urla, i) => {
-								return <WebViewer key={i} ref={viewer}></WebViewer>
-							})}
-						</Preview>
-					) : (
-						<Preview>Файл не выбран</Preview>
-					)}
+					<Preview>
+						<WebViewer ref={viewer}></WebViewer>
+					</Preview>
 				</LoadBoxStyled>
 			</LoadDivStyled>
 		</>
@@ -81,6 +51,9 @@ export const LoadBox = ({
 
 const Title = styled.h3`
 	margin: 0 0 0 15px;
+`
+const NowPage = styled.h5`
+	margin: auto 5px;
 `
 const LoadDivStyled = styled.div`
 	background: ${COLORS.blue100};
@@ -103,6 +76,7 @@ const NoneInput = styled.input`
 const ButtonsBlock = styled.div`
 	display: flex;
 	margin-left: 40px;
+	align-items: center;
 `
 const OpenButton = styled(Button)`
 	border-radius: 12px;
@@ -123,5 +97,5 @@ const Preview = styled.div`
 	padding: 0.5rem;
 `
 const WebViewer = styled.div`
-    width: 100%;
+	width: 100%;
 `

@@ -1,43 +1,41 @@
-import React, { FC } from 'react'
-import { Route, Routes, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 
-import { Main } from './Main'
-import { LoadPage } from './LoadPage'
-import { Profile } from './Profile'
+import { Authorization, Registration } from './Authorization'
 import { DocumentPage } from './DocumentPage'
-import { Authorization, EmailConfirm, Registration } from './Authorization'
-
+import { LoadPage } from './LoadPage'
+import { Main } from './Main'
+import { Profile } from './Profile'
 
 const GetParam = () => {
-  const params = useParams();
-    const prodId = params.id;
-  return <>
-  {prodId}
-  </>
+	const params = useParams()
+	const prodId = params.id
+	return <>{prodId}</>
 }
 
 type NavigationType = {
-  setUser: Function
-  setLoggedIn: Function
+	setUser: Function
+	setLoggedIn: Function
 }
 
 export const Navigation = (props: NavigationType) => {
-  return (
-    <Routes>
-      <Route path="Auth" element={<Authorization {...props}/>}/>
-      <Route path="Registration" element={<Registration {...props}/>}/>
-      <Route path="Home" element={<Main />}/>
-      <Route path="LoadPage" element={<LoadPage />}/>
-      <Route path="Profile" element={<Profile {...props}/>}/>
+   
+	return (
+		<Routes>
+			<Route path='Auth' element={<Authorization {...props} />} />
+			<Route path='Registration' element={<Registration {...props} />} />
+			<Route path='Home' element={<Main />} />
+			<Route path='LoadPage' element={<LoadPage/>}>
+				<Route path=':id' element={<Navigate to={'0'} />} />
+				<Route path=':id/:index' element={<LoadPage />} />
+			</Route>
+			<Route path='Profile' element={<Profile {...props} />} />
 
-      <Route path="document" element={<DocumentPage />}>
-        <Route path=":id" element={<GetParam/>}/>
-      </Route>
-    </Routes>
-  )
+			<Route path='document' element={<DocumentPage />}>
+				<Route path=':id' element={<GetParam />} />
+			</Route>
+		</Routes>
+	)
 }
-
-
 
 // export const routesMap = [
 // { path: '/accesso/done', route: routes.accesso.done },

@@ -9,9 +9,7 @@ import './API/user/fetchDecorator'
 
 import { IUser } from '@api/user/profileData'
 import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
-import { AuthContext, UserContext } from './contexts'
-
-import { Navigate } from 'react-router-dom'
+import { AuthContext, DocumentContext, UserContext } from './contexts'
 
 export function App() {
 	const [background, setBackground] = useState('')
@@ -24,27 +22,34 @@ export function App() {
 		last_name: '',
 		date_joined: '',
 	})
-	const [may, setMay] = useState(false)
+	const [may, setMay] = useState(true)
+
+
+
 	useEffect(() => {
-		fetchVerifyJWT()
-			.then(data => {
-				if (data.status != 400) {
-					setLoggedIn(true)
-				}
-				setMay(true)
-			})
+		fetchVerifyJWT().then(data => {
+			if (data.status != 400) {
+				setLoggedIn(true)
+			}
+			setMay(true)
+		})
 	}, [])
 
 	return (
 		<AuthContext.Provider value={loggedIn}>
 			<UserContext.Provider value={user}>
-				<BrowserRouter>
-					<Header />
-					<MainStyled background={background}>
-						{may && <Navigation setLoggedIn={setLoggedIn} setUser={setUser} />}
-					</MainStyled>
-					<Footer />
-				</BrowserRouter>
+					<BrowserRouter>
+						<Header />
+						<MainStyled background={background}>
+							{may && (
+								<Navigation
+									setLoggedIn={setLoggedIn}
+									setUser={setUser}
+								/>
+							)}
+						</MainStyled>
+						<Footer />
+					</BrowserRouter>
 			</UserContext.Provider>
 		</AuthContext.Provider>
 	)

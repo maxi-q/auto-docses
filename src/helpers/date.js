@@ -15,6 +15,5 @@ const MONTH = [
 export const getFullDate = (date) => {
 	date = new Date(date)
 	if(!date.getDate()) { return '' }
-  console.log(date)
 	return `${date.getDate()} ${MONTH[date.getMonth()]} ${date.getFullYear()}`
 }

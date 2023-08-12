@@ -18,9 +18,9 @@ export interface IRequestProfileCallback extends IRequestProfileCallbackData {
 
 export const fetchRequestProfile =
 	async (): Promise<IRequestProfileCallback> => {
-		console.log(123)
 
 		const access = localStorage.getItem('access')
+
 		const options = {
 			method: 'GET',
 			headers: new Headers({
@@ -28,18 +28,10 @@ export const fetchRequestProfile =
 				Authorization: `Bearer ${access}`,
 			}),
 		}
-		console.log(access)
 
 		const response = await fetch(ServerURL + 'users/me/', options)
-		// , 'getJWTToken'
-		console.log(response, options)
 
 		const data: IRequestProfileCallbackData = await response.json()
 
-		console.log('_-_')
-		console.log(response)
-		console.log(data)
-
-		console.log(data)
 		return { status: 200, ...data }
 	}

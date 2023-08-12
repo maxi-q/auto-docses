@@ -1,32 +1,59 @@
-import WebViewer, { Core, WebViewerInstance } from '@pdftron/webviewer'
+import WebViewer, { WebViewerInstance } from '@pdftron/webviewer'
 import { Worker } from '@react-pdf-viewer/core'
-import { createRef, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { FormWithValidate } from '../../components/FormWithValidate'
-import { Button, Input } from '../../ui'
 
+import Documents, {
+	IDocumentPackageData,
+	IOneDocumentData,
+} from '@api/documents'
+import { ButtonCircle } from '@ui/ButtonCircle'
+import { Button, Input } from '@ui/index'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FieldNames } from '../../helpers/validator'
 import { Aside, LoadBox } from './components'
+import { ModalAddTemplate } from './modules/ModalAddTemplate'
+
+type keyInDocumentType = {
+	title: string
+	name_in_document: string
+	id: string
+}
 
 export const LoadPage = () => {
 	const viewer = useRef<HTMLElement>()
+
+	const [documentPackageName, setDocumentPackageName] = useState('Имя пакета')
 	const [documentName, setDocumentName] = useState('Имя документа')
 	const [formAction, setFormAction] = useState('Ждет файл...')
-	const [inputElement, setInputElement] = useState<HTMLInputElement | ''>('')
-	const [actionLabel, setActionLabel] = useState('actionLabel')
+	const [maxPage, setMaxPage] = useState(0)
 	const [instance, setInstance] = useState<WebViewerInstance>()
-	const [documentViewer_S, setDocumentViewer] = useState<Core.DocumentViewer>()
 	const [upload, setUpload] = useState(() => false)
-	const [autofillHidden, setAutofillHidden] = useState(true)
-	const [parentUrl, setParentUrl] = useState(window.location.href)
 	const [FormWithFills, setFormWithFills] = useState<React.ReactNode>(null)
-	const [keyValues, setKeyValues] = useState('keyValues')
-	const [files, setFiles] = useState<Array<File>>(() => [])
-	const [url, setUrl] = useState(() => [''])
-	const [keys, setKeys] = useState<Array<string>>(['hello'])
+	const [url, setUrl] = useState('')
+	const [keys, setKeys] = useState<Array<Array<keyInDocumentType>>>()
+	const [documentPackage, setDocumentPackage] = useState<IDocumentPackageData>()
+	const [modalActive, setModalActive] = useState(false)
+	const navigate = useNavigate()
+	const [document, setDocument] = useState<IOneDocumentData>()
+	const params = useParams()
+	const [nowDocumentIndex, setNowDocumentIndex] = useState(Number(params.index) || 0)
+	const prodId = params.id
 
-	const autoFillForm = createRef()
+	useEffect(() => {
+		setNowDocumentIndex(Number(params.index) || 0)
+	}, [params])
+
+	useEffect(() => {
+		setDocument(documentPackage?.documents[nowDocumentIndex])
+	}, [nowDocumentIndex])
+
+	useEffect(() => {
+		documentPackage && setNowDocument(documentPackage)
+	}, [document])
+
 	useEffect(() => {
 		if (!viewer.current) return
 
@@ -38,13 +65,7 @@ export const LoadPage = () => {
 			},
 			viewer.current
 		).then(instance => {
-			const { documentViewer } = instance.Core
 			setInstance(instance)
-			setParentUrl(window.location.href)
-			setDocumentViewer(documentViewer)
-
-			if (!files[0]) return
-			if (!url[0]) return
 
 			instance.UI.disableElements([
 				'leftPanel',
@@ -52,112 +73,139 @@ export const LoadPage = () => {
 				'header',
 				'toolsHeader',
 			])
-			instance.UI.loadDocument(url[0], { filename: files[0].name })
+		})
+	}, [])
 
-			documentViewer.addEventListener('documentLoaded', async () => {
-				await documentViewer.getDocument().getDocumentCompletePromise()
-				documentViewer.updateView()
-				const doc = documentViewer.getDocument()
+	useEffect(() => {
+		if (!url) return
+		if (!instance) return
 
-				// console.log(doc.filename, url[0])
+		const { documentViewer } = instance.Core
 
-				setActionLabel('Отправить для заполнения документа')
-				setAutofillHidden(false)
-				// setDocumentName(doc.filename)
-				setKeyValues('Ключи документа:')
-			})
-			// instance.UI.disableFeatures([instance.Feature.Forms])
-			// instance.UI.enableFeatures([instance.Feature.ContentEdit]);
+		instance.UI.loadDocument(url, {
+			extension: 'docx',
+		})
+
+		documentViewer.addEventListener('documentLoaded', async () => {
+			await documentViewer.getDocument().getDocumentCompletePromise()
+			documentViewer.updateView()
 		})
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [url])
 
+	const documentsSerializer = new Documents()
+
+	const setNowDocument = async (documentPackage: IDocumentPackageData) => {
+		const nowDocument = documentPackage.documents[nowDocumentIndex]
+		if (!nowDocument) return
+		const fileUrl = nowDocument?.file
+		if (!fileUrl) return
+		const blob = await fetch(fileUrl).then(r => r.blob())
+		const url = URL.createObjectURL(blob)
+		setUrl(url)
+		setDocumentName(nowDocument.title)
+	}
+
 	useEffect(() => {
-		if (files[0]) {
-			setUrl([URL.createObjectURL(files[0])])
-		} else setUrl([''])
-		setUpload(Boolean(files.length))
+		documentsSerializer
+			.readPackage({ id: prodId || '' })
+			.then(res => {
+				if (res.status == 404) {
+					navigate('/Profile')
+				}
+				res.json().then(async (data: IDocumentPackageData) => {
+					setUpload(true)
+					setNowDocument(data)
+					
+					setDocumentPackage(data)
+					setDocumentPackageName(data.title)
+
+					if (!data.documents) return
+					setMaxPage(data.documents.length)
+					setKeys(
+						data.documents.map(document =>
+							document.templates?.map(x => ({
+								name_in_document: x.title + ' (' + x.name_in_document + ')',
+								title: x.title,
+								id: x.id,
+							}))
+						)
+					)
+				})
+			})
+			.catch(err => {
+				console.log(err)
+			})
 
 		//after send to server
-		setKeys(['qwe', 'ads'])
-	}, [files])
+	}, [])
 
-	const firstUpdate = useRef(true)
-
-	const onSubmit = (data: object) => fillFile(data)
-
+	const onSubmit = (data: object) => fillDocument(data)
+	const addTemplate = () => {
+		setModalActive(true)
+	}
 	useEffect(() => {
-		if (firstUpdate.current) {
-			firstUpdate.current = false
-			return
-		}
+		if (!keys) return
 
 		setFormWithFills(
 			<>
 				<FormWithValidate onSubmit={onSubmit}>
-					{keys.map((key, i) => (
-						<FeatureInput key={i}>
-							<KeyLabel>{key}:</KeyLabel>
-							<Input
-								field={FieldNames.field}
-								placeholder={''}
-								type='textarea'
-								name={key}
-							/>
-						</FeatureInput>
-					))}
-					{keys.length && <Button type='submit'>Заполнить документ</Button>}
+					{keys &&
+						keys.map((keyPackage, i) => {
+							return (
+								<>
+									<TemplateSplitter />
+									{keyPackage.map((key, j) => (
+										<FeatureInput key={i + ',' + j}>
+											<KeyLabel>{key.name_in_document}:</KeyLabel>
+											<Input
+												field={FieldNames.field}
+												placeholder={''}
+												type='textarea'
+												name={key.title}
+											/>
+										</FeatureInput>
+									))}
+								</>
+							)
+						})}
+					{keys && <Button type='submit'>Заполнить все документы</Button>}
 				</FormWithValidate>
+
+				<AddTemplateBlock>
+					<AddTemplateButton onClick={addTemplate}>+</AddTemplateButton>
+				</AddTemplateBlock>
 			</>
 		)
 		setFormAction('Заполните поля')
 	}, [keys])
 	//
 
-	const fillFile = (data: object) => {
-		console.log(data)
-		fillDocument()
-	}
-	const fillDocument = () => {
-		console.log(formAction)
+	const fillDocument = (data: object) => {
 		return
 	}
 
-	const openClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		// e.preventDefault() !
-		if (inputElement) {
-			inputElement.click()
-		}
-		// Запускает changeHundler
-	}
-	const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (Boolean(e.target?.files)) {
-			setFiles(Array.from(e.target.files || []))
-		}
-	}
-	const submitFiles = (files: Array<File>) => {}
 	return (
 		<>
 			<LoadPageStyled>
 				<Worker workerUrl='https://unpkg.com/pdfjs-dist@3.3.122/build/pdf.worker.min.js'>
 					<Aside
+						documentPackageName={documentPackageName}
 						documentName={documentName}
 						formAction={formAction}
 						FormWithFills={FormWithFills}
-						fillFile={fillFile}
+						fillFile={fillDocument}
 					/>
 
-					<LoadBox
-						setInputElement={setInputElement}
-						changeHandler={changeHandler}
-						submitFiles={submitFiles}
-						openClick={openClick}
-						upload={upload}
-						viewer={viewer}
-						files={files}
-						url={url}
-					/>
+					<LoadBox viewer={viewer} maxPage={maxPage}/>
+					{document && (
+						<ModalAddTemplate
+							document={document}
+							setModalActive={setModalActive}
+							modalActive={modalActive}
+						/>
+					)}
 				</Worker>
 			</LoadPageStyled>
 		</>
@@ -181,6 +229,26 @@ const FeatureInput = styled.div`
 	align-items: start;
 `
 
+const AddTemplateButton = styled(ButtonCircle)`
+	width: 80px;
+	height: 80px;
+	font-size: 30px;
+	margin: 0 8px 0 0;
+	position: absolute;
+	bottom: 20px;
+	right: 20px;
+`
+const AddTemplateBlock = styled.div`
+	display: absolute;
+	down: 20px;
+	right: 20px;
+	margin: 1% 0 0 0;
+`
+const TemplateSplitter = styled.div`
+	width: 100%;
+	height: 1px;
+	background-color: grey;
+`
 export default LoadPage
 
 // useEffect(() => {

@@ -1,13 +1,7 @@
-import Card from 'react-bootstrap/Card'
-import { Link, Navigate } from 'react-router-dom'
-import styled from 'styled-components'
-
-import { FormWithValidate } from '../../components/FormWithValidate'
-import { Button, Input } from '../../ui'
-
-import { FieldNames } from '../../helpers/validator'
+import { Navigate } from 'react-router-dom'
 
 import { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
 	IConfirmEmailCallback,
 	fetchConfirmEmail,
@@ -17,9 +11,9 @@ import {
 	fetchDataForRegistration,
 } from '../../API/user/register'
 import { fetchRequestJWT } from '../../API/user/token/createJWT'
-import { COLORS } from '../../constants/style/COLORS'
-import { useNavigate  } from 'react-router-dom'
 import { AuthContext } from '../../contexts'
+import { AuthWindow, EmailWindow, RegWindow } from './modules'
+import { Body } from './ui'
 
 type NavigationType = {
 	setLoggedIn: Function
@@ -69,127 +63,13 @@ const Main = ({
 				email: typeof data.email == 'string' ? data.email : '',
 			}).then(feedback => setCallback(feedback))
 		}
-		// setConfirm(true)
 	}
 
 	return (
 		<>
 			<Body>
-			{authContext && <Navigate to={'/Profile'}/>}
-				<Window>
-					<FormWithValidate onSubmit={onSubmit}>
-						<Window.Title>Окно регистрации</Window.Title>
-						<Input
-							defaultValue='Максим'
-							name='first_name'
-							placeholder='Имя'
-							field={FieldNames.field}
-						/>
-						<Input
-							defaultValue='Галушкин'
-							name='last_name'
-							placeholder='Фамилия'
-							field={FieldNames.field}
-						/>
-						<Input
-							defaultValue='maxi-q'
-							name='username'
-							placeholder='Логин'
-							field={FieldNames.login}
-						/>
-						<Input
-							defaultValue='maximkabust@gmail.com'
-							name='email'
-							placeholder='Почта'
-							field={FieldNames.email}
-						/>
-						<Input
-							defaultValue='evKBJHsdf4hriewiBSDIF777'
-							name='password'
-							type='password'
-							placeholder='Пароль'
-							field={FieldNames.password}
-						/>
-						<Input
-							defaultValue='evKBJHsdf4hriewiBSDIF777'
-							name='rePassword'
-							type='password'
-							placeholder='Повторить пароль'
-							field={FieldNames.password}
-						/>
-
-						<RButton>Регистрация</RButton>
-					</FormWithValidate>
-					<Errors>
-						{callback.password ? (
-							<span>password: {...callback.password}</span>
-						) : (
-							<></>
-						)}
-						{callback.username ? (
-							<span>username: {...callback.username}</span>
-						) : (
-							<></>
-						)}
-						{callback.non_field_errors ? (
-							<span>{...callback.non_field_errors}</span>
-						) : (
-							<></>
-						)}
-					</Errors>
-					<Link to='/Auth'>Уже зарегистрированы? Вход</Link>
-				</Window>
-			</Body>
-		</>
-	)
-}
-
-export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
-	const [callback, setCallback] = useState<IRegistrationCallback>({})
-	const navigate = useNavigate()
-	const authContext = useContext(AuthContext)
-	console.log('ads', authContext)
-	useEffect(() => {
-		if (callback.status == 200) {
-			setLoggedIn(true)
-			navigate('/Profile')
-		}
-	}, [callback])
-
-	const onSubmit = async (data: Object) => {
-		console.log('hello, ', data)
-		if ('username' in data && 'password' in data) {
-			fetchRequestJWT({
-				username: typeof data.username == 'string' ? data.username : '',
-				password: typeof data.password == 'string' ? data.password : '',
-			}).then(feedback => setCallback(feedback))
-		}
-		// setConfirm(true)
-	}
-
-	return (
-		<>
-			<Body>
-			{authContext && <Navigate to={'/Profile'}/>}
-				<Window>
-					<FormWithValidate onSubmit={onSubmit}>
-						<Window.Title>Окно входа</Window.Title>
-						<Input
-							name='username'
-							type='text'
-							placeholder='Логин'
-							field={FieldNames.field}
-						/>
-						<Input
-							name='password'
-							type='password'
-							placeholder='Пароль'
-							field={FieldNames.password}
-						/>
-						<RButton>Войти</RButton>
-					</FormWithValidate>
-					<Link to='/Registration'>Еще не зарегистрированы? Регистрация</Link>
-				</Window>
+				{authContext && <Navigate to={'/Profile'} />}
+				<RegWindow onSubmit={onSubmit} callback={callback} />
 			</Body>
 		</>
 	)
@@ -229,48 +109,41 @@ export const EmailConfirm = ({
 	return (
 		<>
 			<Body>
-				<Window>
-					<FormWithValidate onSubmit={onSubmit}>
-						<Window.Title>Подтвердите email</Window.Title>
-						<Input
-							name='confirmation_code'
-							type='text'
-							placeholder='Код'
-							field={FieldNames.field}
-						/>
-						<RButton>Подтвердить</RButton>
-					</FormWithValidate>
-				</Window>
+				<EmailWindow onSubmit={onSubmit} />
 			</Body>
 		</>
 	)
 }
 
-const Errors = styled.div`
-	color: red;
-	display: flex;
-	flex-direction: column;
-`
+export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
+	const [callback, setCallback] = useState<IRegistrationCallback>({})
+	const authContext = useContext(AuthContext)
 
-const Body = styled.div`
-	width: 100wh;
-	height: 80vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: ${COLORS.blue100};
-`
+	const navigate = useNavigate()
 
-const Window = styled(Card)`
-	min-width: 450px;
-	min-height: 100px;
-	width: max-content;
-	height: min-content;
-	padding: 40px;
-	gap: 10px;
-`
-const RButton = styled(Button)`
-	max-width: 150px;
-	width: 100%;
-	margin-left: auto;
-`
+	useEffect(() => {
+		if (callback.status == 200) {
+			setLoggedIn(true)
+			navigate('/Profile')
+		}
+	}, [callback])
+
+	const onSubmit = async (data: Object) => {
+		console.log('hello, ', data)
+		if ('username' in data && 'password' in data) {
+			fetchRequestJWT({
+				username: typeof data.username == 'string' ? data.username : '',
+				password: typeof data.password == 'string' ? data.password : '',
+			}).then(feedback => setCallback(feedback))
+		}
+	}
+
+	return (
+		<>
+			<Body>
+				{authContext && <Navigate to={'/Profile'} />}
+				<AuthWindow onSubmit={onSubmit} />
+			</Body>
+		</>
+	)
+}

@@ -6,10 +6,10 @@ import { Button } from '../../../Button'
 
 import { FieldNames } from 'src/helpers/validator'
 import { InputBox } from '../components/InputBox'
-import Plus from './ui/Plus'
 import { Minus } from './ui/Minus'
+import Plus from './ui/Plus'
 
-interface ISelectOptions {
+export interface ISelectOptions {
 	label: number | string
 	value: string
 }
@@ -42,7 +42,7 @@ export const LotsSelect = ({
 
 	const { unregister } = useFormContext()
 
-	const removeInput:MouseEventHandler = (e) => {
+	const removeInput: MouseEventHandler = e => {
 		e.preventDefault()
 		unregister(`${name}-${arr.length - 1}`)
 		setArr(s => {
@@ -51,7 +51,7 @@ export const LotsSelect = ({
 		})
 	}
 
-	const addInput:MouseEventHandler = (e) => {
+	const addInput: MouseEventHandler = e => {
 		e.preventDefault()
 		setArr(s => {
 			return [...s, '']

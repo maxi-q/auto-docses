@@ -3,14 +3,14 @@ import styled from 'styled-components'
 
 type ModalType = {
   active: boolean
-  setActive: Function
+  setActive: React.Dispatch<React.SetStateAction<boolean>>
   children: ReactNode
 }
 
 export const Modal = ({active, setActive, children}: ModalType) => {
   return (
     <ModalBG active={active} onClick={() => setActive(false)}>
-      <ModalContent onClick={() => setActive(false)}>
+      <ModalContent onClick={(e) => e.stopPropagation()}>
         {children}
       </ModalContent>
     </ModalBG>
@@ -28,13 +28,13 @@ const ModalBG = styled.div<{active: boolean}>`
   width: 100vw;
   background: rgba(0,0,0,0.4);
   position: fixed;
-  display: flex;
+  display: ${props => props.active ? 'flex' : 'none'};
   align-items: center;
   justify-content: center;
   top: 0;
   left: 0;
   pointer-events: ${props => props.active ? 'all' : 'none'};
-
+]
   transition: 0.5s;
   opacity: ${props => props.active ? 1 : 0};
 `

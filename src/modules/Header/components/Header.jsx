@@ -11,7 +11,6 @@ export const Header = () => {
 	//тут должна быть проверка токена
 
 	fetchVerifyJWT().then(data => {
-		console.log(`fetchVerifyJWT, ${data}`)
 		if (data.status == 401) {
 			localStorage.setItem('access', '')
 		}

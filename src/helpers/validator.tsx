@@ -11,6 +11,7 @@ export enum FieldNames {
 	password = 'password',
 	select = 'select',
 	username = 'username',
+	mayEmpty = 'mayEmpty',
 }
 
 const validator: IValidator<typeof FieldNames> = {
@@ -28,6 +29,7 @@ const validator: IValidator<typeof FieldNames> = {
 			message: 'Поле должен быть длиной 3+ символов.',
 		},
 	},
+	mayEmpty: {},
 	email: {
 		required: 'Почта обязательна!',
 		pattern: {
