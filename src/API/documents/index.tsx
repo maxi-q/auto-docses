@@ -47,7 +47,7 @@ export interface IDocumentPackageData {
 interface IUpdateIDocumentPackage {
 	title?: string
 	id: string
-	documents: Array<string>
+	documents?: Array<string>
 }
 class Documents {
 	ServerURL = process.env.ServerURL

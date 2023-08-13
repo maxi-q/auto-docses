@@ -5,11 +5,12 @@ type ModalType = {
   active: boolean
   setActive: React.Dispatch<React.SetStateAction<boolean>>
   children: ReactNode
+  onClick?: Function
 }
 
-export const Modal = ({active, setActive, children}: ModalType) => {
+export const Modal = ({active, setActive, children, onClick = () => {}}: ModalType) => {
   return (
-    <ModalBG active={active} onClick={() => setActive(false)}>
+    <ModalBG active={active} onClick={() => {setActive(false); onClick()}}>
       <ModalContent onClick={(e) => e.stopPropagation()}>
         {children}
       </ModalContent>

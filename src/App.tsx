@@ -9,7 +9,7 @@ import './API/user/fetchDecorator'
 
 import { IUser } from '@api/user/profileData'
 import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
-import { AuthContext, DocumentContext, UserContext } from './contexts'
+import { AuthContext, UserContext } from './contexts'
 
 export function App() {
 	const [background, setBackground] = useState('')
@@ -24,8 +24,6 @@ export function App() {
 	})
 	const [may, setMay] = useState(true)
 
-
-
 	useEffect(() => {
 		fetchVerifyJWT().then(data => {
 			if (data.status != 400) {
@@ -39,7 +37,7 @@ export function App() {
 		<AuthContext.Provider value={loggedIn}>
 			<UserContext.Provider value={user}>
 					<BrowserRouter>
-						<Header />
+						<Header setLoggedIn={setLoggedIn}/>
 						<MainStyled background={background}>
 							{may && (
 								<Navigation
@@ -55,13 +53,9 @@ export function App() {
 	)
 }
 
-const DeveloperNav = styled('nav')`
-	border-bottom: solid 1px;
-	padding-bottom: 0.5rem;
-	margin-bottom: 0px;
-`
 const MainStyled = styled.div<{ background: string }>`
 	background-color: ${props => props.background};
-	padding-top: 62px;
-	
+	& > * {
+		padding-top: 62px;
+	}
 `

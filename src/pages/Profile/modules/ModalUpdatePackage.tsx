@@ -5,22 +5,20 @@ import { Button, Input, Modal } from '@ui/index'
 import { useState } from 'react'
 import { lotsSelectToArray } from '../../LoadPage/helpers/lotsSelectToArray'
 
-interface IModalUpdateDocument {
-	documentId: string
+interface IModalUpdatePackage { 
+  packageId: string
 	setIUpdating:  React.Dispatch<React.SetStateAction<'check' | 'documentUpdate' | 'packageUpdate'>>
 }
-
-const ModalUpdateDocument = ({
-	documentId,
+const ModalUpdatePackage = ({
+	packageId,
 	setIUpdating
-}: IModalUpdateDocument) => {
-	const [document, setDocument] = useState<IOneDocumentData>()
+}: IModalUpdatePackage) => {
+	const [packageI, setPackage] = useState<IOneDocumentData>()
 	const documentsSerializer = new Documents()
 
-	
-		documentsSerializer.read({ id: documentId }).then(res => {
+		documentsSerializer.readPackage({ id: packageId }).then(res => {
 			res.json().then(data => {
-				setDocument(data)
+				setPackage(data)
 			})
 		})
 
@@ -29,38 +27,30 @@ const ModalUpdateDocument = ({
 		// Здесь все работает!
 		const sendDocument: any = lotsSelectToArray(data)
 
-		documentId &&
-			await DocumentsManager.update({
-				id: documentId,
+		packageI &&
+			await DocumentsManager.updatePackage({
+				id: packageI.id,
 				title: sendDocument.title,
-				description: sendDocument.description,
 			})
 		// Здесь все работает!
 		setIUpdating('check')
 	}
 	return (
 			<FormWithValidate onSubmit={onSubmit}>
-				{document && (
+				{packageI && (
 					<>
 						<Input
-							defaultValue={document.title}
+							defaultValue={packageI.title}
 							field={FieldNames.field}
 							placeholder={'Название'}
 							type='textarea'
 							name={'title'}
 						/>
-						<Input
-							defaultValue={document.description}
-							field={FieldNames.mayEmpty}
-							placeholder={'Описание'}
-							type='textarea'
-							name={'description'}
-						/>
 					</>
 				)}
-				<Button type='submit'>Изменить документ</Button>
+				<Button type='submit'>Изменить пакет</Button>
 			</FormWithValidate>
 	)
 }
 
-export { ModalUpdateDocument }
+export { ModalUpdatePackage }

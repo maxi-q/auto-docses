@@ -15,9 +15,9 @@ interface ISimpleTemplateValue {
 
 export interface IRecordData {
   id: string
-  document_package: ISimpleDocumentPackage
-  templates_values: ISimpleTemplateValue
-  creation_date: Date
+  documents_package: ISimpleDocumentPackage
+  templates_values: Array<ISimpleTemplateValue>
+  creation_date: string
 }
 
 interface ICreateUpdateTemplateValue { 

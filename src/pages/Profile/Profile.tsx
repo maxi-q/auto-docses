@@ -5,16 +5,15 @@ import Table from 'react-bootstrap/Table'
 import { Navigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { fetchRequestProfile } from '../../API/user/profileData'
-import { COLORS } from '../../constants/style/COLORS'
 import { AuthContext, UserContext } from '../../contexts'
 import { getFullDate } from '../../helpers/date'
-import { Button } from '../../ui'
 import { DefaultTemplateValues } from './modules/DTamplate'
 import { DocumentTable } from './modules/DocumentTable'
 import { ModalAddDocumentPackage } from './modules/ModalAddPackage'
 import { ModalUpdateDocument } from './modules/ModalUpdateDocument'
 import { ModalAddDocument } from './modules/ModallAddDocumentq'
 import { ModalDeleteDocument } from './modules/ModalDeleteDocument'
+import { ModalDetailsDocumentPackage } from './modules/ModalDetailsDocumentPackage'
 
 type NavigationType = {
 	setUser: Function
@@ -29,7 +28,8 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [modalActiveDocument, setModalDocumentActive] = useState(false)
 	const [modalUpdateActive, setModalUpdateActive] = useState(false)
 	const [modalDeleteActive, setModalDeleteActive] = useState(false)
-
+	const [modalDetailsActive, setModalDetailsActive] = useState(false)
+	
 	const [packageId, setPackageId] = useState<string>()
 	const [documentId, setDocumentId] = useState<string>()
 	const [packageDocuments, setPackageDocuments] = useState<Array<string>>()
@@ -42,7 +42,7 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 	useEffect(() => {
 		fetchRequestProfile()
 			.then(data => {
-				data.date_joined = getFullDate(new Date(data.date_joined))
+				data.date_joined = getFullDate(data.date_joined)
 				setUser(data)
 			})
 			.catch(_error => {
@@ -61,10 +61,7 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		setModalPackageActive(true)
 	}
 
-	const logOut = () => {
-		setLoggedIn(false)
-		localStorage.setItem('access', '')
-	}
+
 
 	return (
 		<Body>
@@ -79,15 +76,13 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 				<MyTemplates>
 					<DefaultTemplateValues />
 				</MyTemplates>
-				<Button onClick={logOut}>Выйти</Button>
 			</Main>
 			<MainTable>
 				<thead>
 					<tr>
 						<th style={{ paddingLeft: '20px' }}>Название</th>
 						<th>Автор</th>
-						<th>Поля</th>
-						<th>Действия</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -100,6 +95,7 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 							setDocumentId={setDocumentId}
 							setModalUpdateActive={setModalUpdateActive}
 							setModalDeleteActive={setModalDeleteActive}
+							setModalDetailsActive={setModalDetailsActive}
 						/>
 					)}
 				</tbody>
@@ -121,56 +117,46 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 				packageDocuments={packageDocuments}
 			/>
 
-			<ModalUpdateDocument
-				setModalActive={setModalUpdateActive}
-				modalActive={modalUpdateActive}
-				documentId={documentId}
-			/>
-
 			<ModalDeleteDocument
 				setModalActive={setModalDeleteActive}
 				modalActive={modalDeleteActive}
 				documentId={documentId}
 			/>
+			<ModalDetailsDocumentPackage
+				setModalActive={setModalDetailsActive}
+				modalActive={modalDetailsActive}
+				packageId={packageId}
+			/>
 		</Body>
 	)
 }
 const MyTemplates = styled.div`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 	flex: 1;
 `
 const Info = styled.p``
-const Text = styled.span`
-	font-weight: 100;
-`
+
 const Main = styled.div`
 	padding: 15px;
 	width: 40%;
-	height: Math(92vh - 62px);
-	background-color: ${COLORS.blue100};
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 `
 const MainTable = styled(Table)`
 	min-height: 30px;
 	height: min-content;
-	background-color: ${COLORS.blue100};
 `
 const Body = styled.div`
 	background-color: transparent;
-	min-height: 90vh;
+	height: 100vh;
 	display: flex;
 	width: 100%;
 	margin-right: auto;
 	margin-left: auto;
-`
-const TableBlock = styled.div`
-	background-color: transparent;
-	display: flex;
-	flex-direction: column;
-	width: 100%;
-	margin-right: auto;
-	margin-left: auto;
-	padding-top: 1%;
 `
 const Title = styled.h3``
 

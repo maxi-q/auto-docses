@@ -15,6 +15,7 @@ interface IDocumentPackageRow {
 	setDocumentId: Function
 	setModalUpdateActive: Function
 	setModalDeleteActive: Function
+	setModalDetailsActive: Function
 }
 export const DocumentPackageRow = ({
 	documents,
@@ -24,7 +25,8 @@ export const DocumentPackageRow = ({
 	setModalDocumentActive,
 	setDocumentId,
 	setModalUpdateActive,
-	setModalDeleteActive
+	setModalDeleteActive,
+	setModalDetailsActive
 }: IDocumentPackageRow) => {
 	const [active, setActive] = useState(false)
 	const user = useContext(userContext)
@@ -59,62 +61,14 @@ export const DocumentPackageRow = ({
 				<td>
 					<Button
 						onClick={() => {
-							setActive(!active)
+							setModalDetailsActive(true)
+							setPackageId(documentPackage.id)
 						}}
 					>
-						{active ? 'Закрыть' : 'Посмотреть'}
+						Детали
 					</Button>
 				</td>
-				{user.username == documentPackage.author.username && (
-					<td>
-						<Button
-							onClick={() => {
-								addDocument(documentPackage.id, documentPackage.documents)
-							}}
-						>
-							добавить документ
-						</Button>
-					</td>
-				)}
 			</Row>
-			{active &&
-				documents.map((document, i) => (
-					<Row
-						onClick={() => {
-							ChangeDocument(documentPackage.id, i)
-						}}
-					>
-						<td>{document.title}</td>
-						<td>{document.description}</td>
-						<td>
-							{document.templates.map(
-								template => template.name_in_document + ' '
-							)}
-						</td>
-						<td>
-							{user.username == documentPackage.author.username && (
-								<td>
-									<Button
-										onClick={e => {
-											e.stopPropagation()
-											updateDocument(document.id)
-										}}
-									>
-										изменить
-									</Button>
-									<Button
-										onClick={e => {
-											e.stopPropagation()
-											deleteDocument(document.id)
-										}}
-									>
-										удалить
-									</Button>
-								</td>
-							)}
-						</td>
-					</Row>
-				))}
 		</>
 	)
 }

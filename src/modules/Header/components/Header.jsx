@@ -5,9 +5,11 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 
 import { AiOutlineSmile } from 'react-icons/ai'
+import { FiLogOut } from 'react-icons/fi'
+
 import { fetchVerifyJWT } from '../../../API/user/token/verifyJWT'
 
-export const Header = () => {
+export const Header = (setLoggedIn) => {
 	//тут должна быть проверка токена
 
 	fetchVerifyJWT().then(data => {
@@ -15,9 +17,13 @@ export const Header = () => {
 			localStorage.setItem('access', '')
 		}
 	})
+	const logOut = () => {
+		setLoggedIn(false)
+		localStorage.setItem('access', '')
+	}
 
 	return (
-		<Navbar as="header" bg="light" expand="lg" className="navbar navbar-light" style={{position: "absolute", width: '100vw'}}>
+		<Navbar as="header" bg="light" expand="lg" className="navbar navbar-light" style={{position: "absolute", width: '100%'}}>
       <Container>
         <Navbar.Brand as={Link} to="/Home">AutoDocxOnline</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
@@ -30,6 +36,9 @@ export const Header = () => {
           <Nav>
             <Nav.Link as={Link} to="/Profile">
               <AiOutlineSmile style={{fontSize: '30px'}}/>
+            </Nav.Link>
+            <Nav.Link onClick={logOut} as={Link} to="/Auth">
+              <FiLogOut style={{fontSize: '20px', marginLeft: '10px'}}/>
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>  

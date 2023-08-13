@@ -11,6 +11,7 @@ interface IDocumentTable {
 	setDocumentId: Function
 	setModalUpdateActive: Function
 	setModalDeleteActive: Function
+	setModalDetailsActive:Function
 }
 export const DocumentTable = ({
 	setModalDocumentActive,
@@ -19,7 +20,8 @@ export const DocumentTable = ({
 	setPackageDocuments,
 	setDocumentId,
 	setModalUpdateActive,
-	setModalDeleteActive
+	setModalDeleteActive,
+	setModalDetailsActive
 }: IDocumentTable) => {
 
 	return (
@@ -36,6 +38,7 @@ export const DocumentTable = ({
 							documentPackage={d}
 							setModalUpdateActive={setModalUpdateActive}
 							setModalDeleteActive={setModalDeleteActive}
+							setModalDetailsActive={setModalDetailsActive}
 						/>
 					)
 				})}

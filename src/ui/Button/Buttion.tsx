@@ -17,13 +17,13 @@ const SButton = styled.button`
 	display: block;
 	padding: 0.25em 1em;
 
-	background-color: ${COLORS.gray400};
-	color: ${COLORS.gray900};
+	background-color: ${COLORS.blue500};
+	color: white;
 
 	cursor: pointer;
 	font-size: 1.08em;
 
-	border: 2px solid ${COLORS.gray400};
+	border: 2px solid ${COLORS.blue500};
 	border-radius: 5px;
 	box-shadow: 2px 2px 4px 0px rgba(34, 60, 80, 0.3);
 
@@ -31,8 +31,8 @@ const SButton = styled.button`
 
 	&:hover {
 		color: ${COLORS.gray100};
-		background-color: ${COLORS.gray800};
-		border-color: ${COLORS.gray800};
-		box-shadow: 6px 3px 13px 4px rgba(34, 60, 80, 0.45);
+		background-color: ${COLORS.blue600};
+		border-color: ${COLORS.blue600};
+		box-shadow: 3px 1px 6px 2px rgba(34, 60, 80, 0.45);
 	}
 `

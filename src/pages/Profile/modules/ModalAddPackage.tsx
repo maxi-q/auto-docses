@@ -1,4 +1,4 @@
-import Documents from '@api/documents'
+import Documents, { IDocumentPackageData } from '@api/documents'
 import Templates, { ITemplateData } from '@api/templates'
 import { FormWithValidate } from '@components/FormWithValidate'
 import { FieldNames } from '@helpers/validator'

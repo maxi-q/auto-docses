@@ -3,26 +3,13 @@ import Documents, {
 	IOneDocumentData,
 } from '@api/documents'
 import Records, { IRecordData } from '@api/records'
-import { COLORS } from '@constants/style/COLORS'
+import { getFullDate } from '@helpers/date'
+import { Button } from '@ui/Button'
 import { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
 import styled from 'styled-components'
+import { ModalDetails } from './modules/Details'
 
-type simpleTemplateType = {
-	id: string
-	title: string
-}
-
-type templateValueType = {
-	template: simpleTemplateType
-	value: string
-}
-
-type recordInPackageType = {
-	id: string
-	creationDate: Date
-	templateValues: Array<templateValueType>
-}
 type authorType = {
 	id: string
 	email: string
@@ -33,7 +20,7 @@ type packagesWithRecordsType = {
 	author: authorType
 	title: string
 	documents: Array<IOneDocumentData>
-	records: Array<recordInPackageType>
+	records: Array<IRecordData>
 }
 
 export const RecordsPage = () => {
@@ -45,10 +32,11 @@ export const RecordsPage = () => {
 	const RecordsSerializer = new Records()
 	const documentPackageSerializer = new Documents()
 
+	const [record, setRecord] = useState<IRecordData>()
+	const [detailModal, setDetailModal] = useState(false)
 	useEffect(() => {
 		console.log(records)
-		console.log(documentsPackages)
-	}, [records, documentsPackages])
+	}, [records])
 
 	useEffect(() => {
 		documentPackageSerializer.getPackagesList().then(res =>
@@ -64,42 +52,57 @@ export const RecordsPage = () => {
 	}, [])
 
 	useEffect(() => {
-		records && documentsPackages && 
-		documentsPackages.map(Package => {
-			records.map(record => {
-				if(record.document_package.id == Package.id) {
+		records &&
+			documentsPackages &&
+			setPackagesWithRecords(
+				documentsPackages.map(Package => {
 					const packageWithRecords: packagesWithRecordsType = {
-						id: '',
-						author: {
-							id: '',
-							email: '',
-							username: ''
-						},
-						title: '',
-						documents: [],
-						records: []
+						id: Package.id,
+						author: Package.author,
+						title: Package.title,
+						documents: Package.documents,
+						records: [],
 					}
-				}
-			})
-		})
+					records.map(record => {
+						if (record.documents_package.id == Package.id) {
+							packageWithRecords.records.push(record)
+						}
+					})
+					return packageWithRecords
+				})
+			)
 	}, [records, documentsPackages])
+
+	const changeDetailModal = (id: string) => {
+		setDetailModal(true)
+		setRecord(records?.find(x => x.id == id))
+	}
 	return (
 		<Body>
 			<MainTable>
 				<tbody>
-					{/* {documentPackages && (
-						<DocumentTable
-							setModalDocumentActive={setModalDocumentActive}
-							setPackageDocuments={setPackageDocuments}
-							setPackageId={setPackageId}
-							documentPackage={documentPackages}
-							setDocumentId={setDocumentId}
-							setModalUpdateActive={setModalUpdateActive}
-							setModalDeleteActive={setModalDeleteActive}
-						/>
-					)} */}
+					{records?.map(irecord => {
+						return (
+							<tr>
+								<th>{getFullDate(irecord.creation_date)}</th>
+								<th>{irecord.documents_package.title}</th>
+								<th>
+									<Button onClick={() => changeDetailModal(irecord.id)}>
+										Детали
+									</Button>
+								</th>
+							</tr>
+						)
+					})}
 				</tbody>
 			</MainTable>
+			{record && (
+				<ModalDetails
+					setModalActive={setDetailModal}
+					modalActive={detailModal}
+					record={record}
+				/>
+			)}
 		</Body>
 	)
 }
@@ -114,5 +117,4 @@ const Body = styled.div`
 const MainTable = styled(Table)`
 	min-height: 30px;
 	height: min-content;
-	background-color: ${COLORS.blue100};
 `

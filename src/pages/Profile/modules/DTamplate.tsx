@@ -99,7 +99,7 @@ const DefaultTemplateValues = () => {
 export { DefaultTemplateValues }
 
 const TemplateValueBlock = styled.div`
-	max-height: 400px;
+	height: 69vh;
 	overflow: auto;
 `
 const TemplateBlock = styled.div`
