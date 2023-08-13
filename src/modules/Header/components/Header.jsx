@@ -17,13 +17,13 @@ export const Header = () => {
 	})
 
 	return (
-		<Navbar as="header" bg="light" expand="lg" className="navbar navbar-light ">
+		<Navbar as="header" bg="light" expand="lg" className="navbar navbar-light" style={{position: "absolute", width: '100vw'}}>
       <Container>
         <Navbar.Brand as={Link} to="/Home">AutoDocxOnline</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav"/>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/Home">Дом</Nav.Link>
+            <Nav.Link as={Link} to="/Records">Записи</Nav.Link>
             <Nav.Link as={Link} to="/LoadPage">Заполнение</Nav.Link>
             <Nav.Link as={Link} to="/document">Документы</Nav.Link>
           </Nav>

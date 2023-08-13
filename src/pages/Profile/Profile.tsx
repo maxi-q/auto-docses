@@ -75,8 +75,6 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 					{userContext.first_name} {userContext.last_name}
 					<br />
 					{userContext.email}
-					<br />
-					<Text>Зарегистрирован:</Text> {userContext.date_joined}
 				</Info>
 				<MyTemplates>
 					<DefaultTemplateValues />
@@ -86,10 +84,10 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 			<MainTable>
 				<thead>
 					<tr>
-						<th style={{ paddingLeft: '20px' }}>title</th>
-						<th>author</th>
-						<th>description</th>
-						<th>templates</th>
+						<th style={{ paddingLeft: '20px' }}>Название</th>
+						<th>Автор</th>
+						<th>Поля</th>
+						<th>Действия</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -147,7 +145,7 @@ const Text = styled.span`
 const Main = styled.div`
 	padding: 15px;
 	width: 40%;
-	height: 90vh;
+	height: Math(92vh - 62px);
 	background-color: ${COLORS.blue100};
 	display: flex;
 	flex-direction: column;
@@ -156,11 +154,10 @@ const MainTable = styled(Table)`
 	min-height: 30px;
 	height: min-content;
 	background-color: ${COLORS.blue100};
-	margin: 1% 0 0 0;
 `
 const Body = styled.div`
 	background-color: transparent;
-	min-height: 500px;
+	min-height: 90vh;
 	display: flex;
 	width: 100%;
 	margin-right: auto;

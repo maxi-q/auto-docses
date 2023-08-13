@@ -20,15 +20,17 @@ export interface ITemplateData {
 }
 
 interface ICreateTemplateValue {
-	template: string
+	templateId: string
 	value: string
 }
 
 interface IFindTemplateValue {
-	title: string
+	templateId: string
 }
 
-interface IUpdateTemplateValue extends ICreateTemplateValue, IFindTemplateValue {}
+interface IUpdateTemplateValue
+	extends ICreateTemplateValue,
+		IFindTemplateValue {}
 
 export interface ITemplateDataWithValue {
 	id: string
@@ -98,33 +100,33 @@ class Templates {
 		})
 	}
 
-	createValue({ template, value }: ICreateTemplateValue) {
+	createValue({ templateId, value }: ICreateTemplateValue) {
 		return fetch(this.ServerURL + `default_templates_values/`, {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
 				template_value: {
-					template: template,
+					template: templateId,
 					value: value,
 				},
 			}),
 		})
 	}
 
-	getValueByTitle({ title }: IFindTemplateValue) {
-		return fetch(this.ServerURL + `default_templates_values/${title}/`, {
+	getValueByTemplateId({ templateId }: IFindTemplateValue) {
+		return fetch(this.ServerURL + `default_templates_values/${templateId}/`, {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
-	updateValue({ title, template, value }: IUpdateTemplateValue) {
-		return fetch(this.ServerURL + `default_templates_values/${title}/`, {
+	updateValue({ templateId, value }: IUpdateTemplateValue) {
+		return fetch(this.ServerURL + `default_templates_values/${templateId}/`, {
 			method: 'PATCH',
 			headers: this.headers,
 			body: JSON.stringify({
 				template_value: {
-					template: template,
+					template: templateId,
 					value: value,
 				},
 			}),

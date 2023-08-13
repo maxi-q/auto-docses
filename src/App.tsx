@@ -62,6 +62,6 @@ const DeveloperNav = styled('nav')`
 `
 const MainStyled = styled.div<{ background: string }>`
 	background-color: ${props => props.background};
-	min-height: 1000px;
-	flex: 1 0 auto;
+	padding-top: 62px;
+	
 `

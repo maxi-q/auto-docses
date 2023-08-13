@@ -5,6 +5,7 @@ import { DocumentPage } from './DocumentPage'
 import { LoadPage } from './LoadPage'
 import { Main } from './Main'
 import { Profile } from './Profile'
+import {RecordsPage} from './Records'
 
 const GetParam = () => {
 	const params = useParams()
@@ -29,6 +30,7 @@ export const Navigation = (props: NavigationType) => {
 				<Route path=':id/:index' element={<LoadPage />} />
 			</Route>
 			<Route path='Profile' element={<Profile {...props} />} />
+			<Route path='Records' element={<RecordsPage />} />
 
 			<Route path='document' element={<DocumentPage />}>
 				<Route path=':id' element={<GetParam />} />

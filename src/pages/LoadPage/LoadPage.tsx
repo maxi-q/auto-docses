@@ -9,22 +9,29 @@ import Documents, {
 	IDocumentPackageData,
 	IOneDocumentData,
 } from '@api/documents'
+import Records from '@api/records'
+import Templates, { ITemplateDataWithValue } from '@api/templates'
 import { ButtonCircle } from '@ui/ButtonCircle'
 import { Button, Input } from '@ui/index'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FieldNames } from '../../helpers/validator'
 import { Aside, LoadBox } from './components'
 import { ModalAddTemplate } from './modules/ModalAddTemplate'
+import { ModalDownloadDocument } from './modules/ModalDownloadDocument'
 
 type keyInDocumentType = {
 	title: string
 	name_in_document: string
 	id: string
+	value: string
 }
 
 export const LoadPage = () => {
 	const viewer = useRef<HTMLElement>()
 
+	const [recordId, setRecordId] = useState('')
+	const [saveTemplateValues, setSaveTemplateValues] = useState(false)
+	const [downloadModal, setDownloadModal] = useState(false)
 	const [documentPackageName, setDocumentPackageName] = useState('Имя пакета')
 	const [documentName, setDocumentName] = useState('Имя документа')
 	const [formAction, setFormAction] = useState('Ждет файл...')
@@ -33,13 +40,15 @@ export const LoadPage = () => {
 	const [upload, setUpload] = useState(() => false)
 	const [FormWithFills, setFormWithFills] = useState<React.ReactNode>(null)
 	const [url, setUrl] = useState('')
-	const [keys, setKeys] = useState<Array<Array<keyInDocumentType>>>()
+	const [keys, setKeys] = useState<Array<keyInDocumentType>>()
 	const [documentPackage, setDocumentPackage] = useState<IDocumentPackageData>()
 	const [modalActive, setModalActive] = useState(false)
 	const navigate = useNavigate()
 	const [document, setDocument] = useState<IOneDocumentData>()
 	const params = useParams()
-	const [nowDocumentIndex, setNowDocumentIndex] = useState(Number(params.index) || 0)
+	const [nowDocumentIndex, setNowDocumentIndex] = useState(
+		Number(params.index) || 0
+	)
 	const prodId = params.id
 
 	useEffect(() => {
@@ -107,31 +116,47 @@ export const LoadPage = () => {
 		setDocumentName(nowDocument.title)
 	}
 
+	const TemplateSerializer = new Templates()
+
 	useEffect(() => {
 		documentsSerializer
 			.readPackage({ id: prodId || '' })
 			.then(res => {
-				if (res.status == 404) {
-					navigate('/Profile')
-				}
+				if (res.status == 404) navigate('/Profile')
+
 				res.json().then(async (data: IDocumentPackageData) => {
 					setUpload(true)
 					setNowDocument(data)
-					
+
 					setDocumentPackage(data)
 					setDocumentPackageName(data.title)
 
 					if (!data.documents) return
 					setMaxPage(data.documents.length)
-					setKeys(
-						data.documents.map(document =>
-							document.templates?.map(x => ({
-								name_in_document: x.title + ' (' + x.name_in_document + ')',
-								title: x.title,
-								id: x.id,
-							}))
-						)
+
+					let templateSet: Array<keyInDocumentType> = []
+					const values = await (await TemplateSerializer.getValuesList()).json()
+
+					data.documents.map(document =>
+						document.templates?.map(template => {
+							if (!templateSet.find(item => item.id == template.id)) {
+								const value = values?.find(
+									(value: ITemplateDataWithValue) =>
+										value.template.id == template.id
+								)
+
+								templateSet.push({
+									name_in_document:
+										template.title + ' (' + template.name_in_document + ')',
+									title: template.title,
+									id: template.id,
+									value: value ? value.value : '',
+								})
+							}
+						})
 					)
+
+					setKeys(templateSet)
 				})
 			})
 			.catch(err => {
@@ -141,10 +166,60 @@ export const LoadPage = () => {
 		//after send to server
 	}, [])
 
-	const onSubmit = (data: object) => fillDocument(data)
+	const checkButton = useRef<HTMLInputElement>()
+	const recordSerializer = new Records()
+	const SaveTemplateValues = (templates_values: any[]) => {
+		if (!checkButton) return
+		if (!checkButton.current) return
+		if (!checkButton.current.checked) return
+
+		templates_values.map(value => {
+			TemplateSerializer.updateValue({
+				templateId: value.template,
+				value: value.value,
+			}).then(res => {
+				
+				console.log(res)
+				
+				if (res.status == 404) {
+					TemplateSerializer.createValue({
+						templateId: value.template,
+						value: value.value,
+					})
+				}
+			})
+		})
+	}
+	const onSubmit = (data: object) => {
+		const templates_values = []
+		for (const [key, value] of Object.entries(data)) {
+			templates_values.push({ template: key, value: value })
+		}
+
+		documentPackage &&
+			recordSerializer
+				.create({
+					documents_package: documentPackage.id,
+					templates_values: templates_values,
+				})
+				.then(res => {
+					res.json().then(data => {
+						const recordIdq = data.id
+						setRecordId(recordIdq)
+						setDownloadModal(true)
+					})
+				})
+
+		SaveTemplateValues(templates_values)
+	}
 	const addTemplate = () => {
 		setModalActive(true)
 	}
+
+	const onClickCheckBox = () => {
+		setSaveTemplateValues(!saveTemplateValues)
+	}
+
 	useEffect(() => {
 		if (!keys) return
 
@@ -152,21 +227,19 @@ export const LoadPage = () => {
 			<>
 				<FormWithValidate onSubmit={onSubmit}>
 					{keys &&
-						keys.map((keyPackage, i) => {
+						keys.map((key, i) => {
 							return (
 								<>
-									<TemplateSplitter />
-									{keyPackage.map((key, j) => (
-										<FeatureInput key={i + ',' + j}>
-											<KeyLabel>{key.name_in_document}:</KeyLabel>
-											<Input
-												field={FieldNames.field}
-												placeholder={''}
-												type='textarea'
-												name={key.title}
-											/>
-										</FeatureInput>
-									))}
+									<FeatureInput key={i}>
+										<KeyLabel>{key.name_in_document}:</KeyLabel>
+										<Input
+											defaultValue={key.value}
+											field={FieldNames.field}
+											placeholder={''}
+											type='textarea'
+											name={key.id}
+										/>
+									</FeatureInput>
 								</>
 							)
 						})}
@@ -180,11 +253,6 @@ export const LoadPage = () => {
 		)
 		setFormAction('Заполните поля')
 	}, [keys])
-	//
-
-	const fillDocument = (data: object) => {
-		return
-	}
 
 	return (
 		<>
@@ -195,15 +263,26 @@ export const LoadPage = () => {
 						documentName={documentName}
 						formAction={formAction}
 						FormWithFills={FormWithFills}
-						fillFile={fillDocument}
+						saveTemplateValues={saveTemplateValues}
+						onClickCheckBox={onClickCheckBox}
+						checkButton={checkButton}
 					/>
 
-					<LoadBox viewer={viewer} maxPage={maxPage}/>
+					<LoadBox viewer={viewer} maxPage={maxPage} />
+
 					{document && (
 						<ModalAddTemplate
 							document={document}
 							setModalActive={setModalActive}
 							modalActive={modalActive}
+						/>
+					)}
+					{documentPackage && (
+						<ModalDownloadDocument
+							setModalActive={setDownloadModal}
+							modalActive={downloadModal}
+							documentPackage={documentPackage}
+							recordId={recordId}
 						/>
 					)}
 				</Worker>

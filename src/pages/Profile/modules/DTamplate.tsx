@@ -36,60 +36,77 @@ const DefaultTemplateValues = () => {
 	useEffect(() => {
 		setDefaultTemplateValues(
 			values &&
-				templates?.map(template => {
+				templates?.map((template): { id: string; template: ITemplateData; value: string } | undefined => {
 					const value = values?.find(value => value.template.id == template.id)
 
-					if (!(value?.template.is_official || value?.value)) return
-
-					return {
-						id: value ? value.id : '',
-						template: template,
-						value: value ? value.value : '',
+					if(template.is_official || value?.value) {
+						return {
+							id: value ? value.id : '',
+							template: template,
+							value: value ? value.value : '',
+						}
 					}
+					return
 				})
 		)
 	}, [values, templates])
 
 	const onSubmit = (data: object) => {
-		for (const [key, value] of Object.entries(data)) {
-			if (!value) continue
-			if (values?.find(x => x.template.title == key)) {
+		console.log(data)
+		for (const [template_id, template_value] of Object.entries(data)) {
+			if (!template_value) continue
+			if (values?.find(x => x.template.id == template_id)) {
 				Template.updateValue({
-					title: key,
-					template: templates?.find(x => x.title == key)?.id || '',
-					value: value,
+					templateId: templates?.find(x => x.id == template_id)?.id || '',
+					value: template_value,
 				})
 			} else {
 				Template.createValue({
-					template: templates?.find(x => x.title == key)?.id || '',
-					value: value,
+					templateId: templates?.find(x => x.id == template_id)?.id || '',
+					value: template_value,
 				})
 			}
 		}
 	}
 
 	return (
-		<FormWithValidate onSubmit={onSubmit}>
-			{defaultTemplateValues &&
-				defaultTemplateValues.map((t, i) => t && (
-					<FeatureInput key={i}>
-						<KeyLabel>{t.template.title}:</KeyLabel>
-						<Input
-							defaultValue={t.value}
-							field={t.value ? FieldNames.field : FieldNames.mayEmpty}
-							placeholder={''}
-							type='textarea'
-							name={t.template.title}
-						/>
-					</FeatureInput>
-				))}
-			{templates && <Button type='submit'>Сохранить изменения</Button>}
-		</FormWithValidate>
+		<TemplateBlock>
+			<FormWithValidate onSubmit={onSubmit}>
+				<TemplateValueBlock>
+					{defaultTemplateValues &&
+						defaultTemplateValues.map(
+							(t, i) =>
+								t && (
+									<FeatureInput key={i}>
+										<KeyLabel>{t.template.title}:</KeyLabel>
+										<Input
+											defaultValue={t.value}
+											field={t.value ? FieldNames.field : FieldNames.mayEmpty}
+											placeholder={''}
+											type='textarea'
+											name={t.template.id}
+										/>
+									</FeatureInput>
+								)
+						)}
+				</TemplateValueBlock>
+				{templates && <Button type='submit'>Сохранить изменения</Button>}
+			</FormWithValidate>
+		</TemplateBlock>
 	)
 }
 
 export { DefaultTemplateValues }
 
+const TemplateValueBlock = styled.div`
+	max-height: 400px;
+	overflow: auto;
+`
+const TemplateBlock = styled.div`
+	display: flex;
+	gap: 4px;
+	flex-direction: column;
+`
 const KeyLabel = styled('span')`
 	font-size: 1em;
 	color: #767676;

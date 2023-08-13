@@ -12,9 +12,12 @@ export const Aside = props => {
 				<ActionLabel>{props.actionLabel}</ActionLabel>
 
 				{props.FormWithFills}
-
-				
-
+				сохранить изменения?  {' '}<input
+						type="checkbox"
+						ref={props.checkButton}
+						checked={props.saveTemplateValues}
+						onClick={props.onClickCheckBox}
+					/>
 			</AsideStyled>
 		</>
 	)
