@@ -89,7 +89,7 @@ module.exports = {
       '@api': path.resolve(__dirname, 'src/API'),
       '@ui': path.resolve(__dirname, 'src/ui'),
     },
-    extensions: ['*', '.js', '.jsx', '.scss','.tsx', '.ts'],
+    extensions: ['.*', '.js', '.jsx', '.scss','.tsx', '.ts'],
     fallback: { 
       "util": require.resolve("util/"),
       "path": require.resolve("path-browserify"),
