@@ -16,7 +16,7 @@ const production = process.env.NODE_ENV === 'production'
 module.exports = {
   entry: { myAppName: path.resolve(__dirname, './src/index.tsx') },
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './build'),
     publicPath: '/',
     filename: production ? '[name].[contenthash].js' : '[name].js',
     assetModuleFilename: 'assets/[hash][ext][query]'
@@ -124,7 +124,7 @@ module.exports = {
   externals: {
   },              
   devServer: {
-    static: './dist',
+    static: './build',
     historyApiFallback: true,
     port: 3001,
   },
