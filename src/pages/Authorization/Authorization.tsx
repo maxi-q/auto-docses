@@ -124,7 +124,7 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 
 	useEffect(() => {
 		fetchVerifyJWT().then(res => {
-			console.log(res, authContext)
+			console.log(res, authContext);
 			if (res.status == 200) {
 				setLoggedIn(true)
 				navigate(-1)
