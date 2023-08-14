@@ -39,6 +39,7 @@ export const Navigation = (props: NavigationType) => {
 			<Route path='document' element={<DocumentPage />}>
 				<Route path=':id' element={<GetParam />} />
 			</Route>
+			<Route path='*' element={<Navigate to={'/Profile'} />} />
 		</Routes>
 	)
 }
