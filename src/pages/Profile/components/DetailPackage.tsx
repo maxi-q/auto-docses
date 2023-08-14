@@ -4,27 +4,33 @@ import { useContext } from 'react'
 import Table from 'react-bootstrap/esm/Table'
 import { FaPen } from 'react-icons/Fa'
 import { TbFileSearch } from 'react-icons/tb'
-import { UserContext } from '../../../contexts'
-import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import { UserContext } from '../../../contexts'
 
-interface IDetailPackage { 
-  documentPackage: IDocumentPackageData
-  setIUpdating: React.Dispatch<React.SetStateAction<'check' | 'documentUpdate' | 'packageUpdate'>>
-  setDocumentId: React.Dispatch<React.SetStateAction<string>>
+interface IDetailPackage {
+	documentPackage: IDocumentPackageData
+	setIUpdating: React.Dispatch<
+		React.SetStateAction<'check' | 'documentUpdate' | 'packageUpdate'>
+	>
+	setDocumentId: React.Dispatch<React.SetStateAction<string>>
 }
-const DetailPackage = ({documentPackage, setIUpdating, setDocumentId}: IDetailPackage) => {
-  const userContext = useContext(UserContext)
-  const navigate = useNavigate()
-  
-  const updateDocument = (documentId: string) => {
-    setDocumentId(documentId)
-    setIUpdating('documentUpdate')
-  }
-  const updatePackage = () => {
-    setIUpdating('packageUpdate')
-  }
-  const ChangeDocument = (id: string, index: number) => {
+const DetailPackage = ({
+	documentPackage,
+	setIUpdating,
+	setDocumentId,
+}: IDetailPackage) => {
+	const userContext = useContext(UserContext)
+	const navigate = useNavigate()
+
+	const updateDocument = (documentId: string) => {
+		setDocumentId(documentId)
+		setIUpdating('documentUpdate')
+	}
+	const updatePackage = () => {
+		setIUpdating('packageUpdate')
+	}
+	const ChangeDocument = (id: string, index: number) => {
 		navigate(`/LoadPage/${id}/${index}`)
 	}
 
@@ -33,9 +39,9 @@ const DetailPackage = ({documentPackage, setIUpdating, setDocumentId}: IDetailPa
 			<Header>
 				<Title>
 					{documentPackage?.title}{' '}
-					{userContext.id == documentPackage?.author.id && (
+					{userContext?.id == documentPackage?.author.id && (
 						<FaPen
-              onClick={updatePackage}
+							onClick={updatePackage}
 							style={{ fontSize: '10px', cursor: 'pointer' }}
 						/>
 					)}
@@ -52,11 +58,13 @@ const DetailPackage = ({documentPackage, setIUpdating, setDocumentId}: IDetailPa
 										{document.title}
 										<div>
 											<Link>
-												<Button onClick={() => ChangeDocument(documentPackage.id, i)}>
+												<Button
+													onClick={() => ChangeDocument(documentPackage.id, i)}
+												>
 													<TbFileSearch />
 												</Button>
 											</Link>
-											{userContext.id == documentPackage.author.id && (
+											{userContext?.id == documentPackage.author.id && (
 												<Link>
 													<Button onClick={() => updateDocument(document.id)}>
 														<FaPen />

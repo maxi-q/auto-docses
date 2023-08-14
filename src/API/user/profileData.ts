@@ -17,7 +17,7 @@ export interface IRequestProfileCallback extends IRequestProfileCallbackData {
 }
 
 export const fetchRequestProfile =
-	async (): Promise<IRequestProfileCallback> => {
+	async (): Promise<IRequestProfileCallback > => {
 
 		const access = localStorage.getItem('access')
 
@@ -32,6 +32,10 @@ export const fetchRequestProfile =
 		const response = await fetch(ServerURL + 'users/me/', options)
 
 		const data: IRequestProfileCallbackData = await response.json()
+		if (response.status == 401) {
+
+			return {status: 401, ...data}
+		}
 
 		return { status: 200, ...data }
 	}

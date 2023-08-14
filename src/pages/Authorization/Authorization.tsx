@@ -14,6 +14,7 @@ import { fetchRequestJWT } from '../../API/user/token/createJWT'
 import { AuthContext } from '../../contexts'
 import { AuthWindow, EmailWindow, RegWindow } from './modules'
 import { Body } from './ui'
+import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
 
 type NavigationType = {
 	setLoggedIn: Function
@@ -122,6 +123,17 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
+		fetchVerifyJWT().then(res => {
+			console.log(res, authContext)
+			if (res.status == 200) {
+				setLoggedIn(true)
+				navigate(-1)
+			}
+		})
+	}, [])
+
+
+	useEffect(() => {
 		if (callback.status == 200) {
 			setLoggedIn(true)
 			navigate('/Profile')
@@ -141,7 +153,6 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 	return (
 		<>
 			<Body>
-				{authContext && <Navigate to={'/Profile'} />}
 				<AuthWindow onSubmit={onSubmit} />
 			</Body>
 		</>

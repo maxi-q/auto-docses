@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Footer, Header } from './modules'
@@ -7,47 +7,49 @@ import { Navigation } from './pages'
 
 import './API/user/fetchDecorator'
 
-import { IUser } from '@api/user/profileData'
-import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
+import { IUser, fetchRequestProfile } from '@api/user/profileData'
 import { AuthContext, UserContext } from './contexts'
+import { getFullDate } from '@helpers/date'
 
 export function App() {
 	const [background, setBackground] = useState('')
 	const [loggedIn, setLoggedIn] = useState<Boolean>(false)
-	const [user, setUser] = useState<IUser>({
-		id: '',
-		username: '',
-		email: '',
-		first_name: '',
-		last_name: '',
-		date_joined: '',
-	})
-	const [may, setMay] = useState(true)
+	const [user, setUser] = useState<IUser | undefined>()
+
+	const logOut = () => {
+		setLoggedIn(false)
+		localStorage.setItem('access', '')
+	}
 
 	useEffect(() => {
-		fetchVerifyJWT().then(data => {
-			if (data.status != 400) {
-				setLoggedIn(true)
-			}
-			setMay(true)
-		})
-	}, [])
+		const token = localStorage.getItem('access')
 
+		if (token) {
+			fetchRequestProfile()
+				.then(data => {
+					console.log(data)
+					if (data.status == 401) {
+						localStorage.setItem('access', '')
+						setLoggedIn(false)
+						throw new Error('Unauthorized')
+					}
+					data.date_joined = getFullDate(data.date_joined)
+					setUser(data)
+				})
+		}else {
+			setLoggedIn(false)
+		}
+	}, [])
 	return (
 		<AuthContext.Provider value={loggedIn}>
 			<UserContext.Provider value={user}>
-					<BrowserRouter>
-						<Header setLoggedIn={setLoggedIn}/>
-						<MainStyled background={background}>
-							{may && (
-								<Navigation
-									setLoggedIn={setLoggedIn}
-									setUser={setUser}
-								/>
-							)}
-						</MainStyled>
-						<Footer />
-					</BrowserRouter>
+				<BrowserRouter>
+					<Header logOut={logOut} />
+					<MainStyled background={background}>
+						<Navigation setLoggedIn={setLoggedIn} setUser={setUser} />
+					</MainStyled>
+					<Footer />
+				</BrowserRouter>
 			</UserContext.Provider>
 		</AuthContext.Provider>
 	)

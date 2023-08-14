@@ -17,14 +17,16 @@ interface IModalAddDocument {
 const ModalAddDocument = ({
 	setModalActive,
 	modalActive,
-  packageDocuments,
-  packageId
+	packageDocuments,
+	packageId,
 }: IModalAddDocument) => {
 	const [templates, setTemplates] = useState<Array<ISelectOptions>>()
-
+	
 	const TemplatesManager = new Templates()
 	useEffect(() => {
-		TemplatesManager.getList().then(res =>
+		TemplatesManager.getList().then(res => {
+			if (res.status == 401) return
+
 			res.json().then(data => {
 				if (typeof data == 'object') {
 					setTemplates(
@@ -32,14 +34,14 @@ const ModalAddDocument = ({
 					)
 				}
 			})
-		)
+		})
 	}, [])
 
 	const DocumentsManager = new Documents()
 	const onSubmit = (data: object) => {
-    if(!packageId) return
-    if(!packageDocuments) return
-    
+		if (!packageId) return
+		if (!packageDocuments) return
+
 		// Здесь все работает!
 		const sendDocument: any = lotsSelectToArray(data)
 
@@ -51,11 +53,12 @@ const ModalAddDocument = ({
 		})
 			.then(res => {
 				if (res instanceof Response) {
+					if (res.status == 401) return
 					res.json().then(data => {
 						const id = data.id
-            
+
 						DocumentsManager.updatePackage({
-							id:packageId,
+							id: packageId,
 							documents: [...packageDocuments, id],
 						})
 					})

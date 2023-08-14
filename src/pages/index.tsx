@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 
 import { Authorization, Registration } from './Authorization'
 import { DocumentPage } from './DocumentPage'
@@ -6,6 +6,9 @@ import { LoadPage } from './LoadPage'
 import { Main } from './Main'
 import { Profile } from './Profile'
 import {RecordsPage} from './Records'
+import { fetchRequestProfile } from '@api/user/profileData'
+import { getFullDate } from '@helpers/date'
+import { useEffect } from 'react'
 
 const GetParam = () => {
 	const params = useParams()
@@ -19,18 +22,19 @@ type NavigationType = {
 }
 
 export const Navigation = (props: NavigationType) => {
-   
+
 	return (
 		<Routes>
 			<Route path='Auth' element={<Authorization {...props} />} />
 			<Route path='Registration' element={<Registration {...props} />} />
 			<Route path='Home' element={<Main />} />
-			<Route path='LoadPage' element={<LoadPage/>}>
+			<Route path='LoadPage' element={<LoadPage {...props}/>}>
 				<Route path=':id' element={<Navigate to={'0'} />} />
-				<Route path=':id/:index' element={<LoadPage />} />
+				<Route path=':id/:index' element={<LoadPage {...props}/>} />
+				<Route path='*' element={<Navigate to={'/Profile'} />} />
 			</Route>
 			<Route path='Profile' element={<Profile {...props} />} />
-			<Route path='Records' element={<RecordsPage />} />
+			<Route path='Records' element={<RecordsPage {...props}/>} />
 
 			<Route path='document' element={<DocumentPage />}>
 				<Route path=':id' element={<GetParam />} />

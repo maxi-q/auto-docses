@@ -1,6 +1,6 @@
 import WebViewer, { WebViewerInstance } from '@pdftron/webviewer'
 import { Worker } from '@react-pdf-viewer/core'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { FormWithValidate } from '../../components/FormWithValidate'
@@ -11,13 +11,15 @@ import Documents, {
 } from '@api/documents'
 import Records from '@api/records'
 import Templates, { ITemplateDataWithValue } from '@api/templates'
-import { ButtonCircle } from '@ui/ButtonCircle'
 import { Button, Input } from '@ui/index'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import { AuthContext, UserContext } from '../../contexts'
 import { FieldNames } from '../../helpers/validator'
 import { Aside, LoadBox } from './components'
-import { ModalAddTemplate } from './modules/ModalAddTemplate'
 import { ModalDownloadDocument } from './modules/ModalDownloadDocument'
+import { ModalUpdateTemplate } from './modules/ModalUpdateTemplate'
+import { fetchRequestProfile } from '@api/user/profileData'
+import { getFullDate } from '@helpers/date'
 
 type keyInDocumentType = {
 	title: string
@@ -26,7 +28,13 @@ type keyInDocumentType = {
 	value: string
 }
 
-export const LoadPage = () => {
+type NavigationType = {
+	setUser: Function
+	setLoggedIn: Function
+}
+
+
+export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const viewer = useRef<HTMLElement>()
 
 	const [recordId, setRecordId] = useState('')
@@ -37,15 +45,18 @@ export const LoadPage = () => {
 	const [formAction, setFormAction] = useState('Ждет файл...')
 	const [maxPage, setMaxPage] = useState(0)
 	const [instance, setInstance] = useState<WebViewerInstance>()
-	const [upload, setUpload] = useState(() => false)
 	const [FormWithFills, setFormWithFills] = useState<React.ReactNode>(null)
 	const [url, setUrl] = useState('')
-	const [keys, setKeys] = useState<Array<keyInDocumentType>>()
+	const [keys, setKeys] = useState<Array<keyInDocumentType>>([])
 	const [documentPackage, setDocumentPackage] = useState<IDocumentPackageData>()
 	const [modalActive, setModalActive] = useState(false)
 	const navigate = useNavigate()
 	const [document, setDocument] = useState<IOneDocumentData>()
 	const params = useParams()
+
+	const userContext = useContext(UserContext)
+	const authContext = useContext(AuthContext)
+
 	const [nowDocumentIndex, setNowDocumentIndex] = useState(
 		Number(params.index) || 0
 	)
@@ -57,7 +68,7 @@ export const LoadPage = () => {
 
 	useEffect(() => {
 		setDocument(documentPackage?.documents[nowDocumentIndex])
-	}, [nowDocumentIndex])
+	}, [nowDocumentIndex, documentPackage])
 
 	useEffect(() => {
 		documentPackage && setNowDocument(documentPackage)
@@ -82,6 +93,13 @@ export const LoadPage = () => {
 				'header',
 				'toolsHeader',
 			])
+		})
+		fetchRequestProfile().then(data => {
+			if(data.status == 401) {
+				setLoggedIn(false)
+			}
+			data.date_joined = getFullDate(data.date_joined)
+			setUser(data)
 		})
 	}, [])
 
@@ -119,13 +137,16 @@ export const LoadPage = () => {
 	const TemplateSerializer = new Templates()
 
 	useEffect(() => {
+		updateTable()
+	}, [])
+
+	const updateTable = () => {
 		documentsSerializer
 			.readPackage({ id: prodId || '' })
 			.then(res => {
 				if (res.status == 404) navigate('/Profile')
 
 				res.json().then(async (data: IDocumentPackageData) => {
-					setUpload(true)
 					setNowDocument(data)
 
 					setDocumentPackage(data)
@@ -146,8 +167,7 @@ export const LoadPage = () => {
 								)
 
 								templateSet.push({
-									name_in_document:
-										template.title + ' (' + template.name_in_document + ')',
+									name_in_document: template.title,
 									title: template.title,
 									id: template.id,
 									value: value ? value.value : '',
@@ -162,10 +182,10 @@ export const LoadPage = () => {
 			.catch(err => {
 				console.log(err)
 			})
-
-		//after send to server
-	}, [])
-
+	}
+	const addNewTemplate = (newTemplate: keyInDocumentType) => {
+		setKeys([...keys, newTemplate])
+	}
 	const checkButton = useRef<HTMLInputElement>()
 	const recordSerializer = new Records()
 	const SaveTemplateValues = (templates_values: any[]) => {
@@ -178,9 +198,8 @@ export const LoadPage = () => {
 				templateId: value.template,
 				value: value.value,
 			}).then(res => {
-				
 				console.log(res)
-				
+
 				if (res.status == 404) {
 					TemplateSerializer.createValue({
 						templateId: value.template,
@@ -214,6 +233,7 @@ export const LoadPage = () => {
 	}
 	const addTemplate = () => {
 		setModalActive(true)
+		console.log(document)
 	}
 
 	const onClickCheckBox = () => {
@@ -224,38 +244,41 @@ export const LoadPage = () => {
 		if (!keys) return
 
 		setFormWithFills(
-			<>
+			<div style={{ width: '100%' }}>
 				<FormWithValidate onSubmit={onSubmit}>
 					{keys &&
 						keys.map((key, i) => {
 							return (
-								<>
-									<FeatureInput key={i}>
-										<KeyLabel>{key.name_in_document}:</KeyLabel>
-										<Input
-											defaultValue={key.value}
-											field={FieldNames.field}
-											placeholder={''}
-											type='textarea'
-											name={key.id}
-										/>
-									</FeatureInput>
-								</>
+								<FeatureInput key={i}>
+									<KeyLabel>{key.name_in_document}:</KeyLabel>
+									<Input
+										defaultValue={key.value}
+										field={FieldNames.field}
+										placeholder={''}
+										type='textarea'
+										name={key.id}
+									/>
+								</FeatureInput>
 							)
 						})}
 					{keys && <Button type='submit'>Заполнить все документы</Button>}
 				</FormWithValidate>
-
-				<AddTemplateBlock>
-					<AddTemplateButton onClick={addTemplate}>+</AddTemplateButton>
-				</AddTemplateBlock>
-			</>
+				{userContext?.id == documentPackage?.author.id && (
+					<AddTemplateBlock>
+						<AddTemplateButton onClick={addTemplate}>
+							Изменить поля
+						</AddTemplateButton>
+					</AddTemplateBlock>
+				)}
+			</div>
 		)
 		setFormAction('Заполните поля')
-	}, [keys])
+	}, [keys, documentPackage, userContext])
 
 	return (
 		<>
+			{!authContext && <Navigate to={'/Auth'} />}
+
 			<LoadPageStyled>
 				<Worker workerUrl='https://unpkg.com/pdfjs-dist@3.3.122/build/pdf.worker.min.js'>
 					<Aside
@@ -270,11 +293,14 @@ export const LoadPage = () => {
 
 					<LoadBox viewer={viewer} maxPage={maxPage} />
 
-					{document && (
-						<ModalAddTemplate
+					{document && documentPackage && (
+						<ModalUpdateTemplate
+							documentPackage={documentPackage}
 							document={document}
 							setModalActive={setModalActive}
 							modalActive={modalActive}
+							addTemplate={addNewTemplate}
+							updateTable={updateTable}
 						/>
 					)}
 					{documentPackage && (
@@ -308,20 +334,12 @@ const FeatureInput = styled.div`
 	align-items: start;
 `
 
-const AddTemplateButton = styled(ButtonCircle)`
-	width: 80px;
-	height: 80px;
-	font-size: 30px;
-	margin: 0 8px 0 0;
-	position: absolute;
-	bottom: 20px;
-	right: 20px;
+const AddTemplateButton = styled(Button)`
+	width: 100%;
 `
 const AddTemplateBlock = styled.div`
-	display: absolute;
-	down: 20px;
-	right: 20px;
 	margin: 1% 0 0 0;
+	width: 100%;
 `
 const TemplateSplitter = styled.div`
 	width: 100%;

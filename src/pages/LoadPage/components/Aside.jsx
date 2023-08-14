@@ -12,20 +12,22 @@ export const Aside = props => {
 				<ActionLabel>{props.actionLabel}</ActionLabel>
 
 				{props.FormWithFills}
-				сохранить изменения?  {' '}<input
-						type="checkbox"
+				<UpdateValues>
+					обновить данные по умолчанию?{' '}
+					<input
+						type='checkbox'
 						ref={props.checkButton}
 						checked={props.saveTemplateValues}
 						onClick={props.onClickCheckBox}
 					/>
+				</UpdateValues>
 			</AsideStyled>
 		</>
 	)
 }
 
-const FormFills = styled.form`
-	max-height: 90vh;
-	overflow: auto;
+const UpdateValues = styled.div`
+	margin: 1% 0 0 0;
 `
 const AsideStyled = styled('aside')`
 	padding: 16px 16px 0 24px;

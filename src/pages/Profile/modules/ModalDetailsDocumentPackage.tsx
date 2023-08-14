@@ -25,7 +25,7 @@ export const ModalDetailsDocumentPackage = ({
 		'check' | 'documentUpdate' | 'packageUpdate'
 	>('check')
 	const [documentId, setDocumentId] = useState('')
-  const [nope, setNope] = useState(false)
+	const [nope, setNope] = useState(false)
 
 	useEffect(() => {
 		packageId &&

@@ -1,19 +1,18 @@
 import Documents, { IDocumentPackageData } from '@api/documents'
+import { fetchRequestProfile } from '@api/user/profileData'
+import { getFullDate } from '@helpers/date'
 import { ButtonCircle } from '@ui/ButtonCircle'
 import { useContext, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { fetchRequestProfile } from '../../API/user/profileData'
 import { AuthContext, UserContext } from '../../contexts'
-import { getFullDate } from '../../helpers/date'
 import { DefaultTemplateValues } from './modules/DTamplate'
 import { DocumentTable } from './modules/DocumentTable'
 import { ModalAddDocumentPackage } from './modules/ModalAddPackage'
-import { ModalUpdateDocument } from './modules/ModalUpdateDocument'
-import { ModalAddDocument } from './modules/ModallAddDocumentq'
 import { ModalDeleteDocument } from './modules/ModalDeleteDocument'
 import { ModalDetailsDocumentPackage } from './modules/ModalDetailsDocumentPackage'
+import { ModalAddDocument } from './modules/ModallAddDocumentq'
 
 type NavigationType = {
 	setUser: Function
@@ -29,27 +28,26 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [modalUpdateActive, setModalUpdateActive] = useState(false)
 	const [modalDeleteActive, setModalDeleteActive] = useState(false)
 	const [modalDetailsActive, setModalDetailsActive] = useState(false)
-	
+
 	const [packageId, setPackageId] = useState<string>()
 	const [documentId, setDocumentId] = useState<string>()
 	const [packageDocuments, setPackageDocuments] = useState<Array<string>>()
 
 	const authContext = useContext(AuthContext)
 	const userContext = useContext(UserContext)
-
+	const navigate = useNavigate()
 	const documentsSerializer = new Documents()
 
 	useEffect(() => {
-		fetchRequestProfile()
-			.then(data => {
-				data.date_joined = getFullDate(data.date_joined)
-				setUser(data)
-			})
-			.catch(_error => {
-				setLoggedIn(false)
-				localStorage.setItem('access', '')
-			})
-
+		console.log('authContext', authContext)
+		if (!authContext) {
+			navigate('/Auth')
+			return
+		}
+		fetchRequestProfile().then(data => {
+			data.date_joined = getFullDate(data.date_joined)
+			setUser(data)
+		})
 		documentsSerializer.getPackagesList().then(res => {
 			res.json().then(data => {
 				setDocumentPackages(data)
@@ -61,17 +59,17 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		setModalPackageActive(true)
 	}
 
-
-
 	return (
 		<Body>
+			{!authContext && (
+				<Navigate to={'/Auth'} state={{ prevName: location.pathname }} />
+			)}
 			<Main>
-				{!authContext && <Navigate to={'/Auth'} />}
 				<Info>
-					<Title> Hello, {userContext.username} </Title>
-					{userContext.first_name} {userContext.last_name}
+					<Title> Hello, {userContext?.username} </Title>
+					{userContext?.first_name} {userContext?.last_name}
 					<br />
-					{userContext.email}
+					{userContext?.email}
 				</Info>
 				<MyTemplates>
 					<DefaultTemplateValues />

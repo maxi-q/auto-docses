@@ -1,4 +1,4 @@
-import Documents, { IDocumentPackageData } from '@api/documents'
+import Documents from '@api/documents'
 import Templates, { ITemplateData } from '@api/templates'
 import { FormWithValidate } from '@components/FormWithValidate'
 import { FieldNames } from '@helpers/validator'
@@ -20,7 +20,8 @@ const ModalAddDocumentPackage = ({
 
 	const TemplatesManager = new Templates()
 	useEffect(() => {
-		TemplatesManager.getList().then(res =>
+		TemplatesManager.getList().then(res => {
+			if (res.status == 401) return
 			res.json().then(data => {
 				if (typeof data == 'object') {
 					setTemplates(
@@ -28,7 +29,7 @@ const ModalAddDocumentPackage = ({
 					)
 				}
 			})
-		)
+		})
 	}, [])
 
 	const DocumentsManager = new Documents()
@@ -43,7 +44,6 @@ const ModalAddDocumentPackage = ({
 			file: sendDocument.file[0],
 		})
 			.then(res => {
-				
 				if (res instanceof Response) {
 					res.json().then(data => {
 						const id = data.id

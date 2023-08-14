@@ -18,6 +18,7 @@ const DefaultTemplateValues = () => {
 
 	useEffect(() => {
 		Template.getList().then(data => {
+			if(data.status == 401) return
 			data.json().then((templatesArray: Array<ITemplateData>) => {
 				templatesArray = templatesArray
 					.sort((a, b) => Number(a.is_official) - Number(b.is_official))

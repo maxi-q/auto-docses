@@ -5,10 +5,13 @@ import Documents, {
 import Records, { IRecordData } from '@api/records'
 import { getFullDate } from '@helpers/date'
 import { Button } from '@ui/Button'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import Table from 'react-bootstrap/Table'
 import styled from 'styled-components'
 import { ModalDetails } from './modules/Details'
+import { AuthContext } from '../../contexts'
+import { Navigate } from 'react-router-dom'
+import { fetchRequestProfile } from '@api/user/profileData'
 
 type authorType = {
 	id: string
@@ -22,8 +25,13 @@ type packagesWithRecordsType = {
 	documents: Array<IOneDocumentData>
 	records: Array<IRecordData>
 }
+type NavigationType = {
+	setUser: Function
+	setLoggedIn: Function
+}
 
-export const RecordsPage = () => {
+
+export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [records, setRecords] = useState<Array<IRecordData>>()
 	const [documentsPackages, setDocumentsPackages] =
 		useState<Array<IDocumentPackageData>>()
@@ -31,6 +39,7 @@ export const RecordsPage = () => {
 		useState<Array<packagesWithRecordsType>>()
 	const RecordsSerializer = new Records()
 	const documentPackageSerializer = new Documents()
+	const authContext = useContext(AuthContext)
 
 	const [record, setRecord] = useState<IRecordData>()
 	const [detailModal, setDetailModal] = useState(false)
@@ -49,28 +58,39 @@ export const RecordsPage = () => {
 				setRecords(data)
 			})
 		)
+		fetchRequestProfile().then(data => {
+			if(data.status == 401) {
+				setLoggedIn(false)
+			}
+			data.date_joined = getFullDate(data.date_joined)
+			setUser(data)
+		})
 	}, [])
 
 	useEffect(() => {
-		records &&
-			documentsPackages &&
-			setPackagesWithRecords(
-				documentsPackages.map(Package => {
-					const packageWithRecords: packagesWithRecordsType = {
-						id: Package.id,
-						author: Package.author,
-						title: Package.title,
-						documents: Package.documents,
-						records: [],
-					}
-					records.map(record => {
-						if (record.documents_package.id == Package.id) {
-							packageWithRecords.records.push(record)
+		console.log(records)
+		if(records) {
+
+			records &&
+				documentsPackages &&
+				setPackagesWithRecords(
+					documentsPackages.map(Package => {
+						const packageWithRecords: packagesWithRecordsType = {
+							id: Package.id,
+							author: Package.author,
+							title: Package.title,
+							documents: Package.documents,
+							records: [],
 						}
+						records.map(record => {
+							if (record.documents_package.id == Package.id) {
+								packageWithRecords.records.push(record)
+							}
+						})
+						return packageWithRecords
 					})
-					return packageWithRecords
-				})
-			)
+				)
+		}
 	}, [records, documentsPackages])
 
 	const changeDetailModal = (id: string) => {
@@ -79,6 +99,7 @@ export const RecordsPage = () => {
 	}
 	return (
 		<Body>
+			{!authContext && <Navigate to={'/Auth'} />}
 			<MainTable>
 				<tbody>
 					{records?.map(irecord => {
