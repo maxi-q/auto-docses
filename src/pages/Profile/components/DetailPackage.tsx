@@ -2,8 +2,6 @@ import { IDocumentPackageData } from '@api/documents'
 import { Button } from '@ui/Button'
 import { useContext } from 'react'
 import Table from 'react-bootstrap/esm/Table'
-import { TbFileSearch } from 'react-icons/tb'
-import { FaPen } from '@react-icons/all-files/Fa/FaPen'
 
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -41,10 +39,18 @@ const DetailPackage = ({
 				<Title>
 					{documentPackage?.title}{' '}
 					{userContext?.id == documentPackage?.author.id && (
-						<FaPen
+						<svg
 							onClick={updatePackage}
+							xmlns='http://www.w3.org/2000/svg'
+							width='16'
+							height='16'
+							fill='currentColor'
+							className='bi bi-pencil'
+							viewBox='0 0 16 16'
 							style={{ fontSize: '10px', cursor: 'pointer' }}
-						/>
+						>
+							<path d='M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z' />
+						</svg>
 					)}
 				</Title>
 				<div>Автор: {documentPackage?.author.username}</div>
@@ -62,13 +68,31 @@ const DetailPackage = ({
 												<Button
 													onClick={() => ChangeDocument(documentPackage.id, i)}
 												>
-													<TbFileSearch />
+													<svg
+														xmlns='http://www.w3.org/2000/svg'
+														width='16'
+														height='16'
+														fill='currentColor'
+														className='bi bi-search'
+														viewBox='0 0 16 16'
+													>
+														<path d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z' />
+													</svg>
 												</Button>
 											</Link>
 											{userContext?.id == documentPackage.author.id && (
 												<Link>
 													<Button onClick={() => updateDocument(document.id)}>
-														<FaPen />
+														<svg
+															xmlns='http://www.w3.org/2000/svg'
+															width='16'
+															height='16'
+															fill='currentColor'
+															className='bi bi-search'
+															viewBox='0 0 16 16'
+														>
+															<path d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z' />
+														</svg>
 													</Button>
 												</Link>
 											)}
