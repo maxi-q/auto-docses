@@ -44,6 +44,7 @@
   "dependencies": {
     "@pdftron/webviewer": "^10.1.1",
     "@popperjs/core": "^2.11.6",
+    "@react-icons/all-files": "^4.1.0",
     "@react-pdf-viewer/core": "^3.11.0",
     "@react-pdf-viewer/default-layout": "^3.11.0",
     "@react-pdf-viewer/full-screen": "^3.11.0",

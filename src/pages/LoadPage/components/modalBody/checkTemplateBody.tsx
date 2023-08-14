@@ -6,8 +6,8 @@ import {
 import { Button } from '@ui/Button'
 import { useContext, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/esm/Table'
-import { FaPen } from 'react-icons/Fa'
-import { AiOutlineDelete } from 'react-icons/ai'
+import { FaPen } from '@react-icons/all-files/Fa/FaPen'
+import { AiOutlineDelete } from '@react-icons/all-files/ai/AiOutlineDelete'
 import styled from 'styled-components'
 import { UserContext } from '../../../../contexts'
 
