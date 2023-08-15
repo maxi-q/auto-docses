@@ -5,10 +5,10 @@ import {
 } from '@api/documents'
 import { Modal } from '@ui/index'
 import { useEffect, useState } from 'react'
-import { AddTemplateBody } from '../components/components/addTemplateBody'
-import { CheckTemplateBody } from '../components/components/checkTemplateBody'
-import { DeleteTemplateBody } from '../components/components/deleteTemplateBody'
-import { UpdateTemplateBody } from '../components/components/updateTemplateBody'
+import { AddTemplateBody } from '../components/modalBody/addTemplateBody'
+import { CheckTemplateBody } from '../components/modalBody/checkTemplateBody'
+import { DeleteTemplateBody } from '../components/modalBody/deleteTemplateBody'
+import { UpdateTemplateBody } from '../components/modalBody/updateTemplateBody'
 
 interface IModalUpdateTemplate {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
