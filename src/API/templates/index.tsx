@@ -39,9 +39,7 @@ export interface ITemplateDataWithValue {
 }
 
 class Templates {
-	API_URL = process.env.API_URL
-		? process.env.API_URL
-		: 'http://26.81.229.58:9000/api/v1/'
+	API_URL = 'http://backend:8000/api/'
 
 	private headers = new Headers({
 		'Content-Type': 'application/json',

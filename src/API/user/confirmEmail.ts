@@ -1,9 +1,7 @@
 import { fetchM } from '../../helpers/fetchM'
 import { fetchRequestJWT } from './token/createJWT'
 
-const API_URL = process.env.API_URL
-	? process.env.API_URL
-	: 'http://26.81.229.58:9000/api/v1/'
+const API_URL = 'http://backend:8000/api/'
 
 interface IConfirmEmailData {
 	username: string

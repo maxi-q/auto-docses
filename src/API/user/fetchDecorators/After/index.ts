@@ -1,6 +1,4 @@
-const API_URL = process.env.API_URL
-	? process.env.API_URL
-	: 'http://192.168.0.107:5000/api/v1/'
+const 'http://backend:8000/api/'
 
 export type originalRequestType = {
 	input: RequestInfo | URL

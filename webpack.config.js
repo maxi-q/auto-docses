@@ -104,7 +104,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
       'process.env': JSON.stringify(process.env),
-      'process.env.API_URL': 'backend:8000/api/',
     }),
     new CopyWebpackPlugin({
       patterns: [

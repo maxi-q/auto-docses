@@ -1,6 +1,4 @@
-const API_URL = process.env.API_URL
-	? process.env.API_URL
-	: 'http://26.81.229.58:9000/api/v1/'
+const API_URL = 'http://backend:8000/api/'
 
 interface IRequestProfileCallbackData {
 	id: string
