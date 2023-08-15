@@ -1,6 +1,5 @@
 import { fetchM } from '../../../helpers/fetchM'
 
-console.log(process.env)
 const PROXY = process.env.PROXY
 	? process.env.PROXY
 	: 'http://26.81.229.58:9000/api/v1/'
