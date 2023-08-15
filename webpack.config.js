@@ -103,7 +103,7 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_DEBUG': JSON.stringify(process.env.NODE_DEBUG),
-      'process.env': JSON.stringify(dotenv.parsed),
+      'process.env': JSON.stringify(process.env),
       
     }),
     new CopyWebpackPlugin({
