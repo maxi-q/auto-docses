@@ -1,7 +1,7 @@
 import { fetchM } from '../../helpers/fetchM'
 
-const ServerURL = process.env.ServerURL
-	? process.env.ServerURL
+const proxy = process.env.proxy
+	? process.env.proxy
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IAuthorizationData {
@@ -21,7 +21,7 @@ export interface IAuthorizationCallback {
 
 export const fetchDataForAuthorization = async ({
 	username,
-	password
+	password,
 }: IAuthorizationData): Promise<IAuthorizationCallback> => {
 	const options = {
 		method: 'POST',
@@ -30,35 +30,33 @@ export const fetchDataForAuthorization = async ({
 		}),
 		body: JSON.stringify({
 			username: username,
-			password: password
+			password: password,
 		}),
 	}
 
-	const response = await fetchM(ServerURL + 'auth/signup/', options)
+	const response = await fetchM(proxy + 'auth/signup/', options)
 	// , 'getJWTToken'
 	const data: object = await response.json()
-	
 
-
-	if(response.status == 400) {
-		return {...data, status: response.status}
+	if (response.status == 400) {
+		return { ...data, status: response.status }
 	}
-	if(response.status == 201) {
+	if (response.status == 201) {
 		const options = {
 			method: 'POST',
 			headers: new Headers({
 				'Content-Type': 'application/json',
 			}),
 			body: JSON.stringify({
-				username: username
+				username: username,
 			}),
 		}
-		await fetchM(ServerURL + 'auth/send_confirm_code/', options)
+		await fetchM(proxy + 'auth/send_confirm_code/', options)
 
-		localStorage.setItem("password", password)
-		localStorage.setItem("username", username)
+		localStorage.setItem('password', password)
+		localStorage.setItem('username', username)
 
-		return {status: 201, regUsername: username}
+		return { status: 201, regUsername: username }
 	}
-	return {status: 201}
+	return { status: 201 }
 }

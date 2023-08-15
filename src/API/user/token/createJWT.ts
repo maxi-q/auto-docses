@@ -1,7 +1,7 @@
 import { fetchM } from '../../../helpers/fetchM'
 
-const ServerURL = process.env.ServerURL
-	? process.env.ServerURL
+const proxy = process.env.proxy
+	? process.env.proxy
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IRequestJWTData {
@@ -34,7 +34,7 @@ export const fetchRequestJWT = async ({
 		}),
 	}
 
-	const response = await fetchM(ServerURL + 'auth/jwt/create/', options)
+	const response = await fetchM(proxy + 'auth/jwt/create/', options)
 	// , 'getJWTToken'
 	const data: IRequestJWTCallbackData = await response.json()
 

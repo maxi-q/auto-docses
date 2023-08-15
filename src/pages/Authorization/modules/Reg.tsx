@@ -17,38 +17,32 @@ export const RegWindow = ({onSubmit, callback}: IRegWindow) => {
 			<FormWithValidate onSubmit={onSubmit}>
 				<Window.Title>Окно регистрации</Window.Title>
 				<Input
-					defaultValue='Максим'
 					name='first_name'
 					placeholder='Имя'
 					field={FieldNames.field}
 				/>
 				<Input
-					defaultValue='Галушкин'
 					name='last_name'
 					placeholder='Фамилия'
 					field={FieldNames.field}
 				/>
 				<Input
-					defaultValue='maxi-q'
 					name='username'
 					placeholder='Логин'
 					field={FieldNames.login}
 				/>
 				<Input
-					defaultValue='maximkabust@gmail.com'
 					name='email'
 					placeholder='Почта'
 					field={FieldNames.email}
 				/>
 				<Input
-					defaultValue='evKBJHsdf4hriewiBSDIF777'
 					name='password'
 					type='password'
 					placeholder='Пароль'
 					field={FieldNames.password}
 				/>
 				<Input
-					defaultValue='evKBJHsdf4hriewiBSDIF777'
 					name='rePassword'
 					type='password'
 					placeholder='Повторить пароль'

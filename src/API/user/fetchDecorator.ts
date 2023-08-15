@@ -2,8 +2,8 @@
 // import { AfterMyObjectD, AfterMyObjectType, originalRequestType } from './fetchDecorators/After'
 // import { BeforeMyObjectD, BeforeMyObjectType } from './fetchDecorators/Before'
 
-// const ServerURL = process.env.ServerURL
-// 	? process.env.ServerURL
+// const proxy = process.env.proxy
+// 	? process.env.proxy
 // 	: 'http://192.168.0.107:5000/api/v1/'
 
 // // --------------------
@@ -40,7 +40,6 @@
 
 // 	const mockResponse =
 // 		AfterMyObject[keyForX as keyof AfterMyObjectType](response, originalRequest)
-	
 
 // 	/* the original( mock:) ) response can be resolved unmodified: */
 // 	return mockResponse

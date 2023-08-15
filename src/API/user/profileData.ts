@@ -1,5 +1,5 @@
-const ServerURL = process.env.ServerURL
-	? process.env.ServerURL
+const proxy = process.env.proxy
+	? process.env.proxy
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IRequestProfileCallbackData {
@@ -17,8 +17,7 @@ export interface IRequestProfileCallback extends IRequestProfileCallbackData {
 }
 
 export const fetchRequestProfile =
-	async (): Promise<IRequestProfileCallback > => {
-
+	async (): Promise<IRequestProfileCallback> => {
 		const access = localStorage.getItem('access')
 
 		const options = {
@@ -29,12 +28,11 @@ export const fetchRequestProfile =
 			}),
 		}
 
-		const response = await fetch(ServerURL + 'users/me/', options)
+		const response = await fetch(proxy + 'users/me/', options)
 
 		const data: IRequestProfileCallbackData = await response.json()
 		if (response.status == 401) {
-
-			return {status: 401, ...data}
+			return { status: 401, ...data }
 		}
 
 		return { status: 200, ...data }

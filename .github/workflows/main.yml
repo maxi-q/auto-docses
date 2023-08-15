@@ -55,8 +55,6 @@ jobs:
           sudo docker compose -f docker-compose.production.yml down
           sudo docker compose -f docker-compose.production.yml up -d
 
-          # clear
-          sudo docker system prune --all --force
 
   send_message:
     runs-on: ubuntu-latest

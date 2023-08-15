@@ -1,5 +1,5 @@
-const ServerURL = process.env.ServerURL
-	? process.env.ServerURL
+const proxy = process.env.proxy
+	? process.env.proxy
 	: 'http://192.168.0.107:5000/api/v1/'
 
 export type originalRequestType = {
@@ -13,7 +13,6 @@ const getJWTTokenDecorator = (
 	originalRequest: originalRequestType
 ) => {
 	console.log('Calculating JWT')
-	
 
 	// localStorage.setItem('accessToken', 'accessToken')
 	// localStorage.setItem('refreshToken', 'refreshToken')
@@ -44,7 +43,7 @@ const getJWTTokenDecorator = (
 
 	console.log('options', options)
 
-	fetch(ServerURL + 'jwt/create/', options).then(data => {
+	fetch(proxy + 'jwt/create/', options).then(data => {
 		console.log(data)
 		data.json().then(json => {
 			console.log('json', json)

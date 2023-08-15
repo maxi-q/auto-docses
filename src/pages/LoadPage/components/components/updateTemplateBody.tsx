@@ -27,7 +27,7 @@ const UpdateTemplateBody = ({
 }: IUpdateTemplateBody) => {
 	const TemplatesManager = new Templates()
 	const DocumentManager = new Documents()
-
+	
 	const onSubmit = (data: object) => {
 		// Здесь все работает!
 		const sendTemplate: any = lotsSelectToArray(data)
@@ -38,8 +38,14 @@ const UpdateTemplateBody = ({
 			description: sendTemplate.description,
 			nameInDocument: sendTemplate.name_in_document,
 		}).then(res => {
-			setModalStatus('check')
-			updateTable()
+			console.log(res)
+			res.json().then(data => {
+				console.log(data)
+			})
+			if(res.status == 200) {
+				setModalStatus('check')
+				updateTable()
+			}
 		})
 		// Здесь все работает!
 	}
@@ -61,7 +67,7 @@ const UpdateTemplateBody = ({
 			/>
 			<Input
 				defaultValue={template.name_in_document}
-				field={FieldNames.mayEmpty}
+				field={FieldNames.nameInDocument}
 				placeholder={'Имя в документе'}
 				type='textarea'
 				name={'name_in_document'}

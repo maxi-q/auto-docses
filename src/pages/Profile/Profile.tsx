@@ -4,7 +4,7 @@ import { getFullDate } from '@helpers/date'
 import { ButtonCircle } from '@ui/ButtonCircle'
 import { useContext, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { AuthContext, UserContext } from '../../contexts'
 import { DefaultTemplateValues } from './modules/DTamplate'
@@ -39,7 +39,6 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 	const documentsSerializer = new Documents()
 
 	useEffect(() => {
-		console.log('authContext', authContext)
 		if (!authContext) {
 			navigate('/Auth')
 			return
@@ -61,9 +60,6 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	return (
 		<Body>
-			{!authContext && (
-				<Navigate to={'/Auth'} state={{ prevName: location.pathname }} />
-			)}
 			<Main>
 				<Info>
 					<Title> Hello, {userContext?.username} </Title>

@@ -4,11 +4,11 @@ import {
 	TemplateInDocumentType,
 } from '@api/documents'
 import { Modal } from '@ui/index'
-import { useState } from 'react'
-import { AddTemplateBody } from '../components/modalBody/addTemplateBody'
-import { CheckTemplateBody } from '../components/modalBody/checkTemplateBody'
-import { DeleteTemplateBody } from '../components/modalBody/deleteTemplateBody'
-import { UpdateTemplateBody } from '../components/modalBody/updateTemplateBody'
+import { useEffect, useState } from 'react'
+import { AddTemplateBody } from '../components/components/addTemplateBody'
+import { CheckTemplateBody } from '../components/components/checkTemplateBody'
+import { DeleteTemplateBody } from '../components/components/deleteTemplateBody'
+import { UpdateTemplateBody } from '../components/components/updateTemplateBody'
 
 interface IModalUpdateTemplate {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -37,6 +37,9 @@ const ModalUpdateTemplate = ({
 		setModalStatus('check')
 		setModalActive(false)
 	}
+	useEffect(()=> {
+		console.log(modalStatus, template)
+	}, [template, modalStatus])
 
 	return (
 		<Modal setActive={closeModal} active={modalActive}>
@@ -67,13 +70,12 @@ const ModalUpdateTemplate = ({
 					template={template}
 				/>
 			) : modalStatus == 'add' ? (
-				template && (
+				  (
 					<AddTemplateBody
 						updateTable={updateTable}
 						document={document}
 						setModalStatus={setModalStatus}
 						addTemplate={addTemplate}
-						template={template}
 					/>
 				)
 			) : (

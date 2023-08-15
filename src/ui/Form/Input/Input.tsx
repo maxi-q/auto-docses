@@ -85,10 +85,11 @@ export const Input = ({
 	)
 }
 
-const ErrorInput = styled.span`
+export const ErrorInput = styled.span`
 	font-size: 16px;
 	margin: -10px 0 -5px 10px;
 	color: red;
+	white-space: pre-line;
 `
 const InputBox = styled.div`
 	position: relative;

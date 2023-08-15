@@ -10,19 +10,20 @@ interface IAuthWindow {
 }
 
 export const AuthWindow = ({ onSubmit }: IAuthWindow) => {
+	
 	return (
 		<Window>
 			<FormWithValidate onSubmit={onSubmit}>
 				<Window.Title>Окно входа</Window.Title>
 				<Input
-					defaultValue='maxi-q'
+					defaultValue={localStorage.getItem('username') || ''}
 					name='username'
 					type='text'
 					placeholder='Логин'
 					field={FieldNames.field}
 				/>
 				<Input
-					defaultValue='evKBJHsdf4hriewiBSDIF777'
+					defaultValue={localStorage.getItem('password') || ''}
 					name='password'
 					type='password'
 					placeholder='Пароль'

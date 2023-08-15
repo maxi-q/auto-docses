@@ -12,14 +12,26 @@ export enum FieldNames {
 	select = 'select',
 	username = 'username',
 	mayEmpty = 'mayEmpty',
+	title = 'title',
+	nameInDocument = 'nameInDocument'
 }
-
 const validator: IValidator<typeof FieldNames> = {
 	login: {
 		required: 'Логин обязателен!',
 		minLength: {
 			value: 3,
 			message: 'Логин должен быть длиной 3+ символов.',
+		},
+	},
+	title: {
+		required: 'Это поле обязательно!',
+		minLength: {
+			value: 7,
+			message: 'Поле должно быть длиной 7+ символов.',
+		},
+		maxLength: {
+			value: 27,
+			message: 'Поле должно быть максимум длиной 27 символов.',
 		},
 	},
 	field: {
@@ -36,6 +48,17 @@ const validator: IValidator<typeof FieldNames> = {
 			value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
 			message: 'Невалидная почта.',
 		},
+	},
+	nameInDocument: {
+		required: 'Ключ в документе обязателен!',
+		pattern: {
+			value: /^{{[a-zA-Z-_]+}}$/,
+			message: '{{ключ}}.',
+		},
+		maxLength: {
+			value: 24,
+			message: 'Максимум 24 символа',
+		}
 	},
 	password: {
 		required: 'Пароль обязателен!',
