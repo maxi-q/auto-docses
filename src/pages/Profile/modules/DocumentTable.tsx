@@ -1,44 +1,39 @@
 import { IDocumentPackageData } from '@api/documents'
 import { COLORS } from '@constants/style/COLORS'
+import { Button } from '@ui/Button'
 import styled from 'styled-components'
-import { DocumentPackageRow } from '../components/PackageRow'
 
 interface IDocumentTable {
-	documentPackage: Array<IDocumentPackageData>
-	setPackageDocuments: Function
+	documentPackages: Array<IDocumentPackageData>
 	setPackageId: Function
-	setModalDocumentActive: Function
-	setDocumentId: Function
-	setModalUpdateActive: Function
-	setModalDeleteActive: Function
 	setModalDetailsActive: Function
 }
 export const DocumentTable = ({
-	setModalDocumentActive,
-	documentPackage,
+	documentPackages,
 	setPackageId,
-	setPackageDocuments,
-	setDocumentId,
-	setModalUpdateActive,
-	setModalDeleteActive,
 	setModalDetailsActive,
 }: IDocumentTable) => {
 	return (
 		<>
-			{documentPackage &&
-				documentPackage.map(d => {
+			{documentPackages &&
+				documentPackages.map(documentPackage => {
 					return (
-						<DocumentPackageRow
-							setModalDocumentActive={setModalDocumentActive}
-							setPackageId={setPackageId}
-							setPackageDocuments={setPackageDocuments}
-							documents={d.documents}
-							setDocumentId={setDocumentId}
-							documentPackage={d}
-							setModalUpdateActive={setModalUpdateActive}
-							setModalDeleteActive={setModalDeleteActive}
-							setModalDetailsActive={setModalDetailsActive}
-						/>
+						<>
+							<Row>
+								<td>{documentPackage.title}</td>
+								<td>{documentPackage.author.username}</td>
+								<td>
+									<Button
+										onClick={() => {
+											setModalDetailsActive(true)
+											setPackageId(documentPackage.id)
+										}}
+									>
+										Детали
+									</Button>
+								</td>
+							</Row>
+						</>
 					)
 				})}
 		</>

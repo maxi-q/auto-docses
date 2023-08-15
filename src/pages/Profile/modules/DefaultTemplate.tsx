@@ -8,6 +8,12 @@ import { Button, Input } from '@ui/index'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+interface IDefaultTemplateWithValues {
+	id: string
+	template: ITemplateData
+	value: string
+}
+
 const DefaultTemplateValues = () => {
 	const [templates, setTemplates] = useState<Array<ITemplateData>>()
 	const [values, setValues] = useState<Array<ITemplateDataWithValue>>()
@@ -37,7 +43,7 @@ const DefaultTemplateValues = () => {
 	useEffect(() => {
 		setDefaultTemplateValues(
 			values &&
-				templates?.map((template): { id: string; template: ITemplateData; value: string } | undefined => {
+				templates?.map((template): IDefaultTemplateWithValues | undefined => {
 					const value = values?.find(value => value.template.id == template.id)
 
 					if(template.is_official || value?.value) {
@@ -53,7 +59,6 @@ const DefaultTemplateValues = () => {
 	}, [values, templates])
 
 	const onSubmit = (data: object) => {
-		console.log(data)
 		for (const [template_id, template_value] of Object.entries(data)) {
 			if (!template_value) continue
 			if (values?.find(x => x.template.id == template_id)) {
@@ -76,16 +81,16 @@ const DefaultTemplateValues = () => {
 				<TemplateValueBlock>
 					{defaultTemplateValues &&
 						defaultTemplateValues.map(
-							(t, i) =>
-								t && (
+							(template, i) =>
+								template && (
 									<FeatureInput key={i}>
-										<KeyLabel>{t.template.title}:</KeyLabel>
+										<KeyLabel>{template.template.title}:</KeyLabel>
 										<Input
-											defaultValue={t.value}
-											field={t.value ? FieldNames.field : FieldNames.mayEmpty}
+											defaultValue={template.value}
+											field={template.value ? FieldNames.field : FieldNames.mayEmpty}
 											placeholder={''}
 											type='textarea'
-											name={t.template.id}
+											name={template.template.id}
 										/>
 									</FeatureInput>
 								)

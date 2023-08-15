@@ -37,12 +37,18 @@ const ModalUpdateTemplate = ({
 		setModalStatus('check')
 		setModalActive(false)
 	}
-	useEffect(()=> {
+	const returnCheck = () => {
+		setModalStatus('check')
+	}
+	useEffect(() => {
 		console.log(modalStatus, template)
 	}, [template, modalStatus])
 
 	return (
-		<Modal setActive={closeModal} active={modalActive}>
+		<Modal
+			setActive={modalStatus == 'check' ? closeModal : returnCheck}
+			active={modalActive}
+		>
 			{modalStatus == 'check' ? (
 				<CheckTemplateBody
 					setModalStatus={setModalStatus}
@@ -54,30 +60,26 @@ const ModalUpdateTemplate = ({
 			) : modalStatus == 'update' ? (
 				template && (
 					<UpdateTemplateBody
-						document={document}
-						addTemplate={addTemplate}
 						setModalStatus={setModalStatus}
 						updateTable={updateTable}
 						template={template}
 					/>
 				)
 			) : modalStatus == 'delete' ? (
-				template && <DeleteTemplateBody
-					document={document}
-					addTemplate={addTemplate}
-					setModalStatus={setModalStatus}
-					updateTable={updateTable}
-					template={template}
-				/>
-			) : modalStatus == 'add' ? (
-				  (
-					<AddTemplateBody
-						updateTable={updateTable}
-						document={document}
+				template && (
+					<DeleteTemplateBody
 						setModalStatus={setModalStatus}
-						addTemplate={addTemplate}
+						updateTable={updateTable}
+						template={template}
 					/>
 				)
+			) : modalStatus == 'add' ? (
+				<AddTemplateBody
+					updateTable={updateTable}
+					document={document}
+					setModalStatus={setModalStatus}
+					addTemplate={addTemplate}
+				/>
 			) : (
 				<>Error</>
 			)}

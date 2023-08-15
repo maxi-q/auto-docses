@@ -1,7 +1,7 @@
 import { fetchM } from '../../helpers/fetchM'
 
-const PROXY = process.env.PROXY
-	? process.env.PROXY
+const API_URL = process.env.API_URL
+	? process.env.API_URL
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IRegistrationData {
@@ -40,7 +40,7 @@ export const fetchDataForRegistration = async ({
 		}),
 	}
 
-	const response = await fetchM(PROXY + 'auth/signup/', options)
+	const response = await fetchM(API_URL + 'auth/signup/', options)
 	// , 'getJWTToken'
 	const data: object = await response.json()
 
@@ -57,7 +57,7 @@ export const fetchDataForRegistration = async ({
 				username: username,
 			}),
 		}
-		await fetchM(PROXY + 'auth/send_confirm_code/', options)
+		await fetchM(API_URL + 'auth/send_confirm_code/', options)
 
 		localStorage.setItem('password', password)
 		localStorage.setItem('username', username)

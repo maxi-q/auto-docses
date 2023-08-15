@@ -46,7 +46,7 @@ const validator: IValidator<typeof FieldNames> = {
 		required: 'Почта обязательна!',
 		pattern: {
 			value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
-			message: 'Невалидная почта.',
+			message: 'Проверьте правильность написания.',
 		},
 	},
 	nameInDocument: {
@@ -57,7 +57,7 @@ const validator: IValidator<typeof FieldNames> = {
 		},
 		maxLength: {
 			value: 24,
-			message: 'Максимум 24 символа',
+			message: 'Максимум 24 символа.',
 		}
 	},
 	password: {
@@ -82,7 +82,7 @@ const validator: IValidator<typeof FieldNames> = {
 		},
 		pattern: {
 			value: /^[a-zA-ZА-Яа-я\w]+$/,
-			message: 'Только Буквы и цифры без пробелов',
+			message: 'Только Буквы и цифры без пробелов.',
 		},
 	},
 }

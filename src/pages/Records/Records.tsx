@@ -35,8 +35,7 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [records, setRecords] = useState<Array<IRecordData>>()
 	const [documentsPackages, setDocumentsPackages] =
 		useState<Array<IDocumentPackageData>>()
-	const [packagesWithRecords, setPackagesWithRecords] =
-		useState<Array<packagesWithRecordsType>>()
+
 	const RecordsSerializer = new Records()
 	const documentPackageSerializer = new Documents()
 	const authContext = useContext(AuthContext)
@@ -67,32 +66,6 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 		})
 	}, [])
 
-	useEffect(() => {
-		console.log(records)
-		if(records) {
-
-			records &&
-				documentsPackages &&
-				setPackagesWithRecords(
-					documentsPackages.map(Package => {
-						const packageWithRecords: packagesWithRecordsType = {
-							id: Package.id,
-							author: Package.author,
-							title: Package.title,
-							documents: Package.documents,
-							records: [],
-						}
-						records.map(record => {
-							if (record.documents_package.id == Package.id) {
-								packageWithRecords.records.push(record)
-							}
-						})
-						return packageWithRecords
-					})
-				)
-		}
-	}, [records, documentsPackages])
-
 	const changeDetailModal = (id: string) => {
 		setDetailModal(true)
 		setRecord(records?.find(x => x.id == id))
@@ -102,13 +75,13 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			{!authContext && <Navigate to={'/Auth'} />}
 			<MainTable>
 				<tbody>
-					{records?.map(irecord => {
+					{records?.map(oneRecord => {
 						return (
 							<tr>
-								<th>{getFullDate(irecord.creation_date)}</th>
-								<th>{irecord.documents_package.title}</th>
+								<th>{getFullDate(oneRecord.creation_date)}</th>
+								<th>{oneRecord.documents_package.title}</th>
 								<th>
-									<Button onClick={() => changeDetailModal(irecord.id)}>
+									<Button onClick={() => changeDetailModal(oneRecord.id)}>
 										Детали
 									</Button>
 								</th>

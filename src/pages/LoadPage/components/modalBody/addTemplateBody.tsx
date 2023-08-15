@@ -1,8 +1,8 @@
 import Documents, { IOneDocumentData } from '@api/documents'
 import Templates from '@api/templates'
 import { FormWithValidate } from '@components/FormWithValidate'
+import { ServerSetError } from '@helpers/ServerSetError'
 import { FieldNames } from '@helpers/validator'
-import { ErrorInput } from '@ui/Form/Input/Input'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
 import { lotsSelectToArray } from '../../helpers/lotsSelectToArray'
@@ -16,9 +16,6 @@ interface IModalAddTemplate {
 	updateTable: Function
 }
 
-const templateErrors = {
-	templates: {},
-}
 const AddTemplateBody = ({
 	document,
 	addTemplate,
@@ -61,32 +58,15 @@ const AddTemplateBody = ({
 							setModalStatus('check')
 							updateTable()
 						} else {
-							console.log(res)
 							res.json().then(err => {
-								console.log(err)
-								const error = []
-								for (const [key, value] of Object.entries(err)) {
-									if (!value) continue
-									if (value instanceof Array) {
-										error.push({ key: key, errors: value })
-									}
-								}
-								setServerError(error)
+								setServerError(ServerSetError(err))
 							})
 						}
 					})
 				})
 			} else {
 				res.json().then(err => {
-					console.log(err)
-					const error = []
-					for (const [key, value] of Object.entries(err)) {
-						if (!value) continue
-						if (value instanceof Array) {
-							error.push({ key: key, errors: value })
-						}
-					}
-					setServerError(error)
+					setServerError(ServerSetError(err))
 				})
 			}
 		})
@@ -115,9 +95,10 @@ const AddTemplateBody = ({
 			{serverError.map(x => (
 				<>
 					{x.key}: <br />
-					{x.errors.map((w) => (
+					{x.errors.map(w => (
 						<>
-							{w}<br />
+							{w}
+							<br />
 						</>
 					))}
 				</>

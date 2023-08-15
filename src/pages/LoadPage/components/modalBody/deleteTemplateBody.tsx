@@ -4,8 +4,6 @@ import { Button } from '@ui/index'
 import styled from 'styled-components'
 
 interface IDeleteTemplateBody {
-	document: IOneDocumentData
-	addTemplate: Function
 	setModalStatus: React.Dispatch<
 		React.SetStateAction<'check' | 'update' | 'delete' | 'add'>
 	>

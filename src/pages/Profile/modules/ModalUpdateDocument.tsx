@@ -1,5 +1,6 @@
 import Documents, { IOneDocumentData } from '@api/documents'
 import { FormWithValidate } from '@components/FormWithValidate'
+import { ServerSetError } from '@helpers/ServerSetError'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
@@ -18,6 +19,9 @@ const ModalUpdateDocument = ({
 }: IModalUpdateDocument) => {
 	const [document, setDocument] = useState<IOneDocumentData>()
 	const documentsSerializer = new Documents()
+	const [serverError, setServerError] = useState<
+		Array<{ key: string; errors: Array<string> }>
+	>([])
 
 	documentsSerializer.read({ id: documentId }).then(res => {
 		res.json().then(data => {
@@ -27,17 +31,22 @@ const ModalUpdateDocument = ({
 
 	const DocumentsManager = new Documents()
 	const onSubmit = async (data: object) => {
-		// Здесь все работает!
 		const sendDocument: any = lotsSelectToArray(data)
 
 		documentId &&
-			(await DocumentsManager.update({
+			DocumentsManager.update({
 				id: documentId,
 				title: sendDocument.title,
 				description: sendDocument.description,
-			}))
-		// Здесь все работает!
-		setIUpdating('check')
+			}).then(res => {
+				if (res.ok) {
+					setIUpdating('check')
+				} else {
+					res.json().then(err => {
+						setServerError(ServerSetError(err))
+					})
+				}
+			})
 	}
 	return (
 		<FormWithValidate onSubmit={onSubmit}>
@@ -59,6 +68,17 @@ const ModalUpdateDocument = ({
 					/>
 				</>
 			)}
+			{serverError.map(x => (
+				<>
+					{x.key}: <br />
+					{x.errors.map(w => (
+						<>
+							{w}
+							<br />
+						</>
+					))}
+				</>
+			))}
 			<Button type='submit'>Изменить документ</Button>
 		</FormWithValidate>
 	)

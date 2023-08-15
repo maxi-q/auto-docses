@@ -113,16 +113,16 @@ const Template = styled.div`
 const DownloadRow = styled.div`
 	width: 100%;
 	display: flex;
-  height: min-content;
+	height: min-content;
 	flex-direction: row;
 	justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px black solid;
+	align-items: center;
+	padding: 10px 0;
+	border-bottom: 1px black solid;
 `
 const Link = styled.a`
 	display: inline-block;
 	& > button {
-    display: flex;
-  }
+		display: flex;
+	}
 `

@@ -1,8 +1,8 @@
 import { fetchM } from '../../helpers/fetchM'
 import { fetchRequestJWT } from './token/createJWT'
 
-const PROXY = process.env.PROXY
-	? process.env.PROXY
+const API_URL = process.env.API_URL
+	? process.env.API_URL
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IConfirmEmailData {
@@ -28,7 +28,7 @@ export const fetchConfirmEmail = async ({
 		}),
 	}
 
-	const response = await fetchM(PROXY + 'auth/confirm_email/', options)
+	const response = await fetchM(API_URL + 'auth/confirm_email/', options)
 	// , 'getJWTToken'
 	const data: object = await response.json()
 

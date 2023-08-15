@@ -1,18 +1,20 @@
-import Documents, { IDocumentPackageData } from '@api/documents'
-import { fetchRequestProfile } from '@api/user/profileData'
-import { getFullDate } from '@helpers/date'
-import { ButtonCircle } from '@ui/ButtonCircle'
 import { useContext, useEffect, useState } from 'react'
-import Table from 'react-bootstrap/Table'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import Table from 'react-bootstrap/Table'
+
+import Documents, { IDocumentPackageData } from '@api/documents'
 import { AuthContext, UserContext } from '../../contexts'
-import { DefaultTemplateValues } from './modules/DTamplate'
+import { fetchRequestProfile } from '@api/user/profileData'
+import { ButtonCircle } from '@ui/ButtonCircle'
+import { getFullDate } from '@helpers/date'
+
+import { ModalDetailsDocumentPackage } from './modules/ModalDetailsDocumentPackage'
+import { DefaultTemplateValues } from './modules/DefaultTemplate'
 import { DocumentTable } from './modules/DocumentTable'
 import { ModalAddDocumentPackage } from './modules/ModalAddPackage'
 import { ModalDeleteDocument } from './modules/ModalDeleteDocument'
-import { ModalDetailsDocumentPackage } from './modules/ModalDetailsDocumentPackage'
-import { ModalAddDocument } from './modules/ModallAddDocumentq'
+import { ModalAddDocument } from './modules/ModalAddDocument'
 
 type NavigationType = {
 	setUser: Function
@@ -25,7 +27,6 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	const [modalActivePackage, setModalPackageActive] = useState(false)
 	const [modalActiveDocument, setModalDocumentActive] = useState(false)
-	const [modalUpdateActive, setModalUpdateActive] = useState(false)
 	const [modalDeleteActive, setModalDeleteActive] = useState(false)
 	const [modalDetailsActive, setModalDetailsActive] = useState(false)
 
@@ -82,14 +83,9 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 				<tbody>
 					{documentPackages && (
 						<DocumentTable
-							setModalDocumentActive={setModalDocumentActive}
-							setPackageDocuments={setPackageDocuments}
-							setPackageId={setPackageId}
-							documentPackage={documentPackages}
-							setDocumentId={setDocumentId}
-							setModalUpdateActive={setModalUpdateActive}
-							setModalDeleteActive={setModalDeleteActive}
+							documentPackages={documentPackages}
 							setModalDetailsActive={setModalDetailsActive}
+							setPackageId={setPackageId}
 						/>
 					)}
 				</tbody>

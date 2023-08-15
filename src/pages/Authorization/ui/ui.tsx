@@ -11,7 +11,7 @@ const Errors = styled.div`
 
 const Body = styled.div`
 	width: 100wh;
-	height: 80vh;
+	height: 100vh;
 	display: flex;
 	justify-content: center;
 	align-items: center;

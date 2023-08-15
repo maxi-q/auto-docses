@@ -1,8 +1,8 @@
 import { fetchM } from '../../../helpers/fetchM'
 
 console.log(process.env)
-const PROXY = process.env.PROXY
-	? process.env.PROXY
+const API_URL = process.env.API_URL
+	? process.env.API_URL
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IRequestJWTData {
@@ -24,7 +24,7 @@ export const fetchRequestJWT = async ({
 	username,
 	password,
 }: IRequestJWTData): Promise<IRequestJWTCallback> => {
-	console.log(process.env.PROXY)
+	console.log(process.env.API_URL)
 	const options = {
 		method: 'POST',
 		headers: new Headers({
@@ -36,7 +36,7 @@ export const fetchRequestJWT = async ({
 		}),
 	}
 
-	const response = await fetchM(PROXY + 'auth/jwt/create/', options)
+	const response = await fetchM(API_URL + 'auth/jwt/create/', options)
 	// , 'getJWTToken'
 	const data: IRequestJWTCallbackData = await response.json()
 

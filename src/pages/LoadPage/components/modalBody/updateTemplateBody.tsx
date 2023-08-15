@@ -1,16 +1,13 @@
-import Documents, {
-	IOneDocumentData,
-	TemplateInDocumentType,
-} from '@api/documents'
+import { TemplateInDocumentType } from '@api/documents'
 import Templates from '@api/templates'
 import { FormWithValidate } from '@components/FormWithValidate'
+import { ServerSetError } from '@helpers/ServerSetError'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
+import { useState } from 'react'
 import { lotsSelectToArray } from '../../helpers/lotsSelectToArray'
 
 interface IUpdateTemplateBody {
-	document: IOneDocumentData
-	addTemplate: Function
 	setModalStatus: React.Dispatch<
 		React.SetStateAction<'check' | 'update' | 'delete' | 'add'>
 	>
@@ -19,17 +16,16 @@ interface IUpdateTemplateBody {
 }
 
 const UpdateTemplateBody = ({
-	document,
-	addTemplate,
 	setModalStatus,
 	updateTable,
 	template,
 }: IUpdateTemplateBody) => {
 	const TemplatesManager = new Templates()
-	const DocumentManager = new Documents()
-	
+	const [serverError, setServerError] = useState<
+		Array<{ key: string; errors: Array<string> }>
+	>([])
+
 	const onSubmit = (data: object) => {
-		// Здесь все работает!
 		const sendTemplate: any = lotsSelectToArray(data)
 
 		TemplatesManager.update({
@@ -38,16 +34,15 @@ const UpdateTemplateBody = ({
 			description: sendTemplate.description,
 			nameInDocument: sendTemplate.name_in_document,
 		}).then(res => {
-			console.log(res)
-			res.json().then(data => {
-				console.log(data)
-			})
-			if(res.status == 200) {
+			if (res.status == 200) {
 				setModalStatus('check')
 				updateTable()
+			} else {
+				res.json().then(err => {
+					setServerError(ServerSetError(err))
+				})
 			}
 		})
-		// Здесь все работает!
 	}
 	return (
 		<FormWithValidate onSubmit={onSubmit}>
@@ -72,7 +67,17 @@ const UpdateTemplateBody = ({
 				type='textarea'
 				name={'name_in_document'}
 			/>
-
+			{serverError.map(x => (
+				<>
+					{x.key}: <br />
+					{x.errors.map(w => (
+						<>
+							{w}
+							<br />
+						</>
+					))}
+				</>
+			))}
 			<Button type='submit'>Изменить шаблон</Button>
 		</FormWithValidate>
 	)

@@ -1,5 +1,5 @@
-const PROXY = process.env.PROXY
-	? process.env.PROXY
+const API_URL = process.env.API_URL
+	? process.env.API_URL
 	: 'http://192.168.0.107:5000/api/v1/'
 
 export type originalRequestType = {
@@ -43,7 +43,7 @@ const getJWTTokenDecorator = (
 
 	console.log('options', options)
 
-	fetch(PROXY + 'jwt/create/', options).then(data => {
+	fetch(API_URL + 'jwt/create/', options).then(data => {
 		console.log(data)
 		data.json().then(json => {
 			console.log('json', json)

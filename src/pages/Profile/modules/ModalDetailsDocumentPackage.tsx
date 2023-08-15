@@ -1,12 +1,11 @@
 import Documents, { IDocumentPackageData } from '@api/documents'
 import { Modal } from '@ui/Modal'
-import { useContext, useEffect, useState } from 'react'
-
-import UserContext from '../../../contexts/user-context'
+import { useEffect, useState } from 'react'
 
 import { DetailPackage } from '../components/DetailPackage'
 import { ModalUpdateDocument } from './ModalUpdateDocument'
 import { ModalUpdatePackage } from './ModalUpdatePackage'
+
 interface IModalDetailsDocumentPackage {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
 	modalActive: boolean
@@ -19,51 +18,52 @@ export const ModalDetailsDocumentPackage = ({
 	packageId,
 }: IModalDetailsDocumentPackage) => {
 	const DocumentsSerializer = new Documents()
-	const userContext = useContext(UserContext)
 	const [documentPackage, setDocumentPackage] = useState<IDocumentPackageData>()
-	const [iUpdating, setIUpdating] = useState<
+	const [modalStatus, setModalStatus] = useState<
 		'check' | 'documentUpdate' | 'packageUpdate'
 	>('check')
 	const [documentId, setDocumentId] = useState('')
-	const [nope, setNope] = useState(false)
 
 	useEffect(() => {
 		packageId &&
 			DocumentsSerializer.readPackage({ id: packageId }).then(res => {
 				res.json().then(data => {
-					console.log(data)
 					setDocumentPackage(data)
 				})
 			})
-		console.log(documentPackage)
-	}, [packageId, iUpdating])
-
+	}, [packageId, modalStatus])
+	const closeModal = () => {
+		setModalActive(true)
+		setModalStatus('check')
+	}
+	const returnCheck = () => {
+		setModalStatus('check')
+	}
 	return (
 		<Modal
-			onClick={() => setIUpdating('check')}
-			setActive={iUpdating == 'check' ? setModalActive : setNope}
+			setActive={modalStatus == 'check' ? closeModal : returnCheck}
 			active={modalActive}
 		>
-			{iUpdating == 'documentUpdate' ? (
+			{modalStatus == 'documentUpdate' ? (
 				<ModalUpdateDocument
-					setIUpdating={setIUpdating}
+					setIUpdating={setModalStatus}
 					documentId={documentId}
 				/>
-			) : iUpdating == 'check' ? (
+			) : modalStatus == 'check' ? (
 				<>
 					{documentPackage && (
 						<DetailPackage
 							documentPackage={documentPackage}
-							setIUpdating={setIUpdating}
+							setIUpdating={setModalStatus}
 							setDocumentId={setDocumentId}
 						/>
 					)}
 				</>
-			) : iUpdating == 'packageUpdate' ? (
+			) : modalStatus == 'packageUpdate' ? (
 				packageId && (
 					<ModalUpdatePackage
 						packageId={packageId}
-						setIUpdating={setIUpdating}
+						setIUpdating={setModalStatus}
 					/>
 				)
 			) : (

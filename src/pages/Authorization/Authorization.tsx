@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom'
 
+import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -14,7 +15,6 @@ import { fetchRequestJWT } from '../../API/user/token/createJWT'
 import { AuthContext } from '../../contexts'
 import { AuthWindow, EmailWindow, RegWindow } from './modules'
 import { Body } from './ui'
-import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
 
 type NavigationType = {
 	setLoggedIn: Function
@@ -131,7 +131,6 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 			}
 		})
 	}, [])
-
 
 	useEffect(() => {
 		if (callback.status == 200) {

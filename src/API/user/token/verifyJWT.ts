@@ -1,7 +1,7 @@
 import { fetchM } from '../../../helpers/fetchM'
 
-const PROXY = process.env.PROXY
-	? process.env.PROXY
+const API_URL = process.env.API_URL
+	? process.env.API_URL
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IVerifyJWTCallbackData {
@@ -23,7 +23,7 @@ export const fetchVerifyJWT = async (): Promise<IVerifyJWTCallback> => {
 		}),
 	}
 
-	const response = await fetchM(PROXY + 'auth/jwt/verify/', options)
+	const response = await fetchM(API_URL + 'auth/jwt/verify/', options)
 
 	if (response.status == 200) {
 		return { status: 200 }
