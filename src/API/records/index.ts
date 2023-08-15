@@ -42,8 +42,8 @@ interface IGetDownloadLink {
 }
 
 class Records {
-	proxy = process.env.proxy
-		? process.env.proxy
+	PROXY = process.env.PROXY
+		? process.env.PROXY
 		: 'http://26.81.229.58:9000/api/v1/'
 
 	private headers = new Headers({
@@ -52,14 +52,14 @@ class Records {
 	})
 
 	getList() {
-		return fetch(this.proxy + 'records/', {
+		return fetch(this.PROXY + 'records/', {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	create({ documents_package, templates_values }: ICreateUpdateRecord) {
-		return fetch(this.proxy + 'records/', {
+		return fetch(this.PROXY + 'records/', {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -70,7 +70,7 @@ class Records {
 	}
 
 	info({ id }: IGetSelfRecords) {
-		return fetch(this.proxy + `records/${id}/`, {
+		return fetch(this.PROXY + `records/${id}/`, {
 			method: 'POST',
 			headers: this.headers,
 		})
@@ -78,7 +78,7 @@ class Records {
 
 	async getDownloadLink({ record_id, document_id }: IGetDownloadLink) {
 		const blob = await fetch(
-			this.proxy + `records/${record_id}/download/${document_id}/`,
+			this.PROXY + `records/${record_id}/download/${document_id}/`,
 			{
 				method: 'GET',
 				headers: this.headers,

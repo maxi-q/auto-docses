@@ -2,13 +2,13 @@
 // import { AfterMyObjectD, AfterMyObjectType, originalRequestType } from './fetchDecorators/After'
 // import { BeforeMyObjectD, BeforeMyObjectType } from './fetchDecorators/Before'
 
-// const proxy = process.env.proxy
-// 	? process.env.proxy
+// const PROXY = process.env.PROXY
+// 	? process.env.PROXY
 // 	: 'http://192.168.0.107:5000/api/v1/'
 
 // // --------------------
-// const BeforeMyObject = new Proxy(BeforeMyObjectD, handler)
-// const AfterMyObject = new Proxy(AfterMyObjectD, handler)
+// const BeforeMyObject = new PROXY(BeforeMyObjectD, handler)
+// const AfterMyObject = new PROXY(AfterMyObjectD, handler)
 // // --------------------
 
 // const { fetch: origFetch } = window

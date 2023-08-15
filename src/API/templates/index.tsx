@@ -39,8 +39,8 @@ export interface ITemplateDataWithValue {
 }
 
 class Templates {
-	proxy = process.env.proxy
-		? process.env.proxy
+	PROXY = process.env.PROXY
+		? process.env.PROXY
 		: 'http://26.81.229.58:9000/api/v1/'
 
 	private headers = new Headers({
@@ -49,14 +49,14 @@ class Templates {
 	})
 
 	getList() {
-		return fetch(this.proxy + 'templates/', {
+		return fetch(this.PROXY + 'templates/', {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	create({ title, description, nameInDocument }: ITemplate) {
-		return fetch(this.proxy + 'templates/', {
+		return fetch(this.PROXY + 'templates/', {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -68,14 +68,14 @@ class Templates {
 	}
 
 	get({ id }: ISingleTemplateByID) {
-		return fetch(this.proxy + `templates/${id}/`, {
+		return fetch(this.PROXY + `templates/${id}/`, {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	update({ id, title, description, nameInDocument }: IUpdateTemplate) {
-		return fetch(this.proxy + `templates/${id}/`, {
+		return fetch(this.PROXY + `templates/${id}/`, {
 			method: 'PATCH',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -87,21 +87,21 @@ class Templates {
 	}
 
 	delete({ id }: ISingleTemplateByID) {
-		return fetch(this.proxy + `templates/${id}/`, {
+		return fetch(this.PROXY + `templates/${id}/`, {
 			method: 'DELETE',
 			headers: this.headers,
 		})
 	}
 
 	getValuesList() {
-		return fetch(this.proxy + 'default_templates_values/', {
+		return fetch(this.PROXY + 'default_templates_values/', {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	createValue({ templateId, value }: ICreateTemplateValue) {
-		return fetch(this.proxy + `default_templates_values/`, {
+		return fetch(this.PROXY + `default_templates_values/`, {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -114,14 +114,14 @@ class Templates {
 	}
 
 	getValueByTemplateId({ templateId }: IFindTemplateValue) {
-		return fetch(this.proxy + `default_templates_values/${templateId}/`, {
+		return fetch(this.PROXY + `default_templates_values/${templateId}/`, {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	updateValue({ templateId, value }: IUpdateTemplateValue) {
-		return fetch(this.proxy + `default_templates_values/${templateId}/`, {
+		return fetch(this.PROXY + `default_templates_values/${templateId}/`, {
 			method: 'PATCH',
 			headers: this.headers,
 			body: JSON.stringify({

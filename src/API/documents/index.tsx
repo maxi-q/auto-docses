@@ -50,8 +50,8 @@ interface IUpdateIDocumentPackage {
 	documents?: Array<string>
 }
 class Documents {
-	proxy = process.env.proxy
-		? process.env.proxy
+	PROXY = process.env.PROXY
+		? process.env.PROXY
 		: 'http://26.81.229.58:9000/api/v1/'
 
 	private headers = new Headers({
@@ -68,14 +68,14 @@ class Documents {
 		})
 
 	getList() {
-		return fetch(this.proxy + 'documents/', {
+		return fetch(this.PROXY + 'documents/', {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	getPackagesList() {
-		return fetch(this.proxy + 'documents_packages/', {
+		return fetch(this.PROXY + 'documents_packages/', {
 			method: 'GET',
 			headers: this.headers,
 		})
@@ -92,7 +92,7 @@ class Documents {
 			`data:${file.name.split('.')[0]};docx;base64;` +
 				base64text.split(',')[1] || ''
 
-		return fetch(this.proxy + 'documents/', {
+		return fetch(this.PROXY + 'documents/', {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -105,7 +105,7 @@ class Documents {
 	}
 
 	createPackage({ title, documents }: ICreateList) {
-		return fetch(this.proxy + 'documents_packages/', {
+		return fetch(this.PROXY + 'documents_packages/', {
 			method: 'POST',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -116,21 +116,21 @@ class Documents {
 	}
 
 	read({ id }: ISingleObjectByID) {
-		return fetch(this.proxy + `documents/${id}/`, {
+		return fetch(this.PROXY + `documents/${id}/`, {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	readPackage({ id }: ISingleObjectByID) {
-		return fetch(this.proxy + `documents_packages/${id}/`, {
+		return fetch(this.PROXY + `documents_packages/${id}/`, {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
 	update({ id, title, description, templates }: IUpdateDocument) {
-		return fetch(this.proxy + `documents/${id}/`, {
+		return fetch(this.PROXY + `documents/${id}/`, {
 			method: 'PATCH',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -142,7 +142,7 @@ class Documents {
 	}
 
 	updatePackage({ id, title, documents }: IUpdateIDocumentPackage) {
-		return fetch(this.proxy + `documents_packages/${id}/`, {
+		return fetch(this.PROXY + `documents_packages/${id}/`, {
 			method: 'PATCH',
 			headers: this.headers,
 			body: JSON.stringify({
@@ -153,13 +153,13 @@ class Documents {
 	}
 
 	delete({ id }: ISingleObjectByID) {
-		return fetch(this.proxy + `documents/${id}/`, {
+		return fetch(this.PROXY + `documents/${id}/`, {
 			method: 'DELETE',
 			headers: this.headers,
 		})
 	}
 	deletePackage({ id }: ISingleObjectByID) {
-		return fetch(this.proxy + `documents_packages/${id}/`, {
+		return fetch(this.PROXY + `documents_packages/${id}/`, {
 			method: 'DELETE',
 			headers: this.headers,
 		})

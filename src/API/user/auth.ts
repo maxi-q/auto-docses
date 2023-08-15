@@ -1,7 +1,7 @@
 import { fetchM } from '../../helpers/fetchM'
 
-const proxy = process.env.proxy
-	? process.env.proxy
+const PROXY = process.env.PROXY
+	? process.env.PROXY
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IAuthorizationData {
@@ -34,7 +34,7 @@ export const fetchDataForAuthorization = async ({
 		}),
 	}
 
-	const response = await fetchM(proxy + 'auth/signup/', options)
+	const response = await fetchM(PROXY + 'auth/signup/', options)
 	// , 'getJWTToken'
 	const data: object = await response.json()
 
@@ -51,7 +51,7 @@ export const fetchDataForAuthorization = async ({
 				username: username,
 			}),
 		}
-		await fetchM(proxy + 'auth/send_confirm_code/', options)
+		await fetchM(PROXY + 'auth/send_confirm_code/', options)
 
 		localStorage.setItem('password', password)
 		localStorage.setItem('username', username)

@@ -1,5 +1,5 @@
-const proxy = process.env.proxy
-	? process.env.proxy
+const PROXY = process.env.PROXY
+	? process.env.PROXY
 	: 'http://26.81.229.58:9000/api/v1/'
 
 interface IRequestProfileCallbackData {
@@ -28,7 +28,7 @@ export const fetchRequestProfile =
 			}),
 		}
 
-		const response = await fetch(proxy + 'users/me/', options)
+		const response = await fetch(PROXY + 'users/me/', options)
 
 		const data: IRequestProfileCallbackData = await response.json()
 		if (response.status == 401) {

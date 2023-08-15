@@ -1,5 +1,5 @@
-// const proxy = process.env.proxy
-// 	? process.env.proxy
+// const PROXY = process.env.PROXY
+// 	? process.env.PROXY
 // 	: 'http://192.168.0.107:5000/api/v1/'
 
 // const toBase64 = (file: File): Promise<string | null | ArrayBuffer> =>
@@ -28,7 +28,7 @@
 // 		}),
 // 	}
 
-// 	fetch(proxy + `documents/`, options)
+// 	fetch(PROXY + `documents/`, options)
 // 		.then(response => response.json())
 // 		.then(cons => console.log(cons))
 // 	// setFile(response.file)
