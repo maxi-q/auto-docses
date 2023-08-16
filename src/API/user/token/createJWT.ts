@@ -1,7 +1,7 @@
 import { fetchM } from '../../../helpers/fetchM'
 
 console.log(process.env)
-const API_URL = 'https://backend:8000/api/'
+const API_URL = 'http://backend:8000/api/'
 
 interface IRequestJWTData {
 	username: string | null
