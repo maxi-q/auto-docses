@@ -1,1 +1,1 @@
-export const SERVER_URL = 'http://192.168.0.107:5000/api/v1/'
+export const API_URL = 'backend://localhost:8000/api/'

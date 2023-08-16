@@ -37,10 +37,10 @@ export interface ITemplateDataWithValue {
 	template: ITemplateData
 	value: string
 }
+import { API_URL } from '@constants/API'
 
 class Templates {
-	API_URL = 'http://backend:8000/api/'
-
+	API_URL = API_URL
 	private headers = new Headers({
 		'Content-Type': 'application/json',
 		Authorization: `Bearer ${localStorage.getItem('access')}`,

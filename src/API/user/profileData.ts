@@ -1,4 +1,4 @@
-const API_URL = 'http://backend:8000/api/'
+import { API_URL } from '@constants/API'
 
 interface IRequestProfileCallbackData {
 	id: string

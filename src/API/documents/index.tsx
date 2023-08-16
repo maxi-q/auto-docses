@@ -49,8 +49,11 @@ interface IUpdateIDocumentPackage {
 	id: string
 	documents?: Array<string>
 }
+
+import { API_URL } from '@constants/API'
+
 class Documents {
-	API_URL = 'http://backend:8000/api/'
+	API_URL = API_URL
 
 	private headers = new Headers({
 		'Content-Type': 'application/json',

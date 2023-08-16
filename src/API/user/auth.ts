@@ -1,6 +1,6 @@
 import { fetchM } from '../../helpers/fetchM'
 
-const API_URL = 'http://backend:8000/api/'
+import { API_URL } from '@constants/API'
 
 interface IAuthorizationData {
 	username: string

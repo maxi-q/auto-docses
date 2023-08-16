@@ -40,9 +40,10 @@ interface IGetDownloadLink {
 	record_id: string
 	document_id: string
 }
+import { API_URL } from '@constants/API'
 
 class Records {
-	API_URL = 'http://backend:8000/api/'
+	API_URL = API_URL
 
 	private headers = new Headers({
 		'Content-Type': 'application/json',
