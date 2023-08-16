@@ -42,7 +42,7 @@ interface IGetDownloadLink {
 }
 
 class Records {
-	API_URL = 'http://backend:8000/api/'
+	API_URL = 'https://backend:8000/api/'
 
 	private headers = new Headers({
 		'Content-Type': 'application/json',

@@ -1,4 +1,4 @@
-const API_URL = 'http://backend:8000/api/'
+const API_URL = 'https://backend:8000/api/'
 
 export type originalRequestType = {
 	input: RequestInfo | URL
