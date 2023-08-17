@@ -20,7 +20,7 @@ export interface IRequestJWTCallback {
 export const fetchRequestJWT = async ({
 	username,
 	password,
-}: IRequestJWTData): Promise<IRequestJWTCallback> => {
+}: IRequestJWTData) => {
 	console.log(process.env.API_URL)
 	const options = {
 		method: 'POST',
@@ -33,18 +33,6 @@ export const fetchRequestJWT = async ({
 		}),
 	}
 
-	const response = await fetchM(API_URL + 'auth/jwt/create/', options)
-	// , 'getJWTToken'
-	const data: IRequestJWTCallbackData = await response.json()
+	return fetchM(API_URL + 'auth/jwt/create/', options)
 
-	if (response.status == 200) {
-		localStorage.setItem('access', data.access)
-		localStorage.setItem('refresh', data.refresh)
-		localStorage.setItem('password', password || '')
-		localStorage.setItem('username', username || '')
-
-		return { status: 200 }
-	}
-	console.log(data)
-	return { status: 400 }
 }

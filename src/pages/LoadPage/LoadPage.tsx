@@ -38,7 +38,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const viewer = useRef<HTMLElement>()
 
 	const [recordId, setRecordId] = useState('')
-	const [saveTemplateValues, setSaveTemplateValues] = useState(false)
+	const [saveTemplateValues, setSaveTemplateValues] = useState(true)
 	const [downloadModal, setDownloadModal] = useState(false)
 	const [documentPackageName, setDocumentPackageName] = useState('Имя пакета')
 	const [documentName, setDocumentName] = useState('Имя документа')

@@ -8,28 +8,18 @@ import { SubmitHandler } from 'react-hook-form'
 
 interface IRegWindow {
 	onSubmit: SubmitHandler<Object>
-	callback: IRegistrationCallback
+	serverError: Array<{ key: string; errors: Array<string> }>
 }
 
-export const RegWindow = ({onSubmit, callback}: IRegWindow) => {
+export const RegWindow = ({onSubmit, serverError}: IRegWindow) => {
 	return (
 		<Window>
 			<FormWithValidate onSubmit={onSubmit}>
-				<Window.Title>Окно регистрации</Window.Title>
-				<Input
-					name='first_name'
-					placeholder='Имя'
-					field={FieldNames.field}
-				/>
-				<Input
-					name='last_name'
-					placeholder='Фамилия'
-					field={FieldNames.field}
-				/>
+				{/* <Window.Title>Окно регистрации</Window.Title> */}
 				<Input
 					name='username'
 					placeholder='Логин'
-					field={FieldNames.login}
+					field={FieldNames.username}
 				/>
 				<Input
 					name='email'
@@ -52,21 +42,17 @@ export const RegWindow = ({onSubmit, callback}: IRegWindow) => {
 				<RButton>Регистрация</RButton>
 			</FormWithValidate>
 			<Errors>
-				{callback.password ? (
-					<span>password: {...callback.password}</span>
-				) : (
-					<></>
-				)}
-				{callback.username ? (
-					<span>username: {...callback.username}</span>
-				) : (
-					<></>
-				)}
-				{callback.non_field_errors ? (
-					<span>{...callback.non_field_errors}</span>
-				) : (
-					<></>
-				)}
+			{serverError.map(x => (
+				<>
+					{x.key}: <br />
+					{x.errors.map(w => (
+						<>
+							{w}
+							<br />
+						</>
+					))}
+				</>
+			))}
 			</Errors>
 			<Link to='/Auth'>Уже зарегистрированы? Вход</Link>
 		</Window>

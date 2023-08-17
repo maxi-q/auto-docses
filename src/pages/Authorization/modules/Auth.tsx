@@ -7,20 +7,22 @@ import { RButton, Window } from '../ui'
 
 interface IAuthWindow {
 	onSubmit: SubmitHandler<Object>
+	serverError: Array<{ key: string; errors: Array<string> }>
+	
 }
 
-export const AuthWindow = ({ onSubmit }: IAuthWindow) => {
+export const AuthWindow = ({ onSubmit, serverError }: IAuthWindow) => {
 	
 	return (
 		<Window>
 			<FormWithValidate onSubmit={onSubmit}>
-				<Window.Title>Окно входа</Window.Title>
+				{/* <Window.Title>Окно входа</Window.Title> */}
 				<Input
 					defaultValue={localStorage.getItem('username') || ''}
 					name='username'
 					type='text'
 					placeholder='Логин'
-					field={FieldNames.field}
+					field={FieldNames.username}
 				/>
 				<Input
 					defaultValue={localStorage.getItem('password') || ''}
@@ -31,6 +33,17 @@ export const AuthWindow = ({ onSubmit }: IAuthWindow) => {
 				/>
 				<RButton>Войти</RButton>
 			</FormWithValidate>
+			{serverError.map(x => (
+				<>
+					{x.key}: <br />
+					{x.errors.map(w => (
+						<>
+							{w}
+							<br />
+						</>
+					))}
+				</>
+			))}
 			<Link to='/Registration'>Еще не зарегистрированы? Регистрация</Link>
 		</Window>
 	)

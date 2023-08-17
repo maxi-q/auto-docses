@@ -63,8 +63,8 @@ const validator: IValidator<typeof FieldNames> = {
 	password: {
 		required: 'Пароль обязателен!',
 		minLength: {
-			value: 5,
-			message: 'Пароль должен быть длиной 5+ символов.',
+			value: 8,
+			message: 'Пароль должен быть длиной 8+ символов.',
 		},
 	},
 	select: {
@@ -81,7 +81,7 @@ const validator: IValidator<typeof FieldNames> = {
 			message: 'Имя более 4 символов.',
 		},
 		pattern: {
-			value: /^[a-zA-ZА-Яа-я\w]+$/,
+			value: /^[a-z@_-\d]+$/i,
 			message: 'Только Буквы и цифры без пробелов.',
 		},
 	},

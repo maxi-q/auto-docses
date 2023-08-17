@@ -50,15 +50,22 @@ interface IUpdateIDocumentPackage {
 	documents?: Array<string>
 }
 
+interface IGetPackageParam { 
+	authorId?: string
+	search?: string
+}
+
 import { API_URL } from '@constants/API'
 
 class Documents {
 	API_URL = API_URL
 
-	private headers = new Headers({
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${localStorage.getItem('access')}`,
-	})
+	private get headers() {
+		return new Headers({
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('access')}`,
+		})
+	}
 
 	private toBase64 = (file: File): Promise<string | null | ArrayBuffer> =>
 		new Promise((resolve, reject) => {
@@ -75,8 +82,10 @@ class Documents {
 		})
 	}
 
-	getPackagesList() {
-		return fetch(this.API_URL + 'documents_packages/', {
+	getPackagesList({authorId, search}: IGetPackageParam) {
+		const param = (authorId ? `author=${authorId}`: '') + (search ? `search=${search}` : '')
+		console.log(this.API_URL + `documents_packages/?${param}`)
+		return fetch(this.API_URL + `documents_packages/?${param}`, {
 			method: 'GET',
 			headers: this.headers,
 		})

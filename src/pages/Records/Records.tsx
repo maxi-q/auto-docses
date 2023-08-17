@@ -33,11 +33,8 @@ type NavigationType = {
 
 export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [records, setRecords] = useState<Array<IRecordData>>()
-	const [documentsPackages, setDocumentsPackages] =
-		useState<Array<IDocumentPackageData>>()
 
 	const RecordsSerializer = new Records()
-	const documentPackageSerializer = new Documents()
 	const authContext = useContext(AuthContext)
 
 	const [record, setRecord] = useState<IRecordData>()
@@ -47,11 +44,7 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	}, [records])
 
 	useEffect(() => {
-		documentPackageSerializer.getPackagesList().then(res =>
-			res.json().then(data => {
-				setDocumentsPackages(data)
-			})
-		)
+		
 		RecordsSerializer.getList().then(res =>
 			res.json().then(data => {
 				setRecords(data)

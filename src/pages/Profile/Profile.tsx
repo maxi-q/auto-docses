@@ -1,20 +1,20 @@
 import { useContext, useEffect, useState } from 'react'
+import Table from 'react-bootstrap/Table'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import Table from 'react-bootstrap/Table'
 
 import Documents, { IDocumentPackageData } from '@api/documents'
-import { AuthContext, UserContext } from '../../contexts'
 import { fetchRequestProfile } from '@api/user/profileData'
-import { ButtonCircle } from '@ui/ButtonCircle'
 import { getFullDate } from '@helpers/date'
+import { ButtonCircle } from '@ui/ButtonCircle'
+import { AuthContext, UserContext } from '../../contexts'
 
-import { ModalDetailsDocumentPackage } from './modules/ModalDetailsDocumentPackage'
 import { DefaultTemplateValues } from './modules/DefaultTemplate'
 import { DocumentTable } from './modules/DocumentTable'
+import { ModalAddDocument } from './modules/ModalAddDocument'
 import { ModalAddDocumentPackage } from './modules/ModalAddPackage'
 import { ModalDeleteDocument } from './modules/ModalDeleteDocument'
-import { ModalAddDocument } from './modules/ModalAddDocument'
+import { ModalDetailsDocumentPackage } from './modules/ModalDetailsDocumentPackage'
 
 type NavigationType = {
 	setUser: Function
@@ -44,15 +44,17 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 			navigate('/Auth')
 			return
 		}
-		fetchRequestProfile().then(data => {
-			data.date_joined = getFullDate(data.date_joined)
-			setUser(data)
-		})
-		documentsSerializer.getPackagesList().then(res => {
-			res.json().then(data => {
-				setDocumentPackages(data)
+		fetchRequestProfile().then(user => {
+			user.date_joined = getFullDate(user.date_joined)
+			setUser(user)
+
+			documentsSerializer.getPackagesList({ authorId: user.username }).then(res => {
+				res.json().then(data => {
+					setDocumentPackages(data)
+				})
 			})
 		})
+		console.log('userContext', userContext)
 	}, [])
 
 	const addDocument = () => {
@@ -63,10 +65,9 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		<Body>
 			<Main>
 				<Info>
-					<Title> Hello, {userContext?.username} </Title>
+					<Title> Привет, {userContext?.username} </Title>
 					{userContext?.first_name} {userContext?.last_name}
 					<br />
-					{userContext?.email}
 				</Info>
 				<MyTemplates>
 					<DefaultTemplateValues />

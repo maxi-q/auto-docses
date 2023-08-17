@@ -1,6 +1,7 @@
 import { Navigate } from 'react-router-dom'
 
 import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
+import { ServerSetError } from '@helpers/ServerSetError'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -40,6 +41,9 @@ const Main = ({
 }) => {
 	const [callback, setCallback] = useState<IRegistrationCallback>({})
 	const authContext = useContext(AuthContext)
+	const [serverError, setServerError] = useState<
+		Array<{ key: string; errors: Array<string> }>
+	>([])
 
 	useEffect(() => {
 		if (callback.status == 201) {
@@ -52,17 +56,31 @@ const Main = ({
 		if (
 			'username' in data &&
 			'password' in data &&
-			'first_name' in data &&
-			'last_name' in data &&
+			'rePassword' in data &&
 			'email' in data
 		) {
+			if (data.rePassword != data.password) {
+				setServerError([{ key: 'пароль', errors: ['пароли не совпадают'] }])
+				return
+			}
 			fetchDataForRegistration({
 				username: typeof data.username == 'string' ? data.username : '',
 				password: typeof data.password == 'string' ? data.password : '',
-				first_name: typeof data.first_name == 'string' ? data.first_name : '',
-				last_name: typeof data.last_name == 'string' ? data.last_name : '',
 				email: typeof data.email == 'string' ? data.email : '',
-			}).then(feedback => setCallback(feedback))
+			}).then(res => {
+				if (res.status == 201) {
+					const username = localStorage.getItem('username')
+					setUsername(username)
+					setConfirm(true)
+					console.log(res)
+				} else {
+					console.log(res)
+					res.json().then(err => {
+						console.log(err)
+						setServerError(ServerSetError(err))
+					})
+				}
+			})
 		}
 	}
 
@@ -70,7 +88,7 @@ const Main = ({
 		<>
 			<Body>
 				{authContext && <Navigate to={'/Profile'} />}
-				<RegWindow onSubmit={onSubmit} callback={callback} />
+				<RegWindow onSubmit={onSubmit} serverError={serverError} />
 			</Body>
 		</>
 	)
@@ -84,6 +102,9 @@ export const EmailConfirm = ({
 	setLoggedIn: Function
 }) => {
 	const [callback, setCallback] = useState<IConfirmEmailCallback>({})
+	const [serverError, setServerError] = useState<
+		Array<{ key: string; errors: Array<string> }>
+	>([])
 
 	const navigate = useNavigate()
 
@@ -103,7 +124,25 @@ export const EmailConfirm = ({
 					typeof data.confirmation_code == 'string'
 						? data.confirmation_code
 						: '',
-			}).then(feedback => setCallback(feedback))
+			}).then(res => {
+				if (res.status == 200) {
+					const password = localStorage.getItem('password')
+					fetchRequestJWT({ username: username, password: password }).then(
+						res => {
+							res.json().then(data => {
+								localStorage.setItem('access', data.access)
+								setLoggedIn(true)
+								navigate('/Profile')
+							})
+						}
+					)
+				} else {
+					res.json().then(err => {
+						console.log(err)
+						setServerError(ServerSetError(err))
+					})
+				}
+			})
 		}
 	}
 
@@ -117,8 +156,10 @@ export const EmailConfirm = ({
 }
 
 export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
-	const [callback, setCallback] = useState<IRegistrationCallback>({})
 	const authContext = useContext(AuthContext)
+	const [serverError, setServerError] = useState<
+		Array<{ key: string; errors: Array<string> }>
+	>([])
 
 	const navigate = useNavigate()
 
@@ -133,26 +174,33 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 	}, [])
 
 	useEffect(() => {
-		if (callback.status == 200) {
-			setLoggedIn(true)
-			navigate('/Profile')
-		}
-	}, [callback])
+		console.log(serverError)
+	}, [serverError])
 
 	const onSubmit = async (data: Object) => {
-		console.log('hello, ', data)
 		if ('username' in data && 'password' in data) {
 			fetchRequestJWT({
 				username: typeof data.username == 'string' ? data.username : '',
 				password: typeof data.password == 'string' ? data.password : '',
-			}).then(feedback => setCallback(feedback))
+			}).then(res => {
+				if (res.status == 200) {
+					res.json().then(d => localStorage.setItem('access', d.access))
+					setLoggedIn(true)
+					navigate('/Profile')
+				} else {
+					res.json().then(err => {
+						console.log(err)
+						setServerError(ServerSetError(err))
+					})
+				}
+			})
 		}
 	}
 
 	return (
 		<>
 			<Body>
-				<AuthWindow onSubmit={onSubmit} />
+				<AuthWindow serverError={serverError} onSubmit={onSubmit} />
 			</Body>
 		</>
 	)

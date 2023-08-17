@@ -1,3 +1,4 @@
+import { realpathSync } from 'fs'
 import { fetchM } from '../../helpers/fetchM'
 import { fetchRequestJWT } from './token/createJWT'
 
@@ -14,7 +15,7 @@ export interface IConfirmEmailCallback {
 export const fetchConfirmEmail = async ({
 	username,
 	confirmation_code,
-}: IConfirmEmailData): Promise<IConfirmEmailCallback> => {
+}: IConfirmEmailData) => {
 	const options = {
 		method: 'POST',
 		headers: new Headers({
@@ -26,20 +27,7 @@ export const fetchConfirmEmail = async ({
 		}),
 	}
 
-	const response = await fetchM(API_URL + 'auth/confirm_email/', options)
-	// , 'getJWTToken'
-	const data: object = await response.json()
-
-	console.log('_-_')
-	console.log(response)
-	console.log(data)
-
-	if (response.status == 200) {
-		const password = localStorage.getItem('password')
-
-		fetchRequestJWT({ username: username, password: password })
-
-		return { status: 200 }
-	}
-	return { status: 400 }
+	const response = fetchM(API_URL + 'auth/confirm_email/', options)
+	
+	return response
 }

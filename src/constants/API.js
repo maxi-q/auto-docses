@@ -1,1 +1,1 @@
-export const API_URL = 'https://autodocs.online/api/'
+export const API_URL = process.env.NODE_ENV === 'production' ? 'https://autodocs.online/api/' : 'http://26.81.229.58:8000/api/'

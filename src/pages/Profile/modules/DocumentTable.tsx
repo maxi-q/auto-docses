@@ -22,16 +22,25 @@ export const DocumentTable = ({
 							<Row>
 								<td>{documentPackage.title}</td>
 								<td>{documentPackage.author.username}</td>
-								<td>
+								<ButtonsCol>
 									<Button
 										onClick={() => {
 											setModalDetailsActive(true)
 											setPackageId(documentPackage.id)
 										}}
 									>
-										Детали
+										Подробности
 									</Button>
-								</td>
+									<Button
+										onClick={() => {
+											setModalDetailsActive(true)
+											setPackageId(documentPackage.id)
+										}}
+									>
+										Заполнить
+									</Button>
+								</ButtonsCol>
+								
 							</Row>
 						</>
 					)
@@ -40,6 +49,11 @@ export const DocumentTable = ({
 	)
 }
 
+const ButtonsCol = styled.td`
+display: flex;
+flex-direction: row;
+gap: 10px;
+`
 const Row = styled.tr`
 	cursor: pointer;
 	&:hover {

@@ -41,10 +41,12 @@ import { API_URL } from '@constants/API'
 
 class Templates {
 	API_URL = API_URL
-	private headers = new Headers({
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${localStorage.getItem('access')}`,
-	})
+	private get headers() {
+		return new Headers({
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${localStorage.getItem('access')}`,
+		})
+	}
 
 	getList() {
 		return fetch(this.API_URL + 'templates/', {

@@ -5,8 +5,6 @@ import { API_URL } from '@constants/API'
 interface IRegistrationData {
 	username: string
 	password: string
-	last_name: string
-	first_name: string
 	email: string
 }
 export interface IRegistrationCallback {
@@ -20,10 +18,8 @@ export interface IRegistrationCallback {
 export const fetchDataForRegistration = async ({
 	username,
 	password,
-	last_name,
-	first_name,
 	email,
-}: IRegistrationData): Promise<IRegistrationCallback> => {
+}: IRegistrationData) => {
 	const options = {
 		method: 'POST',
 		headers: new Headers({
@@ -32,35 +28,29 @@ export const fetchDataForRegistration = async ({
 		body: JSON.stringify({
 			username: username,
 			password: password,
-			last_name: last_name,
-			first_name: first_name,
 			email: email,
 		}),
 	}
 
-	const response = await fetchM(API_URL + 'auth/signup/', options)
-	// , 'getJWTToken'
-	const data: object = await response.json()
-
-	if (response.status == 400) {
-		return { ...data, status: response.status }
-	}
-	if (response.status == 201) {
-		const options = {
-			method: 'POST',
-			headers: new Headers({
-				'Content-Type': 'application/json',
-			}),
-			body: JSON.stringify({
-				username: username,
-			}),
+	const response = fetchM(API_URL + 'auth/signup/', options)
+	response.then(res => {
+		if (res.status == 201) {
+			const options = {
+				method: 'POST',
+				headers: new Headers({
+					'Content-Type': 'application/json',
+				}),
+				body: JSON.stringify({
+					username: username,
+				}),
+			}
+			fetchM(API_URL + 'auth/send_confirm_code/', options)
+			localStorage.setItem('password', password)
+			localStorage.setItem('username', username)
+	
 		}
-		await fetchM(API_URL + 'auth/send_confirm_code/', options)
+	})
+	return response
 
-		localStorage.setItem('password', password)
-		localStorage.setItem('username', username)
-
-		return { status: 201, regUsername: username }
-	}
-	return { status: 201 }
+	
 }
