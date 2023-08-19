@@ -1,6 +1,8 @@
 import { IDocumentPackageData } from '@api/documents'
 import { COLORS } from '@constants/style/COLORS'
+import { ChangeDocument } from '@helpers/navigation'
 import { Button } from '@ui/Button'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 interface IDocumentTable {
@@ -13,6 +15,8 @@ export const DocumentTable = ({
 	setPackageId,
 	setModalDetailsActive,
 }: IDocumentTable) => {
+	const navigate = useNavigate()
+	
 	return (
 		<>
 			{documentPackages &&
@@ -33,8 +37,7 @@ export const DocumentTable = ({
 									</Button>
 									<Button
 										onClick={() => {
-											setModalDetailsActive(true)
-											setPackageId(documentPackage.id)
+											ChangeDocument(documentPackage.id, 0, navigate)
 										}}
 									>
 										Заполнить

@@ -33,7 +33,7 @@ export const ModalDetailsDocumentPackage = ({
 			})
 	}, [packageId, modalStatus])
 	const closeModal = () => {
-		setModalActive(true)
+		setModalActive(false)
 		setModalStatus('check')
 	}
 	const returnCheck = () => {

@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/esm/Table'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { UserContext } from '../../../contexts'
+import { ChangeDocument } from '@helpers/navigation'
 
 interface IDetailPackage {
 	documentPackage: IDocumentPackageData
@@ -29,9 +30,7 @@ const DetailPackage = ({
 	const updatePackage = () => {
 		setIUpdating('packageUpdate')
 	}
-	const ChangeDocument = (id: string, index: number) => {
-		navigate(`/LoadPage/${id}/${index}`)
-	}
+	
 
 	return (
 		<>
@@ -66,7 +65,7 @@ const DetailPackage = ({
 										<div>
 											<Link>
 												<Button
-													onClick={() => ChangeDocument(documentPackage.id, i)}
+													onClick={() => ChangeDocument(documentPackage.id, i, navigate)}
 												>
 													<svg
 														xmlns='http://www.w3.org/2000/svg'

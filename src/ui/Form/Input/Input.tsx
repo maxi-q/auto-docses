@@ -97,12 +97,12 @@ const InputBox = styled.div`
 `
 const ClassFromInputs = `
   display: block;
-  background-color: ${COLORS.gray200};
+  background-color: ${COLORS.gray400};
 
   width:100%;
   padding: 3px 20px;
   
-  border: 2px solid ${COLORS.gray200};
+  border: 2px solid ${COLORS.gray400};
   border-radius: 5px;
   border-width: 0px;
   
@@ -135,15 +135,4 @@ const ClassFromInputs = `
 `
 const InputForm = styled.input`
 	${ClassFromInputs}
-`
-const TextAreaForm = styled.textarea`
-	${ClassFromInputs}
-	resize: vertical;
-	min-height: 38px;
-	max-height: 200px;
-
-	transition: none;
-	transition-property: border-color, background-color, padding-top,
-		padding-bottom;
-	transition-duration: 0.1s;
 `
