@@ -31,6 +31,8 @@ export class COLORS {
     static readonly blue700 = '#084298'
     static readonly blue800 = '#052c65'
     static readonly blue900 = '#031633'
+    static readonly gos_blue = '#0d4cd3'
+    static readonly gos_black = '#0b1f33'
     
     static readonly gray100 = '#f8f9fa'
     static readonly gray200 = '#e9ecef'

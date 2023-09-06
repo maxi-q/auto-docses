@@ -43,7 +43,7 @@ export const Modal = ({
 
 const ModalHeader = styled.div`
 	width: auto;
-	height: 20px;
+	height: 30px;
 	display: flex;
 	justify-content: end;
 	padding: 10px 10px 0 0;

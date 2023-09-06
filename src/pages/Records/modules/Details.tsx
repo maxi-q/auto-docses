@@ -62,17 +62,6 @@ const ModalDetails = ({
 				</div>
 			</Header>
 			<Body>
-				<Table>
-					<tbody>
-						{record.templates_values.map(value => (
-							<Template>
-								<th style={{ minWidth: '260px', paddingLeft: '0' }}>
-									{value.template.title}: {value.value}
-								</th>
-							</Template>
-						))}
-					</tbody>
-				</Table>
 				{links?.map((link, i) => (
 					<DownloadRow key={i}>
 						<div>{link.title}:</div>
@@ -84,6 +73,15 @@ const ModalDetails = ({
 						</div>
 					</DownloadRow>
 				))}
+				<TemplateTable>
+					<tbody>
+						{record.templates_values.map(value => (
+							<Template>
+								{value.template.title}: <Value>{value.value}</Value>
+							</Template>
+						))}
+					</tbody>
+				</TemplateTable>
 			</Body>
 		</Modal>
 	)
@@ -99,16 +97,22 @@ const Header = styled.div`
 const Title = styled.div`
 	font-size: 22px;
 `
+const Value = styled.span`
+	font-size: 12px;
+`
+const TemplateTable = styled(Table)`
+	width: 360px;
+	margin: 45px 0 0 0;
+`
 const Body = styled.div`
 	margin-top: 20px;
-	max-width: 360px;
+	width: 260px;
 	width: max-content;
 `
-const Template = styled.div`
+const Template = styled.tr`
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-	min-width: 260px;
 `
 const DownloadRow = styled.div`
 	width: 100%;

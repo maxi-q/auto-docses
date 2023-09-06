@@ -1,7 +1,6 @@
 import { API_URL } from '@constants/API'
 import { fetchM } from '../../../helpers/fetchM'
 
-console.log(process.env)
 interface IRequestJWTData {
 	username: string | null
 	password: string | null

@@ -15,6 +15,7 @@ export interface ITemplateData {
 	title: string
 	author: string
 	description: string
+	category: string
 	is_official: boolean
 	name_in_document: string
 }

@@ -4,7 +4,7 @@ import { ServerSetError } from '@helpers/ServerSetError'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
-import { lotsSelectToArray } from '../../LoadPage/helpers/lotsSelectToArray'
+import { lotsSelectToArray } from '../../../LoadPage/helpers/lotsSelectToArray'
 
 interface IModalUpdateDocument {
 	documentId: string

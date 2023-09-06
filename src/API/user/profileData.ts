@@ -4,10 +4,8 @@ interface IRequestProfileCallbackData {
 	id: string
 	username: string
 	email: string
-	first_name: string
-	last_name: string
-	date_joined: string
 }
+
 export interface IUser extends IRequestProfileCallbackData {}
 
 export interface IRequestProfileCallback extends IRequestProfileCallbackData {

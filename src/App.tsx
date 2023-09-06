@@ -27,13 +27,11 @@ export function App() {
 		if (token) {
 			fetchRequestProfile()
 				.then(data => {
-					console.log(data)
 					if (data.status == 401) {
 						localStorage.setItem('access', '')
 						setLoggedIn(false)
 						throw new Error('Unauthorized')
 					}
-					data.date_joined = getFullDate(data.date_joined)
 					setUser(data)
 				})
 		}else {

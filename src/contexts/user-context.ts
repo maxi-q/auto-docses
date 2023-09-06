@@ -5,7 +5,4 @@ export default React.createContext<IUser | undefined>({
   id: '',
   username: '',
   email: '',
-  first_name: '',
-  last_name: '',
-  date_joined: '',
 } )

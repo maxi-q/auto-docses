@@ -11,9 +11,6 @@ export const Aside = () => {
 		id: '',
 		username: '',
 		email: '',
-		first_name: '',
-		last_name: '',
-		date_joined: '2023-07-30T13:32:34.904827Z',
 	})
 	const data = fetchRequestProfile().then(data => {
 		setDataProfile(data)

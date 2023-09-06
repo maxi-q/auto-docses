@@ -10,7 +10,7 @@ interface IDocumentTable {
 	setPackageId: Function
 	setModalDetailsActive: Function
 }
-export const DocumentTable = ({
+export const PackageTable = ({
 	documentPackages,
 	setPackageId,
 	setModalDetailsActive,

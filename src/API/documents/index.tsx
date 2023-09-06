@@ -34,9 +34,11 @@ export type TemplateInDocumentType = {
 export interface IOneDocumentData {
 	id: string
 	title: string
+	author: IUser
 	description?: string
 	file: URL
 	templates: Array<TemplateInDocumentType>
+	creation_date: string
 }
 export interface IDocumentPackageData {
 	id: string
@@ -50,11 +52,12 @@ interface IUpdateIDocumentPackage {
 	documents?: Array<string>
 }
 
-interface IGetPackageParam { 
+interface IGetWithParam { 
 	authorId?: string
 	search?: string
 }
 
+import { IUser } from '@api/user/profileData'
 import { API_URL } from '@constants/API'
 
 class Documents {
@@ -75,16 +78,16 @@ class Documents {
 			reader.onerror = error => reject(error)
 		})
 
-	getList() {
-		return fetch(this.API_URL + 'documents/', {
+	getList({authorId, search}: IGetWithParam) {
+		const param = (authorId ? `author=${authorId}`: '') + (search ? `search=${search}` : '')
+		return fetch(this.API_URL + `documents/?${param}`, {
 			method: 'GET',
 			headers: this.headers,
 		})
 	}
 
-	getPackagesList({authorId, search}: IGetPackageParam) {
+	getPackagesList({authorId, search}: IGetWithParam) {
 		const param = (authorId ? `author=${authorId}`: '') + (search ? `search=${search}` : '')
-		console.log(this.API_URL + `documents_packages/?${param}`)
 		return fetch(this.API_URL + `documents_packages/?${param}`, {
 			method: 'GET',
 			headers: this.headers,

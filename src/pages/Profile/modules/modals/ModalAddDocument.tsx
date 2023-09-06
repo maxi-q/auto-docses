@@ -5,7 +5,7 @@ import { FieldNames } from '@helpers/validator'
 import { ISelectOptions, LotsSelect } from '@ui/Form/Selects/LotsSelect'
 import { Button, Input, Modal } from '@ui/index'
 import { useEffect, useState } from 'react'
-import { lotsSelectToArray } from '../../LoadPage/helpers/lotsSelectToArray'
+import { lotsSelectToArray } from '../../../LoadPage/helpers/lotsSelectToArray'
 
 interface IModalAddDocument {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -21,7 +21,7 @@ const ModalAddDocument = ({
 	packageId,
 }: IModalAddDocument) => {
 	const [templates, setTemplates] = useState<Array<ISelectOptions>>()
-	
+
 	const TemplatesManager = new Templates()
 	useEffect(() => {
 		TemplatesManager.getList().then(res => {

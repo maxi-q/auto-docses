@@ -2,7 +2,7 @@ import Documents, { IDocumentPackageData } from '@api/documents'
 import { Modal } from '@ui/Modal'
 import { useEffect, useState } from 'react'
 
-import { DetailPackage } from '../components/DetailPackage'
+import { DetailPackage } from '../../components/DetailPackage'
 import { ModalUpdateDocument } from './ModalUpdateDocument'
 import { ModalUpdatePackage } from './ModalUpdatePackage'
 

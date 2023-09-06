@@ -3,7 +3,7 @@ import { FormWithValidate } from '@components/FormWithValidate'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
-import { lotsSelectToArray } from '../../LoadPage/helpers/lotsSelectToArray'
+import { lotsSelectToArray } from '../../../LoadPage/helpers/lotsSelectToArray'
 
 interface IModalUpdatePackage {
 	packageId: string

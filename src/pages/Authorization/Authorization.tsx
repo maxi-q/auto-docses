@@ -72,11 +72,8 @@ const Main = ({
 					const username = localStorage.getItem('username')
 					setUsername(username)
 					setConfirm(true)
-					console.log(res)
 				} else {
-					console.log(res)
 					res.json().then(err => {
-						console.log(err)
 						setServerError(ServerSetError(err))
 					})
 				}
@@ -101,20 +98,12 @@ export const EmailConfirm = ({
 	username: string
 	setLoggedIn: Function
 }) => {
-	const [callback, setCallback] = useState<IConfirmEmailCallback>({})
 	const [serverError, setServerError] = useState<
 		Array<{ key: string; errors: Array<string> }>
 	>([])
 
 	const navigate = useNavigate()
 
-	useEffect(() => {
-		if (callback.status == 200) {
-			navigate('/Profile')
-			setLoggedIn(true)
-			console.log(callback)
-		}
-	}, [callback])
 
 	const onSubmit = async (data: Object) => {
 		if ('confirmation_code' in data) {
@@ -138,7 +127,6 @@ export const EmailConfirm = ({
 					)
 				} else {
 					res.json().then(err => {
-						console.log(err)
 						setServerError(ServerSetError(err))
 					})
 				}
@@ -149,14 +137,13 @@ export const EmailConfirm = ({
 	return (
 		<>
 			<Body>
-				<EmailWindow onSubmit={onSubmit} />
+				<EmailWindow serverError={serverError} onSubmit={onSubmit} />
 			</Body>
 		</>
 	)
 }
 
 export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
-	const authContext = useContext(AuthContext)
 	const [serverError, setServerError] = useState<
 		Array<{ key: string; errors: Array<string> }>
 	>([])
@@ -165,7 +152,6 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 
 	useEffect(() => {
 		fetchVerifyJWT().then(res => {
-			console.log(res, authContext)
 			if (res.status == 200) {
 				setLoggedIn(true)
 				navigate(-1)
@@ -173,9 +159,6 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 		})
 	}, [])
 
-	useEffect(() => {
-		console.log(serverError)
-	}, [serverError])
 
 	const onSubmit = async (data: Object) => {
 		if ('username' in data && 'password' in data) {
@@ -189,7 +172,6 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 					navigate('/Profile')
 				} else {
 					res.json().then(err => {
-						console.log(err)
 						setServerError(ServerSetError(err))
 					})
 				}

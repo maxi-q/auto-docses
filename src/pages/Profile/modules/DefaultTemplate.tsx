@@ -3,6 +3,7 @@ import Templates, {
 	ITemplateDataWithValue,
 } from '@api/templates'
 import { FormWithValidate } from '@components/FormWithValidate'
+import { COLORS } from '@constants/style/COLORS'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useEffect, useState } from 'react'
@@ -12,6 +13,7 @@ interface IDefaultTemplateWithValues {
 	id: string
 	template: ITemplateData
 	value: string
+	category: string
 }
 
 const DefaultTemplateValues = () => {
@@ -21,10 +23,17 @@ const DefaultTemplateValues = () => {
 		useState<Array<ITemplateDataWithValue | undefined>>()
 
 	const Template = new Templates()
+	const [status, setStatus] = useState<
+		'Personal documents' | 'Main information' | 'No official'
+	>('Main information')
+
+	useEffect(() => {
+		console.log(defaultTemplateValues)
+	}, [defaultTemplateValues])
 
 	useEffect(() => {
 		Template.getList().then(data => {
-			if(data.status == 401) return
+			if (data.status == 401) return
 			data.json().then((templatesArray: Array<ITemplateData>) => {
 				templatesArray = templatesArray
 					.sort((a, b) => Number(a.is_official) - Number(b.is_official))
@@ -45,12 +54,13 @@ const DefaultTemplateValues = () => {
 			values &&
 				templates?.map((template): IDefaultTemplateWithValues | undefined => {
 					const value = values?.find(value => value.template.id == template.id)
-
-					if(template.is_official || value?.value) {
+					console.log(template)
+					if (template.is_official || value?.value) {
 						return {
 							id: value ? value.id : '',
 							template: template,
 							value: value ? value.value : '',
+							category: template.category,
 						}
 					}
 					return
@@ -77,24 +87,51 @@ const DefaultTemplateValues = () => {
 
 	return (
 		<TemplateBlock>
+			<Header>
+				<ClickedLink
+					onClick={() => setStatus('Main information')}
+					active={status == 'Main information'}
+				>
+					Личные данные
+				</ClickedLink>
+				<ClickedLink
+					onClick={() => setStatus('Personal documents')}
+					active={status == 'Personal documents'}
+				>
+					Персональные документы
+				</ClickedLink>
+				<ClickedLink
+					onClick={() => setStatus('No official')}
+					active={status == 'No official'}
+				>
+					Твои
+				</ClickedLink>
+			</Header>
 			<FormWithValidate onSubmit={onSubmit}>
 				<TemplateValueBlock>
 					{defaultTemplateValues &&
-						defaultTemplateValues.map(
-							(template, i) =>
-								template && (
+						defaultTemplateValues.map((template, i) => {
+							if (!template) return
+
+							
+							return (
+								template &&
+								template.template.category == (template.template.is_official ? status : '') && (
 									<FeatureInput key={i}>
 										<KeyLabel>{template.template.title}:</KeyLabel>
 										<Input
 											defaultValue={template.value}
-											field={template.value ? FieldNames.field : FieldNames.mayEmpty}
+											field={
+												template.value ? FieldNames.field : FieldNames.mayEmpty
+											}
 											placeholder={''}
 											type='textarea'
 											name={template.template.id}
 										/>
 									</FeatureInput>
 								)
-						)}
+							)
+						})}
 				</TemplateValueBlock>
 				{templates && <Button type='submit'>Сохранить изменения</Button>}
 			</FormWithValidate>
@@ -107,6 +144,14 @@ export { DefaultTemplateValues }
 const TemplateValueBlock = styled.div`
 	height: 69vh;
 	overflow: auto;
+`
+const Header = styled.div`
+	width: 100%;
+	height: 40px;
+	color: ${COLORS.gos_blue};
+	display: flex;
+	gap: 14px;
+	flex-direction: row;
 `
 const TemplateBlock = styled.div`
 	display: flex;
@@ -123,4 +168,14 @@ const FeatureInput = styled.div`
 	flex-direction: column;
 	justify-content: start;
 	align-items: start;
+`
+
+const ClickedLink = styled.h6<{ active?: boolean }>`
+	cursor: pointer;
+	margin: 30px 0;
+	height: 24px;
+	color: ${p => (p.active ? `${COLORS.gos_black}` : `${COLORS.gos_blue}`)};
+
+	font-size: 16px;
+	font-weight: 400;
 `

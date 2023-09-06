@@ -20,6 +20,7 @@ import { ModalDownloadDocument } from './modules/ModalDownloadDocument'
 import { ModalUpdateTemplate } from './modules/ModalUpdateTemplate'
 import { fetchRequestProfile } from '@api/user/profileData'
 import { getFullDate } from '@helpers/date'
+import { API_URL, Server_URL } from '@constants/API'
 
 type keyInDocumentType = {
 	title: string
@@ -33,23 +34,17 @@ type NavigationType = {
 	setLoggedIn: Function
 }
 
-
-export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
+export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 	const viewer = useRef<HTMLElement>()
 
-	const [recordId, setRecordId] = useState('')
-	const [saveTemplateValues, setSaveTemplateValues] = useState(true)
-	const [downloadModal, setDownloadModal] = useState(false)
-	const [documentPackageName, setDocumentPackageName] = useState('Имя пакета')
-	const [documentName, setDocumentName] = useState('Имя документа')
-	const [formAction, setFormAction] = useState('Ждет файл...')
 	const [maxPage, setMaxPage] = useState(0)
 	const [instance, setInstance] = useState<WebViewerInstance>()
 	const [FormWithFills, setFormWithFills] = useState<React.ReactNode>(null)
 	const [url, setUrl] = useState('')
 	const [keys, setKeys] = useState<Array<keyInDocumentType>>([])
-	const [documentPackage, setDocumentPackage] = useState<IDocumentPackageData>()
+	const [documentName, setDocumentName] = useState('')
 	const [modalActive, setModalActive] = useState(false)
+	const [formAction, setFormAction] = useState('Ждет файл...')
 	const navigate = useNavigate()
 	const [document, setDocument] = useState<IOneDocumentData>()
 	const params = useParams()
@@ -57,22 +52,8 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const userContext = useContext(UserContext)
 	const authContext = useContext(AuthContext)
 
-	const [nowDocumentIndex, setNowDocumentIndex] = useState(
-		Number(params.index) || 0
-	)
-	const prodId = params.id
+	const documentId = params.id
 
-	useEffect(() => {
-		setNowDocumentIndex(Number(params.index) || 0)
-	}, [params])
-
-	useEffect(() => {
-		setDocument(documentPackage?.documents[nowDocumentIndex])
-	}, [nowDocumentIndex, documentPackage])
-
-	useEffect(() => {
-		documentPackage && setNowDocument(documentPackage)
-	}, [document])
 
 	useEffect(() => {
 		if (!viewer.current) return
@@ -122,16 +103,14 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	const documentsSerializer = new Documents()
 
-	const setNowDocument = async (documentPackage: IDocumentPackageData) => {
-		const nowDocument = documentPackage.documents[nowDocumentIndex]
+	const setNowDocument = async (document: IOneDocumentData) => {
+		const nowDocument = document
 		if (!nowDocument) return
-		const fileUrl = nowDocument?.file
+		const fileUrl = Server_URL + nowDocument?.file
 		if (!fileUrl) return
 		const blob = await fetch(fileUrl).then(r => r.blob())
 		const url = URL.createObjectURL(blob)
 		setUrl(url)
-		console.log(nowDocument)
-		console.log(url)
 		setDocumentName(nowDocument.title)
 	}
 
@@ -143,39 +122,36 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	const updateTable = () => {
 		documentsSerializer
-			.readPackage({ id: prodId || '' })
+			.read({ id: documentId || '' })
 			.then(res => {
 				if (res.status == 404) navigate('/Profile')
 
-				res.json().then(async (data: IDocumentPackageData) => {
+				res.json().then(async (data: IOneDocumentData) => {
 					setNowDocument(data)
 
-					setDocumentPackage(data)
-					setDocumentPackageName(data.title)
+					setDocumentName(data.title)
 
-					if (!data.documents) return
-					setMaxPage(data.documents.length)
+					if (!data) return
+					setMaxPage(1)
 
 					let templateSet: Array<keyInDocumentType> = []
 					const values = await (await TemplateSerializer.getValuesList()).json()
 
-					data.documents.map(document =>
-						document.templates?.map(template => {
-							if (!templateSet.find(item => item.id == template.id)) {
-								const value = values?.find(
-									(value: ITemplateDataWithValue) =>
-										value.template.id == template.id
-								)
+					data.templates?.map(template => {
+						if (!templateSet.find(item => item.id == template.id)) {
+							const value = values?.find(
+								(value: ITemplateDataWithValue) =>
+									value.template.id == template.id
+							)
 
-								templateSet.push({
-									name_in_document: template.title,
-									title: template.title,
-									id: template.id,
-									value: value ? value.value : '',
-								})
-							}
-						})
-					)
+							templateSet.push({
+								name_in_document: template.title,
+								title: template.title,
+								id: template.id,
+								value: value ? value.value : '',
+							})
+						}
+					})
 
 					setKeys(templateSet)
 				})
@@ -189,7 +165,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	}
 	const checkButton = useRef<HTMLInputElement>()
 	const recordSerializer = new Records()
-	const SaveTemplateValues = (templates_values: any[]) => {
+	const SaveTemplateValuesF = (templates_values: any[]) => {
 		if (!checkButton) return
 		if (!checkButton.current) return
 		if (!checkButton.current.checked) return
@@ -216,21 +192,21 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			templates_values.push({ template: key, value: value })
 		}
 
-		documentPackage &&
-			recordSerializer
-				.create({
-					documents_package: documentPackage.id,
-					templates_values: templates_values,
-				})
-				.then(res => {
-					res.json().then(data => {
-						const recordIdq = data.id
-						setRecordId(recordIdq)
-						setDownloadModal(true)
-					})
-				})
+		console.log('make filled in document')
+			// recordSerializer
+			// 	.create({
+			// 		documents_package: documentPackage.id,
+			// 		templates_values: templates_values,
+			// 	})
+			// 	.then(res => {
+			// 		res.json().then(data => {
+			// 			const recordIdq = data.id
+			// 			setRecordId(recordIdq)
+			// 			setDownloadModal(true)
+			// 		})
+			// })
 
-		SaveTemplateValues(templates_values)
+		// SaveTemplateValues(templates_values)
 	}
 	const addTemplate = () => {
 		setModalActive(true)
@@ -238,7 +214,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	}
 
 	const onClickCheckBox = () => {
-		setSaveTemplateValues(!saveTemplateValues)
+		// setSaveTemplateValues(!saveTemplateValues)
 	}
 
 	useEffect(() => {
@@ -264,7 +240,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 						})}
 					{keys && <Button type='submit'>Заполнить все документы</Button>}
 				</FormWithValidate>
-				{userContext?.id == documentPackage?.author.id && (
+				{userContext?.id == document?.author.id && (
 					<AddTemplateBlock>
 						<AddTemplateButton onClick={addTemplate}>
 							Изменить поля
@@ -274,7 +250,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			</div>
 		)
 		setFormAction('Заполните поля')
-	}, [keys, documentPackage, userContext])
+	}, [keys, document, userContext])
 
 	return (
 		<>
@@ -283,18 +259,18 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			<LoadPageStyled>
 				<Worker workerUrl='https://unpkg.com/pdfjs-dist@3.3.122/build/pdf.worker.min.js'>
 					<Aside
-						documentPackageName={documentPackageName}
+						documentPackageName={documentName}
 						documentName={documentName}
 						formAction={formAction}
 						FormWithFills={FormWithFills}
-						saveTemplateValues={saveTemplateValues}
+						saveTemplateValues={SaveTemplateValuesF}
 						onClickCheckBox={onClickCheckBox}
 						checkButton={checkButton}
 					/>
 
 					<LoadBox viewer={viewer} maxPage={maxPage} />
 
-					{document && documentPackage && (
+					{/* {document  && (
 						<ModalUpdateTemplate
 							documentPackage={documentPackage}
 							document={document}
@@ -303,15 +279,15 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 							addTemplate={addNewTemplate}
 							updateTable={updateTable}
 						/>
-					)}
-					{documentPackage && (
+					)} */}
+					{/* {documentPackage && (
 						<ModalDownloadDocument
 							setModalActive={setDownloadModal}
 							modalActive={downloadModal}
 							documentPackage={documentPackage}
 							recordId={recordId}
-						/>
-					)}
+						/> 
+					)}*/}
 				</Worker>
 			</LoadPageStyled>
 		</>
@@ -347,88 +323,4 @@ const TemplateSplitter = styled.div`
 	height: 1px;
 	background-color: grey;
 `
-export default LoadPage
-
-// useEffect(() => {
-//     WebViewer(
-//       {
-//         path: '/lib',
-//         preloadWorker: 'office',
-//         fullAPI: false,
-//         charset: 'UTF-8'
-//       },
-//       viewer.current
-//     ).then((instance) => {
-//         const { documentViewer } = instance.Core
-//         setInstance(instance)
-//         setParentUrl(window.location.href)
-//         setDocumentViewer(documentViewer)
-//         instance.UI.setLanguage('ru');
-//         instance.UI.disableElements([ 'leftPanel', 'leftPanelButton', 'header' ]);
-//         instance.UI.loadDocument(url[0], { filename: files[0].name });
-
-//         documentViewer.addEventListener('documentLoaded', async () => {
-//             await documentViewer.getDocument().documentCompletePromise();
-//             documentViewer.updateView();
-//             const doc = documentViewer.getDocument();
-
-//             console.log(doc.filename, url[0])
-
-//             setActionLabel('Отправить для заполнения документа')
-//             setAutofillHidden(false)
-//             setDocumentName(doc.filename)
-//             setKeyValues('Ключи документа:')
-
-//             console.log(doc)
-//             doc.getTemplateKeys().then(keys => {
-//                 setAutoFills(
-//                     <>
-//                     {keys.map((key, i) => {
-//                         return(
-//                             <FeatureInput id={i}>
-//                                 <KeyLable>{key}:</KeyLable>
-//                                 <Textarea rows={1.4} type='text' name={key}></Textarea>
-//                             </FeatureInput>)})}
-//                     {keys.length ? (<>
-//                      <Input type='submit' value="Заполнить" name='Autofill'></Input> <br/></>) : nope}
-//                     </>
-//                 )
-//             });
-//         })
-
-//         // instance.UI.disableFeatures([instance.Feature.Forms])
-//         // instance.UI.enableFeatures([instance.Feature.ContentEdit]);
-//     });
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-// }, [url]);
-
-// const autofillDoc = async () => {
-//     const elements = autoFillForm.current.elements;
-//     const autofillMap = {};
-//     for (let i = 0, element; (element = elements[i++]); ) {
-//         if (element.type === 'textarea' && element.value.length > 0) {
-//             try {
-//             const json = JSON.parse(element.value);
-//             autofillMap[element.name] = json;
-//             } catch (e) {
-//             autofillMap[element.name] = element.value.toString();
-//             }
-//         }
-//     }
-//     setFillingMap(autofillMap)
-//     for (const entry in autofillMap) {
-//         if (autofillMap[entry].hasOwnProperty('image_url')) {
-//             const path = autofillMap[entry]['image_url'];
-//             if (path.substr(0, 4) !== 'http') {
-//             autofillMap[entry]['image_url'] = parentUrl + path;
-//             }
-//         }
-//     }
-//     for (var k in autofillMap){
-//         if (autofillMap.hasOwnProperty(k))
-//         {
-//             autofillMap[k] = String(autofillMap[k]);
-//         }
-//     }
-//     await documentViewer_S.getDocument().applyTemplateValues(autofillMap);
-// }
+export default ViewDocument

@@ -54,7 +54,6 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			if(data.status == 401) {
 				setLoggedIn(false)
 			}
-			data.date_joined = getFullDate(data.date_joined)
 			setUser(data)
 		})
 	}, [])

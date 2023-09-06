@@ -10,7 +10,7 @@ export const Footer = () => {
   return (
     <MDBFooter className="text-center text-white Footer" style={{ backgroundColor: '#f1f1f1' }}>
       <MDBContainer className="pt-4">
-        <section className="mb-4">
+        {/* <section className="mb-4">
           <MDBBtn
             rippleColor="dark"
             floating
@@ -21,7 +21,7 @@ export const Footer = () => {
           >
             <MDBIcon fab className="fab fa-facebook-f" />
           </MDBBtn>
-        </section>
+        </section> */}
       </MDBContainer>
 
       <div className="text-center text-dark p-3" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
