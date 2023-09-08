@@ -5,22 +5,15 @@ import styled from 'styled-components'
 
 import { FormWithValidate } from '../../components/FormWithValidate'
 
-import Documents, {
-	IDocumentPackageData,
-	IOneDocumentData,
-} from '@api/documents'
-import Records from '@api/records'
+import Documents, { IOneDocumentData } from '@api/documents'
 import Templates, { ITemplateDataWithValue } from '@api/templates'
+import { fetchRequestProfile } from '@api/user/profileData'
+import { Server_URL } from '@constants/API'
 import { Button, Input } from '@ui/index'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { AuthContext, UserContext } from '../../contexts'
 import { FieldNames } from '../../helpers/validator'
 import { Aside, LoadBox } from './components'
-import { ModalDownloadDocument } from './modules/ModalDownloadDocument'
-import { ModalUpdateTemplate } from './modules/ModalUpdateTemplate'
-import { fetchRequestProfile } from '@api/user/profileData'
-import { getFullDate } from '@helpers/date'
-import { API_URL, Server_URL } from '@constants/API'
 
 type keyInDocumentType = {
 	title: string
@@ -43,17 +36,13 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [url, setUrl] = useState('')
 	const [keys, setKeys] = useState<Array<keyInDocumentType>>([])
 	const [documentName, setDocumentName] = useState('')
-	const [modalActive, setModalActive] = useState(false)
 	const [formAction, setFormAction] = useState('Ждет файл...')
 	const navigate = useNavigate()
-	const [document, setDocument] = useState<IOneDocumentData>()
 	const params = useParams()
 
-	const userContext = useContext(UserContext)
 	const authContext = useContext(AuthContext)
 
 	const documentId = params.id
-
 
 	useEffect(() => {
 		if (!viewer.current) return
@@ -76,7 +65,7 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 			])
 		})
 		fetchRequestProfile().then(data => {
-			if(data.status == 401) {
+			if (data.status == 401) {
 				setLoggedIn(false)
 			}
 			setUser(data)
@@ -97,8 +86,6 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 			await documentViewer.getDocument().getDocumentCompletePromise()
 			documentViewer.updateView()
 		})
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [url])
 
 	const documentsSerializer = new Documents()
@@ -160,69 +147,13 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 				console.log(err)
 			})
 	}
-	const addNewTemplate = (newTemplate: keyInDocumentType) => {
-		setKeys([...keys, newTemplate])
-	}
-	const checkButton = useRef<HTMLInputElement>()
-	const recordSerializer = new Records()
-	const SaveTemplateValuesF = (templates_values: any[]) => {
-		if (!checkButton) return
-		if (!checkButton.current) return
-		if (!checkButton.current.checked) return
-
-		templates_values.map(value => {
-			TemplateSerializer.updateValue({
-				templateId: value.template,
-				value: value.value,
-			}).then(res => {
-				console.log(res)
-
-				if (res.status == 404) {
-					TemplateSerializer.createValue({
-						templateId: value.template,
-						value: value.value,
-					})
-				}
-			})
-		})
-	}
-	const onSubmit = (data: object) => {
-		const templates_values = []
-		for (const [key, value] of Object.entries(data)) {
-			templates_values.push({ template: key, value: value })
-		}
-
-		console.log('make filled in document')
-			// recordSerializer
-			// 	.create({
-			// 		documents_package: documentPackage.id,
-			// 		templates_values: templates_values,
-			// 	})
-			// 	.then(res => {
-			// 		res.json().then(data => {
-			// 			const recordIdq = data.id
-			// 			setRecordId(recordIdq)
-			// 			setDownloadModal(true)
-			// 		})
-			// })
-
-		// SaveTemplateValues(templates_values)
-	}
-	const addTemplate = () => {
-		setModalActive(true)
-		console.log(document)
-	}
-
-	const onClickCheckBox = () => {
-		// setSaveTemplateValues(!saveTemplateValues)
-	}
 
 	useEffect(() => {
 		if (!keys) return
 
 		setFormWithFills(
 			<div style={{ width: '100%' }}>
-				<FormWithValidate onSubmit={onSubmit}>
+				<FormWithValidate onSubmit={() => {}}>
 					{keys &&
 						keys.map((key, i) => {
 							return (
@@ -238,19 +169,11 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 								</FeatureInput>
 							)
 						})}
-					{keys && <Button type='submit'>Заполнить все документы</Button>}
 				</FormWithValidate>
-				{userContext?.id == document?.author.id && (
-					<AddTemplateBlock>
-						<AddTemplateButton onClick={addTemplate}>
-							Изменить поля
-						</AddTemplateButton>
-					</AddTemplateBlock>
-				)}
 			</div>
 		)
-		setFormAction('Заполните поля')
-	}, [keys, document, userContext])
+		setFormAction('')
+	}, [keys])
 
 	return (
 		<>
@@ -259,35 +182,12 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 			<LoadPageStyled>
 				<Worker workerUrl='https://unpkg.com/pdfjs-dist@3.3.122/build/pdf.worker.min.js'>
 					<Aside
-						documentPackageName={documentName}
 						documentName={documentName}
 						formAction={formAction}
 						FormWithFills={FormWithFills}
-						saveTemplateValues={SaveTemplateValuesF}
-						onClickCheckBox={onClickCheckBox}
-						checkButton={checkButton}
 					/>
 
 					<LoadBox viewer={viewer} maxPage={maxPage} />
-
-					{/* {document  && (
-						<ModalUpdateTemplate
-							documentPackage={documentPackage}
-							document={document}
-							setModalActive={setModalActive}
-							modalActive={modalActive}
-							addTemplate={addNewTemplate}
-							updateTable={updateTable}
-						/>
-					)} */}
-					{/* {documentPackage && (
-						<ModalDownloadDocument
-							setModalActive={setDownloadModal}
-							modalActive={downloadModal}
-							documentPackage={documentPackage}
-							recordId={recordId}
-						/> 
-					)}*/}
 				</Worker>
 			</LoadPageStyled>
 		</>

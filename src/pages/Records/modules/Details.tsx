@@ -25,35 +25,33 @@ const ModalDetails = ({
 }: IModalUpdateDocument) => {
 	const RecordsManager = new Records()
 	const DocumentsManager = new Documents()
-	
-	const [links, setLinks] = useState<Array<LinkType>>([])
-	const [crutch, setCrutch] = useState<LinkType>()
 
-	useEffect(() => {
-		crutch && setLinks([...links, crutch])
-	}, [crutch])
+	const [links, setLinks] = useState<Array<LinkType>>([])
 
 	useEffect(() => {
 		setLinks([])
+
 		DocumentsManager.readPackage({ id: record.documents_package.id }).then(
 			res =>
 				res.json().then((data: IDocumentPackageData) => {
-					data.documents.map(document => {
-						setCrutch({
-							url: RecordsManager.getDownloadLink({
-								record_id: record.id,
-								document_id: document.id,
-							}),
-							title: document.title,
+					setLinks(
+						data.documents.map(document => {
+							return {
+								url: RecordsManager.getDownloadLink({
+									record_id: record.id,
+									document_id: document.id,
+								}),
+								title: document.title,
+							}
 						})
-					})
+					)
 				})
 		)
 	}, [record])
 
-	const downloadDocument = async (link: string) =>{ 
+	const downloadDocument = async (link: string) => {
 		const documentLink = await RecordsManager.downloadDocument({
-			link: link
+			link: link,
 		})
 
 		window.open(documentLink, '_blank')
@@ -72,7 +70,7 @@ const ModalDetails = ({
 					<DownloadRow key={i}>
 						<div>{link.title}:</div>
 						<div>
-							<Link onClick={(() => downloadDocument(link.url))}>
+							<Link onClick={() => downloadDocument(link.url)}>
 								<Button>{<Download />}</Button>
 							</Link>
 							<br />

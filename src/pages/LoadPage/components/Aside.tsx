@@ -1,6 +1,16 @@
-import styled from 'styled-components'
+import styled, { StyledInterface } from 'styled-components'
 
-export const Aside = props => {
+
+interface IAside { 
+	documentPackageName?: string
+	documentName: string
+	formAction: string
+	FormWithFills: React.ReactNode
+	saveTemplateValues?: boolean
+	onClickCheckBox?: () => void
+	checkButton?: React.MutableRefObject<HTMLInputElement | null> 
+}
+export const Aside = (props: IAside) => {
 	return (
 		<>
 			<AsideStyled>
@@ -9,10 +19,9 @@ export const Aside = props => {
 				<Spacer />
 				<Spacer />
 				<StatusLoadKeys id='key-val-title'>{props.formAction}</StatusLoadKeys>
-				<ActionLabel>{props.actionLabel}</ActionLabel>
 
 				{props.FormWithFills}
-				<UpdateValues>
+				{props.checkButton && <UpdateValues>
 					обновить данные по умолчанию?{' '}
 					<input
 						type='checkbox'
@@ -20,7 +29,7 @@ export const Aside = props => {
 						checked={props.saveTemplateValues}
 						onClick={props.onClickCheckBox}
 					/>
-				</UpdateValues>
+				</UpdateValues>}
 			</AsideStyled>
 		</>
 	)
@@ -44,7 +53,7 @@ const Title = styled.h2`
 	color: #373737;
 `
 const StatusLoadKeys = styled.h1`
-	margin-bottom: -15px;
+	margin-bottom: 15px;
 	font-size: 1.3em;
 	font-style: normal;
 	color: #373737;
@@ -54,9 +63,6 @@ const StatusLoadKeys = styled.h1`
 `
 const ActionLabel = styled.p`
 	margin-bottom: 25px;
-`
-const SendGroup = styled.div`
-	display: ${props => (props.autofillHidden ? 'none' : 'block')};
 `
 const Spacer = styled.div`
 	height: 9px;

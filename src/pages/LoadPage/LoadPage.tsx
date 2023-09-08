@@ -20,6 +20,7 @@ import { ModalDownloadDocument } from './modules/ModalDownloadDocument'
 import { ModalUpdateTemplate } from './modules/ModalUpdateTemplate'
 import { fetchRequestProfile } from '@api/user/profileData'
 import { getFullDate } from '@helpers/date'
+import { Server_URL } from '@constants/API'
 
 type keyInDocumentType = {
 	title: string
@@ -128,19 +129,18 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 		if (!nowDocument) return
 		const fileUrl = nowDocument?.file
 		if (!fileUrl) return
-		const blob = await fetch(fileUrl).then(r => r.blob())
+		const blob = await fetch(Server_URL + fileUrl).then(r => r.blob())
 		const url = URL.createObjectURL(blob)
 		setUrl(url)
-		console.log(nowDocument)
-		console.log(url)
 		setDocumentName(nowDocument.title)
 	}
 
 	const TemplateSerializer = new Templates()
 
 	useEffect(() => {
+		if(!prodId) return
 		updateTable()
-	}, [])
+	}, [prodId])
 
 	const updateTable = () => {
 		documentsSerializer
@@ -188,7 +188,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const addNewTemplate = (newTemplate: keyInDocumentType) => {
 		setKeys([...keys, newTemplate])
 	}
-	const checkButton = useRef<HTMLInputElement>()
+	const checkButton = useRef<HTMLInputElement>(null)
 	const recordSerializer = new Records()
 	const SaveTemplateValues = (templates_values: any[]) => {
 		if (!checkButton) return
@@ -200,8 +200,6 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 				templateId: value.template,
 				value: value.value,
 			}).then(res => {
-				console.log(res)
-
 				if (res.status == 404) {
 					TemplateSerializer.createValue({
 						templateId: value.template,
@@ -235,7 +233,6 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	}
 	const addTemplate = () => {
 		setModalActive(true)
-		console.log(document)
 	}
 
 	const onClickCheckBox = () => {

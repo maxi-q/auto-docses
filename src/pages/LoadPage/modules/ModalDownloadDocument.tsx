@@ -22,32 +22,29 @@ const ModalDownloadDocument = ({
 	documentPackage,
 }: IModalAddTemplate) => {
 	const [links, setLinks] = useState<Array<LinkType>>([])
-	const [crutch, setCrutch] = useState<LinkType>()
 
 	const RecordsManager = new Records()
 
 	useEffect(() => {
-		crutch && setLinks([...links, crutch])
-	}, [crutch])
-	
-	useEffect(() => {
 		if (!recordId) return
 		setLinks([])
 
-		for (const document of documentPackage.documents) {
-			setCrutch({
-				url: RecordsManager.getDownloadLink({
-					record_id: recordId,
-					document_id: document.id,
-				}),
-				title: document.title,
+		setLinks(
+			documentPackage.documents.map(document => {
+				return {
+					url: RecordsManager.getDownloadLink({
+						record_id: recordId,
+						document_id: document.id,
+					}),
+					title: document.title,
+				}
 			})
-		}
+		)
 	}, [recordId])
 
-	const downloadDocument = async (link: string) =>{ 
+	const downloadDocument = async (link: string) => {
 		const documentLink = await RecordsManager.downloadDocument({
-			link: link
+			link: link,
 		})
 
 		window.open(documentLink, '_blank')
@@ -58,7 +55,9 @@ const ModalDownloadDocument = ({
 			{recordId &&
 				links?.map((link, i) => (
 					<div key={i}>
-						{link.title}: <a onClick={() => downloadDocument(link.url)}> скачать документ</a> <br />
+						{link.title}:{' '}
+						<a onClick={() => downloadDocument(link.url)}> скачать документ</a>{' '}
+						<br />
 					</div>
 				))}
 		</Modal>

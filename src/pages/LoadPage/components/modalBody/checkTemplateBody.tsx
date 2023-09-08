@@ -64,7 +64,7 @@ const CheckTemplateBody = ({
 						{templates &&
 							templates.map((template, i) => {
 								return (
-									<DocumentRow>
+									<DocumentRow key={i}>
 										<Row>
 											<DownloadRow>
 												{template.title}
