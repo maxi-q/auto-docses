@@ -5,17 +5,19 @@ import { FieldNames } from '@helpers/validator'
 import { ISelectOptions, LotsSelect } from '@ui/Form/Selects/LotsSelect'
 import { Button, Input, Modal } from '@ui/index'
 import { useEffect, useState } from 'react'
-import { lotsSelectToArray } from '../../../LoadPage/helpers/lotsSelectToArray'
+import { lotsSelectToArray } from '../../../../LoadPage/helpers/lotsSelectToArray'
 
-interface IModalAddDocument {
+interface IModalCreateDocument {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
 	modalActive: boolean
+	updateTable: () => void
 }
 
-const ModalAddDocumentPackage = ({
+const ModalCreateDocumentPackage = ({
 	setModalActive,
 	modalActive,
-}: IModalAddDocument) => {
+	updateTable,
+}: IModalCreateDocument) => {
 	const [templates, setTemplates] = useState<Array<ISelectOptions>>()
 
 	const TemplatesManager = new Templates()
@@ -47,14 +49,11 @@ const ModalAddDocumentPackage = ({
 				if (res instanceof Response) {
 					res.json().then(data => {
 						const id = data.id
-						console.log(data)
 						DocumentsManager.createPackage({
 							title: sendDocument.title_package,
 							documents: [id],
-						}).then(r => {
-							r.json().then(d => {
-								console.log(d)
-							})
+						}).then(_ => {
+							updateTable()
 						})
 					})
 				}
@@ -106,4 +105,4 @@ const ModalAddDocumentPackage = ({
 	)
 }
 
-export { ModalAddDocumentPackage }
+export { ModalCreateDocumentPackage }

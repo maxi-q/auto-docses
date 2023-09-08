@@ -3,13 +3,12 @@ import { FormWithValidate } from '@components/FormWithValidate'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
-import { lotsSelectToArray } from '../../../LoadPage/helpers/lotsSelectToArray'
+import { lotsSelectToArray } from '../../../../LoadPage/helpers/lotsSelectToArray'
+import { modalStatusTypeInPackage } from './ModalDetailsDocumentPackage'
 
 interface IModalUpdatePackage {
 	packageId: string
-	setIUpdating: React.Dispatch<
-		React.SetStateAction<'check' | 'documentUpdate' | 'packageUpdate'>
-	>
+	setIUpdating: React.Dispatch<React.SetStateAction<modalStatusTypeInPackage>>
 }
 const ModalUpdatePackage = ({
 	packageId,

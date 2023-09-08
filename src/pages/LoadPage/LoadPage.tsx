@@ -52,6 +52,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [modalActive, setModalActive] = useState(false)
 	const navigate = useNavigate()
 	const [document, setDocument] = useState<IOneDocumentData>()
+	const [prodId, setProdId] = useState<string | undefined>()
 	const params = useParams()
 
 	const userContext = useContext(UserContext)
@@ -60,9 +61,9 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [nowDocumentIndex, setNowDocumentIndex] = useState(
 		Number(params.index) || 0
 	)
-	const prodId = params.id
 
 	useEffect(() => {
+		setProdId(params.id)
 		setNowDocumentIndex(Number(params.index) || 0)
 	}, [params])
 
@@ -146,7 +147,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			.readPackage({ id: prodId || '' })
 			.then(res => {
 				if (res.status == 404) navigate('/Profile')
-
+				
 				res.json().then(async (data: IDocumentPackageData) => {
 					setNowDocument(data)
 

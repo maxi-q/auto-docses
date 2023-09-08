@@ -5,21 +5,23 @@ import { FieldNames } from '@helpers/validator'
 import { ISelectOptions, LotsSelect } from '@ui/Form/Selects/LotsSelect'
 import { Button, Input, Modal } from '@ui/index'
 import { useEffect, useState } from 'react'
-import { lotsSelectToArray } from '../../../LoadPage/helpers/lotsSelectToArray'
+import { lotsSelectToArray } from '../../../../LoadPage/helpers/lotsSelectToArray'
 
-interface IModalAddDocument {
+interface IModalCreateDocument {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
 	modalActive: boolean
 	packageId?: string
 	packageDocuments?: Array<string>
+	updateTable: () => void
 }
 
-const ModalAddDocument = ({
+const ModalCreateDocument = ({
 	setModalActive,
 	modalActive,
 	packageDocuments,
 	packageId,
-}: IModalAddDocument) => {
+	updateTable,
+}: IModalCreateDocument) => {
 	const [templates, setTemplates] = useState<Array<ISelectOptions>>()
 
 	const TemplatesManager = new Templates()
@@ -39,10 +41,6 @@ const ModalAddDocument = ({
 
 	const DocumentsManager = new Documents()
 	const onSubmit = (data: object) => {
-		if (!packageId) return
-		if (!packageDocuments) return
-
-		// Здесь все работает!
 		const sendDocument: any = lotsSelectToArray(data)
 
 		DocumentsManager.create({
@@ -54,20 +52,25 @@ const ModalAddDocument = ({
 			.then(res => {
 				if (res instanceof Response) {
 					if (res.status == 401) return
+					if (!packageId) {
+						updateTable()
+						return
+					}
+					if (!packageDocuments) return
+
 					res.json().then(data => {
 						const id = data.id
 
 						DocumentsManager.updatePackage({
 							id: packageId,
 							documents: [...packageDocuments, id],
-						})
+						}).then(_ => updateTable())
 					})
 				}
 			})
 			.catch(err => {
 				console.log(err)
 			})
-		// Здесь все работает!
 	}
 	return (
 		<Modal setActive={setModalActive} active={modalActive}>
@@ -105,4 +108,4 @@ const ModalAddDocument = ({
 	)
 }
 
-export { ModalAddDocument }
+export { ModalCreateDocument }

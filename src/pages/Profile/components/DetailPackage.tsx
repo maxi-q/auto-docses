@@ -3,16 +3,15 @@ import { Button } from '@ui/Button'
 import { useContext } from 'react'
 import Table from 'react-bootstrap/esm/Table'
 
+import { ChangeDocument } from '@helpers/navigation'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { UserContext } from '../../../contexts'
-import { ChangeDocument } from '@helpers/navigation'
+import { modalStatusTypeInPackage } from '../modules/modals/Package/ModalDetailsDocumentPackage'
 
 interface IDetailPackage {
 	documentPackage: IDocumentPackageData
-	setIUpdating: React.Dispatch<
-		React.SetStateAction<'check' | 'documentUpdate' | 'packageUpdate'>
-	>
+	setIUpdating: React.Dispatch<React.SetStateAction<modalStatusTypeInPackage>>
 	setDocumentId: React.Dispatch<React.SetStateAction<string>>
 }
 const DetailPackage = ({
@@ -30,8 +29,9 @@ const DetailPackage = ({
 	const updatePackage = () => {
 		setIUpdating('packageUpdate')
 	}
-	
-
+	const addDocument = () => {
+		setIUpdating('addDocuments')
+	}
 	return (
 		<>
 			<Header>
@@ -65,7 +65,9 @@ const DetailPackage = ({
 										<div>
 											<Link>
 												<Button
-													onClick={() => ChangeDocument(documentPackage.id, i, navigate)}
+													onClick={() =>
+														ChangeDocument(documentPackage.id, i, navigate)
+													}
 												>
 													<svg
 														xmlns='http://www.w3.org/2000/svg'
@@ -102,6 +104,8 @@ const DetailPackage = ({
 						))}
 					</tbody>
 				</Table>
+
+				<Button onClick={addDocument}>Добавить документ</Button>
 			</Body>
 		</>
 	)

@@ -2,8 +2,9 @@ import Documents, { IDocumentPackageData } from '@api/documents'
 import { Modal } from '@ui/Modal'
 import { useEffect, useState } from 'react'
 
-import { DetailPackage } from '../../components/DetailPackage'
-import { ModalUpdateDocument } from './ModalUpdateDocument'
+import { DetailPackage } from '../../../components/DetailPackage'
+import { ModalAddDocument } from '../Document/ModalAddDocument'
+import { ModalUpdateDocumentP } from './ModalUpdateDocumentInPackage'
 import { ModalUpdatePackage } from './ModalUpdatePackage'
 
 interface IModalDetailsDocumentPackage {
@@ -11,6 +12,11 @@ interface IModalDetailsDocumentPackage {
 	modalActive: boolean
 	packageId?: string
 }
+export type modalStatusTypeInPackage =
+	| 'check'
+	| 'documentUpdate'
+	| 'packageUpdate'
+	| 'addDocuments'
 
 export const ModalDetailsDocumentPackage = ({
 	setModalActive,
@@ -19,9 +25,9 @@ export const ModalDetailsDocumentPackage = ({
 }: IModalDetailsDocumentPackage) => {
 	const DocumentsSerializer = new Documents()
 	const [documentPackage, setDocumentPackage] = useState<IDocumentPackageData>()
-	const [modalStatus, setModalStatus] = useState<
-		'check' | 'documentUpdate' | 'packageUpdate'
-	>('check')
+	const [modalStatus, setModalStatus] =
+		useState<modalStatusTypeInPackage>('check')
+
 	const [documentId, setDocumentId] = useState('')
 
 	useEffect(() => {
@@ -32,6 +38,7 @@ export const ModalDetailsDocumentPackage = ({
 				})
 			})
 	}, [packageId, modalStatus])
+
 	const closeModal = () => {
 		setModalActive(false)
 		setModalStatus('check')
@@ -39,13 +46,16 @@ export const ModalDetailsDocumentPackage = ({
 	const returnCheck = () => {
 		setModalStatus('check')
 	}
+	const updateTable = () => {
+		return
+	}
 	return (
 		<Modal
 			setActive={modalStatus == 'check' ? closeModal : returnCheck}
 			active={modalActive}
 		>
 			{modalStatus == 'documentUpdate' ? (
-				<ModalUpdateDocument
+				<ModalUpdateDocumentP
 					setIUpdating={setModalStatus}
 					documentId={documentId}
 				/>
@@ -64,6 +74,15 @@ export const ModalDetailsDocumentPackage = ({
 					<ModalUpdatePackage
 						packageId={packageId}
 						setIUpdating={setModalStatus}
+					/>
+				)
+			) : modalStatus == 'addDocuments' ? (
+				packageId && (
+					<ModalAddDocument
+						packageDocuments={documentPackage}
+						packageId={packageId}
+						setIUpdating={setModalStatus}
+						updateTable={updateTable}
 					/>
 				)
 			) : (

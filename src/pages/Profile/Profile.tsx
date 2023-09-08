@@ -1,23 +1,21 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
-import Documents, { IDocumentPackageData, IOneDocumentData } from '@api/documents'
+import Documents, {
+	IDocumentPackageData,
+	IOneDocumentData,
+} from '@api/documents'
 import { fetchRequestProfile } from '@api/user/profileData'
-import { getFullDate } from '@helpers/date'
-import { ButtonCircle } from '@ui/ButtonCircle'
-import { UserContext } from '../../contexts'
 
 import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
 import { COLORS } from '@constants/style/COLORS'
-import { DocumentsData } from './modules/DocumentData'
-import { PackageData } from './modules/PackageData'
-import { ProfileData } from './modules/ProfileData'
-import { ModalAddDocument } from './modules/modals/ModalAddDocument'
-import { ModalAddDocumentPackage } from './modules/modals/ModalAddPackage'
-import { ModalDeleteDocument } from './modules/modals/ModalDeleteDocument'
-import { ModalDetailsDocumentPackage } from './modules/modals/ModalDetailsDocumentPackage'
-import { DefaultTemplateValues } from './modules/DefaultTemplate'
+import { DocumentsData } from './modules/DocumentPage'
+import { PackageData } from './modules/PackagePage'
+import { ProfileData } from './modules/ProfilePage'
+import { DefaultTemplateValues } from './modules/TemplatesPage'
+import { ModalCreateDocument } from './modules/modals/Document/ModalCreateDocument'
+import { ModalCreateDocumentPackage } from './modules/modals/Package/ModalCreatePackage'
 
 type NavigationType = {
 	setUser: Function
@@ -27,22 +25,18 @@ type NavigationType = {
 export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [documentPackages, setDocumentPackages] =
 		useState<Array<IDocumentPackageData>>()
-	const [allDocuments, setAllDocuments] =
-		useState<Array<IOneDocumentData>>()
+	const [allDocuments, setAllDocuments] = useState<Array<IOneDocumentData>>()
 
 	const [pageState, setPageState] = useState<
 		'profile' | 'documents' | 'packages' | 'fields'
 	>('profile')
 	const [modalActivePackage, setModalPackageActive] = useState(false)
 	const [modalActiveDocument, setModalDocumentActive] = useState(false)
-	const [modalDeleteActive, setModalDeleteActive] = useState(false)
-	const [modalDetailsActive, setModalDetailsActive] = useState(false)
 
 	const [packageId, setPackageId] = useState<string>()
 	const [documentId, setDocumentId] = useState<string>()
 	const [packageDocuments, setPackageDocuments] = useState<Array<string>>()
 
-	const userContext = useContext(UserContext)
 	const navigate = useNavigate()
 	const documentsSerializer = new Documents()
 
@@ -67,30 +61,42 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 						setDocumentPackages(data)
 					})
 				})
-			documentsSerializer
-				.getList({ authorId: user.username })
-				.then(res => {
-					res.json().then(data => {
-						setAllDocuments(data)
-					})
+			documentsSerializer.getList({ authorId: user.username }).then(res => {
+				res.json().then(data => {
+					setAllDocuments(data)
 				})
+			})
 		})
 	}
 
-	const addDocument = () => {
+	const addPackage = () => {
 		setModalPackageActive(true)
 	}
+	const addDocument = () => {
+		setPackageId(undefined)
+		setModalDocumentActive(true)
+	}
+
 	const ProfilePage = {
 		profile: <ProfileData />,
-		documents: <DocumentsData updateTable={updateTable} allDocuments={allDocuments}/>,
-		packages: (
-			<PackageData
-				documentPackages={documentPackages}
-				setPackageId={setPackageId}
-				setModalDetailsActive={setModalDetailsActive}
+		documents: (
+			<DocumentsData
+				addDocument={addDocument}
+				updateTable={updateTable}
+				allDocuments={allDocuments}
+				setDocumentId={setDocumentId}
+				documentId={documentId}
 			/>
 		),
-		fields: <DefaultTemplateValues/>,
+		packages: (
+			<PackageData
+				addPackage={addPackage}
+				documentPackages={documentPackages}
+				setPackageId={setPackageId}
+				packageId={packageId}
+			/>
+		),
+		fields: <DefaultTemplateValues />,
 	}
 	return (
 		<Body>
@@ -125,32 +131,18 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 			</Main>
 			<MainTable>{ProfilePage[pageState]}</MainTable>
 
-			<AddDocumentBlock>
-				<AddDocumentButton onClick={addDocument}>+</AddDocumentButton>
-			</AddDocumentBlock>
-
-			<ModalAddDocumentPackage
+			<ModalCreateDocumentPackage
+				updateTable={updateTable}
 				setModalActive={setModalPackageActive}
 				modalActive={modalActivePackage}
 			/>
 
-			<ModalAddDocument
+			<ModalCreateDocument
+				updateTable={updateTable}
 				setModalActive={setModalDocumentActive}
 				modalActive={modalActiveDocument}
 				packageId={packageId}
 				packageDocuments={packageDocuments}
-			/>
-
-			<ModalDeleteDocument
-				setModalActive={setModalDeleteActive}
-				modalActive={modalDeleteActive}
-				documentId={documentId}
-			/>
-
-			<ModalDetailsDocumentPackage
-				setModalActive={setModalDetailsActive}
-				modalActive={modalDetailsActive}
-				packageId={packageId}
 			/>
 		</Body>
 	)
@@ -196,21 +188,6 @@ const Body = styled.div`
 `
 const Title = styled.h2``
 
-const AddDocumentButton = styled(ButtonCircle)`
-	width: 80px;
-	height: 80px;
-	font-size: 30px;
-	margin: 0 8px 0 0;
-	position: absolute;
-	bottom: 20px;
-	right: 20px;
-`
-const AddDocumentBlock = styled.div`
-	display: absolute;
-	down: 20px;
-	right: 20px;
-	margin: 1% 0 0 0;
-`
 {
 	/* <Aside />
 			<TableBlock>

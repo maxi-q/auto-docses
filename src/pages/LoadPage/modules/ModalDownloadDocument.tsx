@@ -35,24 +35,30 @@ const ModalDownloadDocument = ({
 		setLinks([])
 
 		for (const document of documentPackage.documents) {
-			RecordsManager.getDownloadLink({
-				record_id: recordId,
-				document_id: document.id,
-			}).then(link => {
-				setCrutch({
-					url: link,
-					title: document.title
-				})
+			setCrutch({
+				url: RecordsManager.getDownloadLink({
+					record_id: recordId,
+					document_id: document.id,
+				}),
+				title: document.title,
 			})
 		}
 	}, [recordId])
+
+	const downloadDocument = async (link: string) =>{ 
+		const documentLink = await RecordsManager.downloadDocument({
+			link: link
+		})
+
+		window.open(documentLink, '_blank')
+	}
 
 	return (
 		<Modal setActive={setModalActive} active={modalActive}>
 			{recordId &&
 				links?.map((link, i) => (
 					<div key={i}>
-						{link.title}: <a href={link.url}> скачать документ</a> <br />
+						{link.title}: <a onClick={() => downloadDocument(link.url)}> скачать документ</a> <br />
 					</div>
 				))}
 		</Modal>

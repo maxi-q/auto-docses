@@ -77,14 +77,25 @@ class Records {
 		})
 	}
 
-	async getDownloadLink({ record_id, document_id }: IGetDownloadLink) {
-		const blob = await fetch(
-			this.API_URL + `records/${record_id}/download/${document_id}/`,
-			{
-				method: 'GET',
-				headers: this.headers,
-			}
-		).then(r => {
+	getDownloadLink({ record_id, document_id }: IGetDownloadLink) {
+		// const blob = await fetch(
+		// 	this.API_URL + `records/${record_id}/download/${document_id}/`,
+		// 	{
+		// 		method: 'GET',
+		// 		headers: this.headers,
+		// 	}
+		// ).then(r => {
+		// 	return r.blob()
+		// })
+		// return URL.createObjectURL(blob)
+		return this.API_URL + `records/${record_id}/download/${document_id}/`
+	}
+
+	async downloadDocument({ link }: { link: string }) {
+		const blob = await fetch(link, {
+			method: 'GET',
+			headers: this.headers,
+		}).then(r => {
 			return r.blob()
 		})
 		return URL.createObjectURL(blob)
