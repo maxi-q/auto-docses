@@ -33,6 +33,7 @@ export const DocumentsData = ({
 	const documentsSerializer = new Documents()
 
 	useEffect(() => {
+		console.log(documentId)
 		documentId &&
 			documentsSerializer.read({ id: documentId }).then(res => {
 				res.json().then(data => {

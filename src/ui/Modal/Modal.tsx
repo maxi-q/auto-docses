@@ -18,6 +18,8 @@ export const Modal = ({
 		setActive(false)
 		onClick()
 	}
+	document.body.style.overflow = active ? 'hidden' : 'auto'
+
 	return (
 		<ModalBG active={active} onClick={onClickEvent}>
 			<ModalContent onClick={e => e.stopPropagation()}>
@@ -66,10 +68,10 @@ const ModalBG = styled.div<{ active: boolean }>`
 	flex-direction: column;
 	display: ${props => (props.active ? 'flex' : 'none')};
 	align-items: center;
-	justify-content: center;
+	padding: 6% 0;
 	top: 0;
 	left: 0;
+	overflow: auto;
 	pointer-events: ${props => (props.active ? 'all' : 'none')};
-	]transition: 0.5s;
 	opacity: ${props => (props.active ? 1 : 0)};
 `

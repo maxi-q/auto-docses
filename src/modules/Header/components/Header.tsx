@@ -21,7 +21,7 @@ export const Header = ({ logOut }: IHeader) => {
 			style={{ position: 'absolute', width: '100%' }}
 		>
 			<Container>
-				<Navbar.Brand as={Link} to='/Home'>
+				<Navbar.Brand as={Link} to='/Profile'>
 					AutoDocxOnline
 				</Navbar.Brand>
 				<Navbar.Toggle aria-controls='basic-navbar-nav' />

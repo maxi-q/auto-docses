@@ -24,10 +24,11 @@ const ModalUpdateDocumentD = ({
 	updateTable,
 }: IModalUpdateDocument) => {
 	const [document, setDocument] = useState<IOneDocumentData>()
-	const documentsSerializer = new Documents()
 	const [serverError, setServerError] = useState<
 		Array<{ key: string; errors: Array<string> }>
 	>([])
+
+	const documentsSerializer = new Documents()
 
 	useEffect(() => {
 		documentsSerializer.read({ id: documentId }).then(res => {
@@ -37,8 +38,10 @@ const ModalUpdateDocumentD = ({
 		})
 	}, [documentId])
 
-	const deleteDocument = () => {
-		console.log(`delete ${documentId}`)
+	const deleteDocument = (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		e.preventDefault()
 		setModalStatus('delete')
 	}
 
@@ -96,7 +99,7 @@ const ModalUpdateDocumentD = ({
 					</>
 				))}
 				<ButtonBlock>
-					<Button onClick={deleteDocument}>Удалить</Button>
+					<Button onClick={e => deleteDocument(e)}>Удалить</Button>
 					<Button type='submit'>Изменить</Button>
 				</ButtonBlock>
 			</FormWithValidate>

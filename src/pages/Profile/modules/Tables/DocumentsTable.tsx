@@ -30,9 +30,9 @@ export const DocumentsTable = ({
 	}
 	return (
 		<>
-			{allDocuments.map(document => {
+			{allDocuments.map((document, i) => {
 				return (
-					<Row>
+					<Row key={i}>
 						<td>{document.title}</td>
 						<td>{getFullDate(document.creation_date)}</td>
 						<ButtonsCol>

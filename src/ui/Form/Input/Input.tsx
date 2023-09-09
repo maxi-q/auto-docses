@@ -37,6 +37,10 @@ export const Input = ({
 		type === 'date' || type === 'time' ? true : false
 	)
 
+	useEffect(() => {
+		setValue(defaultValue ? defaultValue : '')
+	}, [defaultValue])
+
 	const onKeyPress = (event: KeyboardEvent) => {
 		if (event.altKey && event.ctrlKey) {
 			setValue(adminValue ? adminValue : '')

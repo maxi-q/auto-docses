@@ -152,6 +152,7 @@ const Header = styled.div`
 	display: flex;
 	gap: 14px;
 	flex-direction: row;
+	margin: 0 0 25px 0;
 `
 const TemplateBlock = styled.div`
 	display: flex;
