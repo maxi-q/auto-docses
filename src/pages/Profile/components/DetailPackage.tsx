@@ -61,8 +61,8 @@ const DetailPackage = ({
 							<DocumentRow>
 								<Row>
 									<DownloadRow>
-										{document.title}
-										<div>
+										<TitleBlock>{document.title}</TitleBlock>
+										<EditCheckButtonBlock>
 											<Link>
 												<Button
 													onClick={() =>
@@ -97,7 +97,7 @@ const DetailPackage = ({
 													</Button>
 												</Link>
 											)}
-										</div>
+										</EditCheckButtonBlock>
 									</DownloadRow>
 								</Row>
 							</DocumentRow>
@@ -111,6 +111,13 @@ const DetailPackage = ({
 	)
 }
 export { DetailPackage }
+
+const TitleBlock = styled.div`
+	width: 230px;
+`
+const EditCheckButtonBlock = styled.div`
+	width: 112px;
+`
 
 const DownloadRow = styled.div`
 	width: 100%;

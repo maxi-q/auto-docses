@@ -6,12 +6,13 @@ import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
 import { lotsSelectToArray } from '../../helpers/lotsSelectToArray'
+import { modalStatusType } from '../../modules/ModalUpdateTemplate'
 
 interface IModalAddTemplate {
 	document: IOneDocumentData
 	addTemplate: Function
 	setModalStatus: React.Dispatch<
-		React.SetStateAction<'check' | 'update' | 'delete' | 'add'>
+		React.SetStateAction<modalStatusType>
 	>
 	updateTable: Function
 }
@@ -27,6 +28,11 @@ const AddTemplateBody = ({
 	const [serverError, setServerError] = useState<
 		Array<{ key: string; errors: Array<string> }>
 	>([])
+
+	const toAddExist = (e: React.MouseEvent<HTMLElement>) => {
+		e.preventDefault()
+		setModalStatus('addExist')
+	}
 
 	const onSubmit = (data: object) => {
 		// Здесь все работает!
@@ -104,6 +110,7 @@ const AddTemplateBody = ({
 				</>
 			))}
 			<Button type='submit'>Добавить шаблон</Button>
+			<Button onClick={toAddExist}>Уже создан?</Button>
 		</FormWithValidate>
 	)
 }

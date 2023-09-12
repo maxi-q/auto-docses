@@ -1,7 +1,9 @@
 import { IDocumentPackageData } from '@api/documents'
 import Records from '@api/records'
-import { Modal } from '@ui/index'
+import { Button, Modal } from '@ui/index'
 import { useEffect, useState } from 'react'
+import { Download } from 'react-bootstrap-icons'
+import styled from 'styled-components'
 
 interface IModalAddTemplate {
 	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
@@ -52,16 +54,55 @@ const ModalDownloadDocument = ({
 
 	return (
 		<Modal setActive={setModalActive} active={modalActive}>
-			{recordId &&
-				links?.map((link, i) => (
-					<div key={i}>
-						{link.title}:{' '}
-						<a onClick={() => downloadDocument(link.url)}> скачать документ</a>{' '}
-						<br />
-					</div>
-				))}
+			<Header>
+				<Title>Скачать</Title>
+			</Header>
+			<Body>
+				{recordId &&
+					links?.map((link, i) => (
+						<DownloadRow key={i}>
+							<div>{link.title}</div>
+							<div>
+								<Link onClick={() => downloadDocument(link.url)}>
+									<Button>{<Download />}</Button>
+								</Link>
+								<br />
+							</div>
+						</DownloadRow>
+					))}
+			</Body>
 		</Modal>
 	)
 }
 
 export { ModalDownloadDocument }
+
+const DownloadRow = styled.div`
+	width: 100%;
+	display: flex;
+	height: min-content;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 0;
+	border-bottom: 1px black solid;
+`
+const Link = styled.a`
+	display: inline-block;
+	margin: 0 0 0 10px;
+	& > button {
+		display: flex;
+	}
+`
+const Header = styled.div`
+	height: 30px;
+	display: flex;
+	flex-direction: column;
+`
+const Title = styled.div`
+	font-size: 22px;
+`
+const Body = styled.div`
+	width: 260px;
+	width: max-content;
+`

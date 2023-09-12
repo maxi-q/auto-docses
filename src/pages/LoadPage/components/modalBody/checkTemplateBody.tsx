@@ -8,17 +8,17 @@ import { useContext, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/esm/Table'
 import styled from 'styled-components'
 import { UserContext } from '../../../../contexts'
+import { modalStatusType } from '../../modules/ModalUpdateTemplate'
 
 interface ICheckTemplateBody {
 	document: IOneDocumentData
-	documentPackage: IDocumentPackageData
+	documentPackage?: IDocumentPackageData
 	setTemplate: React.Dispatch<
 		React.SetStateAction<TemplateInDocumentType | undefined>
 	>
-	setModalStatus: React.Dispatch<
-		React.SetStateAction<'check' | 'update' | 'delete' | 'add'>
-	>
+	setModalStatus: React.Dispatch<React.SetStateAction<modalStatusType>>
 	closeModal: Function
+	authorId: string
 }
 
 const CheckTemplateBody = ({
@@ -27,6 +27,7 @@ const CheckTemplateBody = ({
 	setTemplate,
 	setModalStatus,
 	closeModal,
+	authorId
 }: ICheckTemplateBody) => {
 	const [templates, setTemplates] = useState<Array<TemplateInDocumentType>>()
 	const userContext = useContext(UserContext)
@@ -67,8 +68,8 @@ const CheckTemplateBody = ({
 									<DocumentRow key={i}>
 										<Row>
 											<DownloadRow>
-												{template.title}
-												<div>
+												<TitleBlock>{template.title}</TitleBlock>
+												<EditCheckButtonBlock>
 													<Link>
 														<Button
 															onClick={() => {
@@ -88,7 +89,7 @@ const CheckTemplateBody = ({
 															</svg>
 														</Button>
 													</Link>
-													{userContext?.id == documentPackage.author.id && (
+													{userContext?.id == authorId && (
 														<Link>
 															<Button
 																onClick={() => {
@@ -108,7 +109,7 @@ const CheckTemplateBody = ({
 															</Button>
 														</Link>
 													)}
-												</div>
+												</EditCheckButtonBlock>
 											</DownloadRow>
 										</Row>
 									</DocumentRow>
@@ -126,7 +127,12 @@ const CheckTemplateBody = ({
 }
 
 export { CheckTemplateBody }
-
+const TitleBlock = styled.div`
+	width: 230px;
+`
+const EditCheckButtonBlock = styled.div`
+	width: 112px;
+`
 const ButtonBlock = styled.div`
 	width: 100%;
 	display: flex;

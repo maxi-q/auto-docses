@@ -6,10 +6,11 @@ import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
 import { useState } from 'react'
 import { lotsSelectToArray } from '../../helpers/lotsSelectToArray'
+import { modalStatusType } from '../../modules/ModalUpdateTemplate'
 
 interface IUpdateTemplateBody {
 	setModalStatus: React.Dispatch<
-		React.SetStateAction<'check' | 'update' | 'delete' | 'add'>
+		React.SetStateAction<modalStatusType>
 	>
 	updateTable: Function
 	template: TemplateInDocumentType

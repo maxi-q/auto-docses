@@ -47,7 +47,7 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 		
 		RecordsSerializer.getList().then(res =>
 			res.json().then(data => {
-				setRecords(data)
+				setRecords(data.reverse())
 			})
 		)
 		fetchRequestProfile().then(data => {

@@ -14,6 +14,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { AuthContext, UserContext } from '../../contexts'
 import { FieldNames } from '../../helpers/validator'
 import { Aside, LoadBox } from './components'
+import { ModalUpdateTemplate } from './modules/ModalUpdateTemplate'
 
 type keyInDocumentType = {
 	title: string
@@ -37,10 +38,14 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [keys, setKeys] = useState<Array<keyInDocumentType>>([])
 	const [documentName, setDocumentName] = useState('')
 	const [formAction, setFormAction] = useState('Ждет файл...')
+	const [documentAuthor, setDocumentAuthor] = useState('')
+	const [document, setDocument] = useState<IOneDocumentData>()
+	const [modalActive, setModalActive] = useState(false)
 	const navigate = useNavigate()
 	const params = useParams()
 
 	const authContext = useContext(AuthContext)
+	const userContext = useContext(UserContext)
 
 	const documentId = params.id
 
@@ -93,6 +98,8 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 	const setNowDocument = async (document: IOneDocumentData) => {
 		const nowDocument = document
 		if (!nowDocument) return
+		setDocumentAuthor(nowDocument.author.id)
+		setDocument(nowDocument)
 		const fileUrl = Server_URL + nowDocument?.file
 		if (!fileUrl) return
 		const blob = await fetch(fileUrl).then(r => r.blob())
@@ -147,6 +154,12 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 				console.log(err)
 			})
 	}
+	const addTemplate = () => {
+		setModalActive(true)
+	}
+	const addNewTemplate = (newTemplate: keyInDocumentType) => {
+		setKeys([...keys, newTemplate])
+	}
 
 	useEffect(() => {
 		if (!keys) return
@@ -170,6 +183,13 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 							)
 						})}
 				</FormWithValidate>
+				{userContext?.id == documentAuthor && (
+					<AddTemplateBlock>
+						<AddTemplateButton onClick={addTemplate}>
+							Изменить поля
+						</AddTemplateButton>
+					</AddTemplateBlock>
+				)}
 			</div>
 		)
 		setFormAction('')
@@ -189,6 +209,16 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 
 					<LoadBox viewer={viewer} maxPage={maxPage} />
 				</Worker>
+				{document && (
+					<ModalUpdateTemplate
+						document={document}
+						setModalActive={setModalActive}
+						modalActive={modalActive}
+						addTemplate={addNewTemplate}
+						updateTable={updateTable}
+						authorId={document.author.id}
+					/>
+				)}
 			</LoadPageStyled>
 		</>
 	)

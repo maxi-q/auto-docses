@@ -11,6 +11,8 @@ import Documents, {
 } from '@api/documents'
 import Records from '@api/records'
 import Templates, { ITemplateDataWithValue } from '@api/templates'
+import { fetchRequestProfile } from '@api/user/profileData'
+import { Server_URL } from '@constants/API'
 import { Button, Input } from '@ui/index'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { AuthContext, UserContext } from '../../contexts'
@@ -18,9 +20,6 @@ import { FieldNames } from '../../helpers/validator'
 import { Aside, LoadBox } from './components'
 import { ModalDownloadDocument } from './modules/ModalDownloadDocument'
 import { ModalUpdateTemplate } from './modules/ModalUpdateTemplate'
-import { fetchRequestProfile } from '@api/user/profileData'
-import { getFullDate } from '@helpers/date'
-import { Server_URL } from '@constants/API'
 
 type keyInDocumentType = {
 	title: string
@@ -33,7 +32,6 @@ type NavigationType = {
 	setUser: Function
 	setLoggedIn: Function
 }
-
 
 export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const viewer = useRef<HTMLElement>()
@@ -97,7 +95,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			])
 		})
 		fetchRequestProfile().then(data => {
-			if(data.status == 401) {
+			if (data.status == 401) {
 				setLoggedIn(false)
 			}
 			setUser(data)
@@ -138,7 +136,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const TemplateSerializer = new Templates()
 
 	useEffect(() => {
-		if(!prodId) return
+		if (!prodId) return
 		updateTable()
 	}, [prodId])
 
@@ -147,7 +145,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			.readPackage({ id: prodId || '' })
 			.then(res => {
 				if (res.status == 404) navigate('/Profile')
-				
+
 				res.json().then(async (data: IDocumentPackageData) => {
 					setNowDocument(data)
 
@@ -291,26 +289,26 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 					/>
 
 					<LoadBox viewer={viewer} maxPage={maxPage} />
-
-					{document && documentPackage && (
-						<ModalUpdateTemplate
-							documentPackage={documentPackage}
-							document={document}
-							setModalActive={setModalActive}
-							modalActive={modalActive}
-							addTemplate={addNewTemplate}
-							updateTable={updateTable}
-						/>
-					)}
-					{documentPackage && (
-						<ModalDownloadDocument
-							setModalActive={setDownloadModal}
-							modalActive={downloadModal}
-							documentPackage={documentPackage}
-							recordId={recordId}
-						/>
-					)}
 				</Worker>
+				{document && documentPackage && (
+					<ModalUpdateTemplate
+						documentPackage={documentPackage}
+						document={document}
+						setModalActive={setModalActive}
+						modalActive={modalActive}
+						addTemplate={addNewTemplate}
+						updateTable={updateTable}
+						authorId={documentPackage.author.id}
+					/>
+				)}
+				{documentPackage && (
+					<ModalDownloadDocument
+						setModalActive={setDownloadModal}
+						modalActive={downloadModal}
+						documentPackage={documentPackage}
+						recordId={recordId}
+					/>
+				)}
 			</LoadPageStyled>
 		</>
 	)

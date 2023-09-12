@@ -1,26 +1,30 @@
-import { IOneDocumentData, TemplateInDocumentType } from '@api/documents'
+import Documents, { IOneDocumentData, TemplateInDocumentType } from '@api/documents'
 import Templates from '@api/templates'
 import { Button } from '@ui/index'
 import styled from 'styled-components'
+import { modalStatusType } from '../../modules/ModalUpdateTemplate'
 
 interface IDeleteTemplateBody {
-	setModalStatus: React.Dispatch<
-		React.SetStateAction<'check' | 'update' | 'delete' | 'add'>
-	>
+	setModalStatus: React.Dispatch<React.SetStateAction<modalStatusType>>
 	updateTable: Function
 	template: TemplateInDocumentType
+	document: IOneDocumentData
 }
 
 const DeleteTemplateBody = ({
 	setModalStatus,
 	updateTable,
 	template,
+	document
 }: IDeleteTemplateBody) => {
-	const TemplatesManager = new Templates()
+	const DocumentManager = new Documents()
 
 	const Delete = () => {
-		TemplatesManager.delete({
-			id: template.id,
+		const templates = document.templates.filter(i => i.id != template.id).map(i => i.id)
+
+		DocumentManager.update({
+			id: document.id,
+			templates: templates,
 		}).then(_res => {
 			setModalStatus('check')
 			updateTable()

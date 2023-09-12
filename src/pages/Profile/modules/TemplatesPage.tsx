@@ -6,8 +6,9 @@ import { FormWithValidate } from '@components/FormWithValidate'
 import { COLORS } from '@constants/style/COLORS'
 import { FieldNames } from '@helpers/validator'
 import { Button, Input } from '@ui/index'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { UserContext } from '../../../contexts'
 
 interface IDefaultTemplateWithValues {
 	id: string
@@ -17,6 +18,7 @@ interface IDefaultTemplateWithValues {
 }
 
 const DefaultTemplateValues = () => {
+	const userContext = useContext(UserContext)
 	const [templates, setTemplates] = useState<Array<ITemplateData>>()
 	const [values, setValues] = useState<Array<ITemplateDataWithValue>>()
 	const [defaultTemplateValues, setDefaultTemplateValues] =
@@ -48,14 +50,23 @@ const DefaultTemplateValues = () => {
 			})
 		})
 	}, [])
+	useEffect(() => {
+		console.log(defaultTemplateValues)
+	}, [defaultTemplateValues])
 
 	useEffect(() => {
 		setDefaultTemplateValues(
 			values &&
 				templates?.map((template): IDefaultTemplateWithValues | undefined => {
 					const value = values?.find(value => value.template.id == template.id)
-					console.log(template)
-					if (template.is_official || value?.value) {
+
+					template.author == userContext?.username && console.log(template)
+
+					if (
+						template.is_official ||
+						value?.value ||
+						template.author == userContext?.username
+					) {
 						return {
 							id: value ? value.id : '',
 							template: template,
@@ -113,23 +124,29 @@ const DefaultTemplateValues = () => {
 						defaultTemplateValues.map((template, i) => {
 							if (!template) return
 
-							
-							return (
-								template &&
-								template.template.category == (template.template.is_official ? status : '') && (
-									<FeatureInput key={i}>
-										<KeyLabel>{template.template.title}:</KeyLabel>
-										<Input
-											defaultValue={template.value}
-											field={
-												template.value ? FieldNames.field : FieldNames.mayEmpty
-											}
-											placeholder={''}
-											type='textarea'
-											name={template.template.id}
-										/>
-									</FeatureInput>
+							if (
+								!(
+									template.template.category == status ||
+									(status == 'No official' &&
+										template.template.author == userContext?.username)
 								)
+							) {
+								return
+							}
+
+							return (
+								<FeatureInput key={i}>
+									<KeyLabel>{template.template.title}:</KeyLabel>
+									<Input
+										defaultValue={template.value}
+										field={
+											template.value ? FieldNames.field : FieldNames.mayEmpty
+										}
+										placeholder={''}
+										type='textarea'
+										name={template.template.id}
+									/>
+								</FeatureInput>
 							)
 						})}
 				</TemplateValueBlock>
