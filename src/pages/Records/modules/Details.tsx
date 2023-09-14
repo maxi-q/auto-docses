@@ -2,7 +2,7 @@ import Documents, { IDocumentPackageData } from '@api/documents'
 import Records, { IRecordData } from '@api/records'
 import { getFullDate, getTime } from '@helpers/date'
 import { Button, Modal } from '@ui/index'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Download } from 'react-bootstrap-icons'
 import Table from 'react-bootstrap/esm/Table'
 import styled from 'styled-components'
@@ -28,6 +28,11 @@ const ModalDetails = ({
 
 	const [links, setLinks] = useState<Array<LinkType>>([])
 
+	const [downloadTagAttr, setDownloadTagAttr] = useState<{
+		link: string
+		title: string
+	}>({ link: '', title: '' })
+
 	useEffect(() => {
 		setLinks([])
 
@@ -48,14 +53,21 @@ const ModalDetails = ({
 				})
 		)
 	}, [record])
+	const anchor = useRef<HTMLAnchorElement>(null)
 
-	const downloadDocument = async (link: string) => {
+	const downloadDocument = async (link: string, title: string) => {
 		const documentLink = await RecordsManager.downloadDocument({
 			link: link,
 		})
 
-		window.open(documentLink, '_blank')
+		setDownloadTagAttr({ link: documentLink, title: '' })
+
+		// window.open(documentLink, '', `download=${title}.docx`)
 	}
+
+	useEffect(() => {
+		downloadTagAttr.link && anchor.current?.click()
+	}, [downloadTagAttr])
 
 	return (
 		<Modal setActive={setModalActive} active={modalActive}>
@@ -70,7 +82,7 @@ const ModalDetails = ({
 					<DownloadRow key={i}>
 						<div>{link.title}:</div>
 						<div>
-							<Link onClick={() => downloadDocument(link.url)}>
+							<Link onClick={() => downloadDocument(link.url, link.title)}>
 								<Button>{<Download />}</Button>
 							</Link>
 							<br />
@@ -84,6 +96,14 @@ const ModalDetails = ({
 								{value.template.title}: <Value>{value.value}</Value>
 							</Template>
 						))}
+						{anchor && (
+							<a
+								href={downloadTagAttr.link}
+								download={downloadTagAttr.title}
+								ref={anchor}
+								style={{ display: 'none' }}
+							></a>
+						)}
 					</tbody>
 				</TemplateTable>
 			</Body>

@@ -91,6 +91,7 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		packages: (
 			<PackageData
 				addPackage={addPackage}
+				updateTable={updateTable}
 				documentPackages={documentPackages}
 				setPackageId={setPackageId}
 				packageId={packageId}

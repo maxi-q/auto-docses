@@ -3,6 +3,7 @@ import Records from '@api/records'
 import { Button, Modal } from '@ui/index'
 import { useEffect, useState } from 'react'
 import { Download } from 'react-bootstrap-icons'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 interface IModalAddTemplate {
@@ -51,9 +52,15 @@ const ModalDownloadDocument = ({
 
 		window.open(documentLink, '_blank')
 	}
+	const navigate = useNavigate()
+	const closeModal = () => {
+		console.log('/Profile')
+		setModalActive(false)
+		navigate('/Profile')
+	}
 
 	return (
-		<Modal setActive={setModalActive} active={modalActive}>
+		<Modal setActive={closeModal} active={modalActive}>
 			<Header>
 				<Title>Скачать</Title>
 			</Header>

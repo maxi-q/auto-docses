@@ -39,28 +39,14 @@ const ModalCreateDocumentPackage = ({
 		// Здесь все работает!
 		const sendDocument: any = lotsSelectToArray(data)
 
-		DocumentsManager.create({
-			title: sendDocument.title,
-			description: sendDocument.description,
-			templates: sendDocument.templates,
-			file: sendDocument.file[0],
+		DocumentsManager.createPackage({
+			title: sendDocument.title_package,
+			documents: [],
+		}).then(_ => {
+			updateTable()
+			setModalActive(false)
 		})
-			.then(res => {
-				if (res instanceof Response) {
-					res.json().then(data => {
-						const id = data.id
-						DocumentsManager.createPackage({
-							title: sendDocument.title_package,
-							documents: [id],
-						}).then(_ => {
-							updateTable()
-						})
-					})
-				}
-			})
-			.catch(err => {
-				console.log(err)
-			})
+
 		// Здесь все работает!
 	}
 	return (
@@ -72,7 +58,7 @@ const ModalCreateDocumentPackage = ({
 					type='textarea'
 					name={'title_package'}
 				/>
-				<Input
+				{/* <Input
 					field={FieldNames.field}
 					placeholder={'Файл'}
 					type='file'
@@ -97,9 +83,9 @@ const ModalCreateDocumentPackage = ({
 						name={'templates'}
 						options={templates}
 					/>
-				)}
+				)} */}
 
-				<Button type='submit'>Заполнить документ</Button>
+				<Button type='submit'>Создать пакет</Button>
 			</FormWithValidate>
 		</Modal>
 	)

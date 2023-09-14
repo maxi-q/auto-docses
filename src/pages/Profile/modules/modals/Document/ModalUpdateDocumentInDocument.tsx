@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { lotsSelectToArray } from '../../../../LoadPage/helpers/lotsSelectToArray'
 import { modalStatusTypeInDocument } from '../../DocumentPage'
+import { RedButton } from '@ui/Button/RedButtion'
 
 interface IModalUpdateDocument {
 	documentId: string
@@ -99,7 +100,7 @@ const ModalUpdateDocumentD = ({
 					</>
 				))}
 				<ButtonBlock>
-					<Button onClick={e => deleteDocument(e)}>Удалить</Button>
+					<RedButton onClick={e => deleteDocument(e)}>Удалить</RedButton>
 					<Button type='submit'>Изменить</Button>
 				</ButtonBlock>
 			</FormWithValidate>

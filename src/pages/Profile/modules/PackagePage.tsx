@@ -11,13 +11,15 @@ interface IPackageData {
 	setPackageId: React.Dispatch<React.SetStateAction<string | undefined>>
 	addPackage: () => void
 	packageId: string | undefined
+	updateTable: () => void
 }
 
 export const PackageData = ({
 	documentPackages,
 	setPackageId,
 	addPackage,
-	packageId
+	packageId,
+	updateTable
 }: IPackageData) => {
 	const [modalDetailsActive, setModalDetailsActive] = useState(false)
 	
@@ -37,6 +39,7 @@ export const PackageData = ({
 							documentPackages={documentPackages}
 							setModalDetailsActive={setModalDetailsActive}
 							setPackageId={setPackageId}
+							updateTable={updateTable}
 						/>
 					)}
 				</tbody>

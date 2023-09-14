@@ -92,6 +92,8 @@ class Records {
 	}
 
 	async downloadDocument({ link }: { link: string }) {
+		
+
 		const blob = await fetch(link, {
 			method: 'GET',
 			headers: this.headers,

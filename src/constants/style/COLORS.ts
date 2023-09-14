@@ -31,6 +31,7 @@ export class COLORS {
     static readonly blue700 = '#084298'
     static readonly blue800 = '#052c65'
     static readonly blue900 = '#031633'
+    
     static readonly gos_blue = '#0d4cd3'
     static readonly gos_black = '#0b1f33'
     
@@ -43,4 +44,15 @@ export class COLORS {
     static readonly gray700 = '#495057'
     static readonly gray800 = '#343a40'
     static readonly gray900 = '#212529'
+
+    static readonly red100 = '#f8d7da'
+    static readonly red200 = '#f1aeb5'
+    static readonly red300 = '#ea868f'
+    static readonly red400 = '#e35d6a'
+    static readonly red500 = '#dc3545'
+    static readonly red_bs = '#bb2d3b'
+    static readonly red600 = '#b02a37'
+    static readonly red700 = '#842029'
+    static readonly red800 = '#58151c'
+    static readonly red900 = '#2c0b0e'
 }
