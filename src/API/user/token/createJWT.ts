@@ -20,7 +20,6 @@ export const fetchRequestJWT = async ({
 	username,
 	password,
 }: IRequestJWTData) => {
-	console.log(API_URL)
 	const options = {
 		method: 'POST',
 		headers: new Headers({

@@ -25,7 +25,6 @@ export const DocumentsData = ({
 	setDocumentId,
 	documentId,
 }: IDocumentsData) => {
-	console.log(allDocuments)
 	const [modalUpdateDocument, setModalUpdateDocument] = useState(false)
 	const [document, setDocument] = useState<IOneDocumentData>()
 	const [modalStatus, setModalStatus] =
@@ -33,7 +32,6 @@ export const DocumentsData = ({
 	const documentsSerializer = new Documents()
 
 	useEffect(() => {
-		console.log(documentId)
 		documentId &&
 			documentsSerializer.read({ id: documentId }).then(res => {
 				res.json().then(data => {
@@ -104,7 +102,7 @@ export const DocumentsData = ({
 const AddDocumentButton = styled(ButtonCircle)`
 	width: 80px;
 	height: 80px;
-	font-size: 30px;
+	font-size: 2rem;
 	margin: 0 8px 0 0;
 	position: absolute;
 	bottom: 20px;

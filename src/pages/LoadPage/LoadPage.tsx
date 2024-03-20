@@ -52,6 +52,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	const navigate = useNavigate()
 	const [document, setDocument] = useState<IOneDocumentData>()
 	const [prodId, setProdId] = useState<string | undefined>()
+	const [view, setView] = useState(false)
 	const params = useParams()
 
 	const userContext = useContext(UserContext)
@@ -93,7 +94,9 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 				'header',
 				'toolsHeader',
 			])
+			setDocumentF()
 		})
+
 		fetchRequestProfile().then(data => {
 			if (data.status == 401) {
 				setLoggedIn(false)
@@ -103,6 +106,11 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 	}, [])
 
 	useEffect(() => {
+		setDocumentF()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [url])
+
+	const setDocumentF = () => {
 		if (!url) return
 		if (!instance) return
 
@@ -116,10 +124,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			await documentViewer.getDocument().getDocumentCompletePromise()
 			documentViewer.updateView()
 		})
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [url])
-
+	}
 	const documentsSerializer = new Documents()
 
 	const setNowDocument = async (documentPackage: IDocumentPackageData) => {
@@ -175,7 +180,6 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 							}
 						})
 					)
-
 					setKeys(templateSet)
 				})
 			})
@@ -212,7 +216,6 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 		for (const [key, value] of Object.entries(data)) {
 			templates_values.push({ template: key, value: value })
 		}
-
 		documentPackage &&
 			recordSerializer
 				.create({
@@ -226,9 +229,9 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 						setDownloadModal(true)
 					})
 				})
-
 		SaveTemplateValues(templates_values)
 	}
+
 	const addTemplate = () => {
 		setModalActive(true)
 	}
@@ -286,9 +289,17 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 						saveTemplateValues={saveTemplateValues}
 						onClickCheckBox={onClickCheckBox}
 						checkButton={checkButton}
+						view={view}
+						setView={setView}
 					/>
 
-					<LoadBox viewer={viewer} maxPage={maxPage} />
+					<LoadBox
+						viewer={viewer}
+						maxPage={maxPage}
+						view={view}
+						setView={setView}
+						setDocumentF={setDocumentF}
+					/>
 				</Worker>
 				{document && documentPackage && (
 					<ModalUpdateTemplate
@@ -320,7 +331,7 @@ const LoadPageStyled = styled.div`
 `
 
 const KeyLabel = styled('span')`
-	font-size: 1em;
+	font-size: 1rem;
 	color: #767676;
 `
 const FeatureInput = styled.div`

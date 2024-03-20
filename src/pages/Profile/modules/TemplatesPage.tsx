@@ -30,10 +30,6 @@ const DefaultTemplateValues = () => {
 	>('Main information')
 
 	useEffect(() => {
-		console.log(defaultTemplateValues)
-	}, [defaultTemplateValues])
-
-	useEffect(() => {
 		Template.getList().then(data => {
 			if (data.status == 401) return
 			data.json().then((templatesArray: Array<ITemplateData>) => {
@@ -50,9 +46,6 @@ const DefaultTemplateValues = () => {
 			})
 		})
 	}, [])
-	useEffect(() => {
-		console.log(defaultTemplateValues)
-	}, [defaultTemplateValues])
 
 	useEffect(() => {
 		setDefaultTemplateValues(
@@ -60,7 +53,7 @@ const DefaultTemplateValues = () => {
 				templates?.map((template): IDefaultTemplateWithValues | undefined => {
 					const value = values?.find(value => value.template.id == template.id)
 
-					template.author == userContext?.username && console.log(template)
+					template.author == userContext?.username
 
 					if (
 						template.is_official ||
@@ -194,6 +187,6 @@ const ClickedLink = styled.h6<{ active?: boolean }>`
 	height: 24px;
 	color: ${p => (p.active ? `${COLORS.gos_black}` : `${COLORS.gos_blue}`)};
 
-	font-size: 16px;
+	font-size: 1rem;
 	font-weight: 400;
 `

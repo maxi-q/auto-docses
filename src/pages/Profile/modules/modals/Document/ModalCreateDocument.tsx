@@ -80,6 +80,7 @@ const ModalCreateDocument = ({
 					placeholder={'Файл'}
 					type='file'
 					name={'file'}
+					accept={".docx"}
 				/>
 				<Input
 					field={FieldNames.field}

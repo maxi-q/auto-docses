@@ -16,6 +16,7 @@ type InputType = {
 	field: FieldNames
 	type?: string
 	adminValue?: string
+	accept?: string
 }
 type indefiniteInputType = {
 	type: string
@@ -90,7 +91,7 @@ export const Input = ({
 }
 
 export const ErrorInput = styled.span`
-	font-size: 16px;
+	font-size: 1.2rem;
 	margin: -10px 0 -5px 10px;
 	color: red;
 	white-space: pre-line;

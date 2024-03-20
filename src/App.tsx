@@ -12,7 +12,6 @@ import { AuthContext, UserContext } from './contexts'
 import { getFullDate } from '@helpers/date'
 
 export function App() {
-	const [background, setBackground] = useState('')
 	const [loggedIn, setLoggedIn] = useState<Boolean>(false)
 	const [user, setUser] = useState<IUser | undefined>()
 
@@ -34,16 +33,20 @@ export function App() {
 					}
 					setUser(data)
 				})
+				.catch(_ => {
+					setLoggedIn(false)
+				})
 		}else {
 			setLoggedIn(false)
 		}
 	}, [])
+
 	return (
 		<AuthContext.Provider value={loggedIn}>
 			<UserContext.Provider value={user}>
 				<BrowserRouter>
 					<Header logOut={logOut} />
-					<MainStyled background={background}>
+					<MainStyled>
 						<Navigation setLoggedIn={setLoggedIn} setUser={setUser} />
 					</MainStyled>
 					<Footer />
@@ -53,8 +56,7 @@ export function App() {
 	)
 }
 
-const MainStyled = styled.div<{ background: string }>`
-	background-color: ${props => props.background};
+const MainStyled = styled.div`
 	& > * {
 		padding-top: 62px;
 	}

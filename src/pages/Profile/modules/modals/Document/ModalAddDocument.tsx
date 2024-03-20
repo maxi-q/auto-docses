@@ -46,9 +46,6 @@ const ModalAddDocument = ({
 		const id = sendDocument.ids
 
 		if (!packageId) return
-		console.log([...(documentsId ? documentsId : [])])
-		console.log('packageDocuments', packageDocuments)
-
 		await DocumentsManager.updatePackage({
 			id: packageId,
 			documents: [...id],

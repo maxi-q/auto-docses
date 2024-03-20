@@ -1,7 +1,6 @@
-import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 
 import { Authorization, Registration } from './Authorization'
-import { DocumentPage } from './DocumentPage'
 import { LoadPage } from './LoadPage'
 import ViewDocument from './LoadPage/ViewDocument'
 import { Main } from './Main'
@@ -20,6 +19,7 @@ type NavigationType = {
 }
 
 export const Navigation = (props: NavigationType) => {
+
 	return (
 		<Routes>
 			<Route path='Auth' element={<Authorization {...props} />} />
@@ -36,23 +36,7 @@ export const Navigation = (props: NavigationType) => {
 			<Route path='Profile' element={<Profile {...props} />} />
 			<Route path='Records' element={<RecordsPage {...props} />} />
 
-			<Route path='document' element={<DocumentPage />}>
-				<Route path=':id' element={<GetParam />} />
-			</Route>
 			<Route path='*' element={<Navigate to={'/Profile'} />} />
 		</Routes>
 	)
 }
-
-// export const routesMap = [
-// { path: '/accesso/done', route: routes.accesso.done },
-// { path: '/card/new', route: routes.card.create },
-// { path: '/card/:cardId/edit', route: routes.card.edit },
-// { path: '/card/:cardId', route: routes.card.view },
-// { path: '/', route: routes.home },
-// { path: '/search', route: routes.search.results },
-// { path: '/test/comments', route: routes.test.comments },
-// { path: '/u/:username', route: routes.user.view },
-// ];
-
-// export const notFoundRoute = routes.errors.notFound;

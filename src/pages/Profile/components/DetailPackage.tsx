@@ -137,7 +137,7 @@ const Header = styled.div`
 	flex-direction: column;
 `
 const Title = styled.div`
-	font-size: 22px;
+	font-size: 1.2rem;
 `
 const Body = styled.div`
 	margin-top: 20px;

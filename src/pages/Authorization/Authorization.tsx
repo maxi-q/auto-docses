@@ -104,7 +104,6 @@ export const EmailConfirm = ({
 
 	const navigate = useNavigate()
 
-
 	const onSubmit = async (data: Object) => {
 		if ('confirmation_code' in data) {
 			fetchConfirmEmail({
@@ -159,7 +158,6 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 		})
 	}, [])
 
-
 	const onSubmit = async (data: Object) => {
 		if ('username' in data && 'password' in data) {
 			fetchRequestJWT({
@@ -175,6 +173,8 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 						setServerError(ServerSetError(err))
 					})
 				}
+			}).catch((err) => {
+				throw new Error(err)
 			})
 		}
 	}

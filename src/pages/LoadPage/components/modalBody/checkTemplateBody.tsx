@@ -38,10 +38,6 @@ const CheckTemplateBody = ({
 		setTemplates(_templates)
 	}, [document])
 
-	useEffect(() => {
-		console.log(templates)
-	}, [templates])
-
 	const changeTemplate = (templateId: string) => {
 		setTemplate(templates?.find(x => x.id == templateId))
 		setModalStatus('update')
@@ -61,7 +57,7 @@ const CheckTemplateBody = ({
 			</Header>
 			<Body>
 				<Table style={{ width: '360px' }}>
-					<tbody>
+					<div>
 						{templates &&
 							templates.map((template, i) => {
 								return (
@@ -115,7 +111,7 @@ const CheckTemplateBody = ({
 									</DocumentRow>
 								)
 							})}
-					</tbody>
+					</div>
 				</Table>
 				<ButtonBlock>
 					<Button onClick={addTemplate}>Добавить шаблон</Button>
@@ -147,7 +143,7 @@ const DownloadRow = styled.div`
 	justify-content: space-between;
 	align-items: center;
 `
-const Row = styled.th`
+const Row = styled.div`
 	padding-left: '0';
 	width: 360px;
 `
@@ -157,7 +153,7 @@ const Header = styled.div`
 	flex-direction: column;
 `
 const Title = styled.div`
-	font-size: 22px;
+	font-size: 1.2rem;
 `
 const Body = styled.div`
 	margin-top: 20px;

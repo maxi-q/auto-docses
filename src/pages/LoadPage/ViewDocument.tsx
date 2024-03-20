@@ -40,6 +40,7 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [formAction, setFormAction] = useState('Ждет файл...')
 	const [documentAuthor, setDocumentAuthor] = useState('')
 	const [document, setDocument] = useState<IOneDocumentData>()
+	const [view, setView] = useState(false)
 	const [modalActive, setModalActive] = useState(false)
 	const navigate = useNavigate()
 	const params = useParams()
@@ -77,7 +78,7 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 		})
 	}, [])
 
-	useEffect(() => {
+	const setDocumentF = () => {
 		if (!url) return
 		if (!instance) return
 
@@ -91,6 +92,9 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 			await documentViewer.getDocument().getDocumentCompletePromise()
 			documentViewer.updateView()
 		})
+	}
+	useEffect(() => {
+		setDocumentF()
 	}, [url])
 
 	const documentsSerializer = new Documents()
@@ -205,9 +209,17 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 						documentName={documentName}
 						formAction={formAction}
 						FormWithFills={FormWithFills}
+						view={view}
+						setView={setView}
 					/>
 
-					<LoadBox viewer={viewer} maxPage={maxPage} />
+					<LoadBox
+						viewer={viewer}
+						maxPage={maxPage}
+						view={view}
+						setView={setView}
+						setDocumentF={setDocumentF}
+					/>
 				</Worker>
 				{document && (
 					<ModalUpdateTemplate

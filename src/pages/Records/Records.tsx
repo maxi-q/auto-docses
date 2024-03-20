@@ -39,12 +39,8 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	const [record, setRecord] = useState<IRecordData>()
 	const [detailModal, setDetailModal] = useState(false)
-	useEffect(() => {
-		console.log(records)
-	}, [records])
 
 	useEffect(() => {
-		
 		RecordsSerializer.getList().then(res =>
 			res.json().then(data => {
 				setRecords(data.reverse())

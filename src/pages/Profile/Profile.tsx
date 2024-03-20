@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useContext, useEffect, useState } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
 import Documents, {
@@ -10,6 +10,7 @@ import { fetchRequestProfile } from '@api/user/profileData'
 
 import { fetchVerifyJWT } from '@api/user/token/verifyJWT'
 import { COLORS } from '@constants/style/COLORS'
+import { AuthContext } from '../../contexts'
 import { DocumentsData } from './modules/DocumentPage'
 import { PackageData } from './modules/PackagePage'
 import { ProfileData } from './modules/ProfilePage'
@@ -39,6 +40,7 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	const navigate = useNavigate()
 	const documentsSerializer = new Documents()
+	const authContext = useContext(AuthContext)
 
 	useEffect(() => {
 		updateTable()
@@ -53,7 +55,6 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		})
 		fetchRequestProfile().then(user => {
 			setUser(user)
-
 			documentsSerializer
 				.getPackagesList({ authorId: user.username })
 				.then(res => {
@@ -101,12 +102,14 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 	}
 	return (
 		<Body>
+			{!authContext && <Navigate to={'/Auth'} />}
 			<Main>
 				<Info>
 					<Title>Профиль</Title>
 					<ClickedLink
 						onClick={() => setPageState('profile')}
 						active={pageState == 'profile'}
+						style={{ marginLeft: 0 }}
 					>
 						Учётная запись
 					</ClickedLink>
@@ -148,31 +151,34 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		</Body>
 	)
 }
-const MyTemplates = styled.div`
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	flex: 1;
-`
 const ClickedLink = styled.h6<{ active?: boolean }>`
 	cursor: pointer;
-	margin: 30px 0;
 	color: ${p => (p.active ? `${COLORS.gos_black}` : `${COLORS.gos_blue}`)};
-
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 24px;
 	font-weight: 400;
 `
 
-const Info = styled.div``
+const Info = styled.div`
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 15px;
+	@media (min-width: 992px) {
+		align-items: start;
+		flex-direction: column;
+	}
+`
 
 const Main = styled.div`
 	padding: 45px 15px 15px 15px;
-	width: 30%;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+
+	@media (min-width: 992px) {
+		width: 30%;
+	}
 `
 const MainTable = styled.div`
 	min-height: 30px;
@@ -182,27 +188,20 @@ const MainTable = styled.div`
 `
 const Body = styled.div`
 	background-color: transparent;
-	height: 100vh;
+	min-height: 100vh;
 	display: flex;
 	width: 100%;
+	flex-direction: column;
 	padding: 0 0 0 5%;
+	@media (min-width: 992px) {
+		flex-direction: row;
+	}
 `
-const Title = styled.h2``
-
-{
-	/* <Aside />
-			<TableBlock>
-				<Title>Документы</Title>
-				<MTable striped>
-					<thead>
-						<tr>
-							<th>Имя</th>
-							<th>Дата изменения</th>
-						</tr>
-					</thead>
-					<tbody>
-						<Rows />
-					</tbody>
-				</MTable>
-			</TableBlock> */
-}
+const Title = styled.h2`
+	flex: auto;
+	width: 100%;
+	margin-right: 15px;
+	@media (min-width: 768px) {
+		flex: 0;
+	}
+`

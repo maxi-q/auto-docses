@@ -42,9 +42,6 @@ const ModalUpdateTemplate = ({
 	const returnCheck = () => {
 		setModalStatus('check')
 	}
-	useEffect(() => {
-		console.log(modalStatus, template)
-	}, [template, modalStatus])
 
 	return (
 		<Modal

@@ -26,7 +26,7 @@ export const Main = () => {
   )
 }
 const Title = styled.h1`
-  font-size: 20px;
+  font-size: 1.2rem;
 `
 const Text = styled.p`
 

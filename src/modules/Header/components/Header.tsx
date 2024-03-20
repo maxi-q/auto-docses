@@ -12,6 +12,7 @@ interface IHeader {
 
 export const Header = ({ logOut }: IHeader) => {
 	const authContext = useContext(AuthContext)
+
 	return (
 		<Navbar
 			as='header'
@@ -24,7 +25,20 @@ export const Header = ({ logOut }: IHeader) => {
 				<Navbar.Brand as={Link} to='/Profile'>
 					AutoDocxOnline
 				</Navbar.Brand>
-				<Navbar.Toggle aria-controls='basic-navbar-nav' />
+				<Navbar.Toggle aria-controls='basic-navbar-nav'>
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='16'
+						height='16'
+						fill='currentColor'
+						className='bi bi-list'
+					>
+						<path
+							fill-rule='evenodd'
+							d='M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5'
+						/>
+					</svg>
+				</Navbar.Toggle>
 				<Navbar.Collapse id='basic-navbar-nav'>
 					<Nav className='me-auto'>
 						<Nav.Link as={Link} to='/Records'>

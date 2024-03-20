@@ -1,35 +1,41 @@
-import styled, { StyledInterface } from 'styled-components'
+import { Button } from '@ui/Button'
+import styled from 'styled-components'
 
-
-interface IAside { 
+interface IAside {
+	view: boolean
 	documentPackageName?: string
 	documentName: string
 	formAction: string
 	FormWithFills: React.ReactNode
 	saveTemplateValues?: boolean
 	onClickCheckBox?: () => void
-	checkButton?: React.MutableRefObject<HTMLInputElement | null> 
+	setView: (p: boolean) => void
+	checkButton?: React.MutableRefObject<HTMLInputElement | null>
 }
 export const Aside = (props: IAside) => {
 	return (
 		<>
-			<AsideStyled>
+			<AsideStyled view={props.view}>
 				<Title>{props.documentPackageName}</Title>
 				<Title>{props.documentName}</Title>
-				<Spacer />
+				<ViewButton onClick={() => props.setView(true)}>
+					Просмотреть документ
+				</ViewButton>
 				<Spacer />
 				<StatusLoadKeys id='key-val-title'>{props.formAction}</StatusLoadKeys>
 
 				{props.FormWithFills}
-				{props.checkButton && <UpdateValues>
-					обновить данные по умолчанию?{' '}
-					<input
-						type='checkbox'
-						ref={props.checkButton}
-						checked={props.saveTemplateValues}
-						onClick={props.onClickCheckBox}
-					/>
-				</UpdateValues>}
+				{props.checkButton && (
+					<UpdateValues>
+						обновить данные по умолчанию?{' '}
+						<input
+							type='checkbox'
+							ref={props.checkButton}
+							checked={props.saveTemplateValues}
+							onClick={props.onClickCheckBox}
+						/>
+					</UpdateValues>
+				)}
 			</AsideStyled>
 		</>
 	)
@@ -38,13 +44,24 @@ export const Aside = (props: IAside) => {
 const UpdateValues = styled.div`
 	margin: 1% 0 0 0;
 `
-const AsideStyled = styled('aside')`
+const ViewButton = styled(Button)`
+	@media (min-width: 576px) {
+		display: none;
+	}
+`
+const AsideStyled = styled('aside')<{ view: boolean }>`
 	padding: 16px 16px 0 24px;
 	line-height: 25px;
-	width: 288px;
+	width: 100%;
 	height: 100vh;
 	font-size: 0.9em;
 	overflow-y: auto;
+	display: ${props => (props.view ? 'none' : 'block')};
+
+	@media (min-width: 576px) {
+		display: block;
+		width: 288px;
+	}
 `
 const Title = styled.h2`
 	margin-bottom: 0;
@@ -65,7 +82,7 @@ const ActionLabel = styled.p`
 	margin-bottom: 25px;
 `
 const Spacer = styled.div`
-	height: 9px;
+	height: 18px;
 `
 const FileStatus = styled('span')`
 	margin-left: 10px;

@@ -62,7 +62,7 @@ flex-direction: column;
 `
 const Title = styled.h5``
 const Confirm = styled.span`
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 24px;
 	font-weight: 400;
 	color: #66727f;
@@ -74,7 +74,7 @@ const FieldBox = styled.div`
 const ClickedLink = styled.h6`
 	cursor: pointer;
 	color: ${COLORS.gos_blue};
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 24px;
 	font-weight: 400;
 

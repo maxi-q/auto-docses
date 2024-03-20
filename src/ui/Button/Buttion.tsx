@@ -1,16 +1,20 @@
-import { MouseEventHandler, ReactNode } from 'react'
+import { MouseEventHandler, ReactNode, TouchEventHandler } from 'react'
 import styled from 'styled-components'
 
 import { COLORS } from '../../constants/style/COLORS'
 
 type ButtonType = {
 	children: ReactNode
-  onClick?: MouseEventHandler<HTMLButtonElement>
-	type?: "button" | "submit" | "reset" | undefined
+	onClick?: MouseEventHandler<HTMLButtonElement>
+	type?: 'button' | 'submit' | 'reset' | undefined
 }
 
 export const Button = ({ children, onClick, type, ...props }: ButtonType) => {
-	return <SButton onClick={onClick} type={type} {...props}>{children}</SButton>
+	return (
+		<SButton onClick={onClick} type={type} {...props}>
+			{children}
+		</SButton>
+	)
 }
 
 const SButton = styled.button`

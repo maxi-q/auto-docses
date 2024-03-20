@@ -38,7 +38,7 @@ export const Aside = () => {
 
 const ButtonM = styled(Button)`
 	margin: 0 0 25px 15px;
-	font-size: 16px;
+	font-size: 1rem;
 
 	background-color: ${COLORS.blue300};
 	color: ${COLORS.blue700};

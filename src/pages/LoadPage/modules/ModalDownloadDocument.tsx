@@ -54,7 +54,6 @@ const ModalDownloadDocument = ({
 	}
 	const navigate = useNavigate()
 	const closeModal = () => {
-		console.log('/Profile')
 		setModalActive(false)
 		navigate('/Profile')
 	}
@@ -71,7 +70,10 @@ const ModalDownloadDocument = ({
 							<div>{link.title}</div>
 							<div>
 								<Link onClick={() => downloadDocument(link.url)}>
-									<Button>{<Download />}</Button>
+									<Button>
+										{' '}
+										<Download />{' '}
+									</Button>
 								</Link>
 								<br />
 							</div>
@@ -107,7 +109,7 @@ const Header = styled.div`
 	flex-direction: column;
 `
 const Title = styled.div`
-	font-size: 22px;
+	font-size: 1.2rem;
 `
 const Body = styled.div`
 	width: 260px;

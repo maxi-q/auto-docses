@@ -119,10 +119,10 @@ const Header = styled.div`
 	flex-direction: column;
 `
 const Title = styled.div`
-	font-size: 22px;
+	font-size: 1.2rem;
 `
 const Value = styled.span`
-	font-size: 12px;
+	font-size: .8rem;
 `
 const TemplateTable = styled(Table)`
 	width: 360px;

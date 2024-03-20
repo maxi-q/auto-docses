@@ -23,9 +23,8 @@ export const fetchRequestProfile =
 				Authorization: `Bearer ${access}`,
 			}),
 		}
-
 		const response = await fetch(API_URL + 'users/me/', options)
-
+		
 		const data: IRequestProfileCallbackData = await response.json()
 		if (response.status == 401) {
 			return { status: 401, ...data }

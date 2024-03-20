@@ -34,7 +34,6 @@ export const LotsSelect = ({
 	const [arr, setArr] = useState(value ? value : [''])
 
 	const onChange = (object: HTMLInputElement, index: number) => {
-		console.log(object, index)
 		const temp = [...arr]
 		temp[index] = object.value
 		setArr(temp)
