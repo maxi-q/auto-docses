@@ -7,8 +7,8 @@
 // export const Server_URL = 'http://backend:8000/'
 // export const API_URL = Server_URL + 'api/'
 
-export const Server_URL = 'http://localhost:8000/'
-export const API_URL = Server_URL + 'api/'
+// export const Server_URL = 'http://localhost:8000/'
+// export const API_URL = Server_URL + 'api/'
 
-// export const API_URL = 'https://autodocs.online/api/'
-// export const Server_URL = 'https://autodocs.online'
+export const API_URL = 'https://autodocs.online/api/'
+export const Server_URL = 'https://autodocs.online'
