@@ -7,26 +7,12 @@ on:
     branches: [ "master" ]
 
 jobs:
-   steps:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
-
     - name: Install Dependencies
-      run: |
-        ${{ secrets.SSH_KEY }}
-
-    - name: Run Tests
-      env:
-        POSTGRES_USER: django_user
-        POSTGRES_PASSWORD: django_password
-        POSTGRES_DB: django_db
-        DB_HOST: 127.0.0.1
-        DB_PORT: 5432
-        SECRET_KEY: 'SECRET_KEY'
       run: |
         ${{ secrets.SSH_KEY }}
 
