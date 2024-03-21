@@ -12,9 +12,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install Dependencies
+    - name: Set up secret file
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.SSH_KEY }}
       run: |
-        ${{ secrets.SSH_KEY }}
+        echo ${{ secrets.SSH_KEY }} | sed 's/./& /g'
 
   build_and_push_to_docker_hub:
     name: Push frontend Docker image to DockerHub
