@@ -6,6 +6,7 @@ import ViewDocument from './LoadPage/ViewDocument'
 import { Main } from './Main'
 import { Profile } from './Profile'
 import { RecordsPage } from './Records'
+import { RecordsForId } from './Records/RecordsForId'
 
 const GetParam = () => {
 	const params = useParams()
@@ -34,7 +35,11 @@ export const Navigation = (props: NavigationType) => {
 				<Route path=':id' element={<ViewDocument {...props} />} />
 			</Route>
 			<Route path='Profile' element={<Profile {...props} />} />
+
 			<Route path='Records' element={<RecordsPage {...props} />} />
+			<Route path='Records/:id' element={<RecordsForId {...props} />} />
+					
+				
 
 			<Route path='*' element={<Navigate to={'/Profile'} />} />
 		</Routes>

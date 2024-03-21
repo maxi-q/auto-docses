@@ -40,6 +40,11 @@ interface IGetDownloadLink {
 	record_id: string
 	document_id: string
 }
+
+interface IGetPackageList { 
+	documents_package_id: string
+}
+
 import { API_URL } from '@constants/API'
 
 class Records {
@@ -54,6 +59,12 @@ class Records {
 
 	getList() {
 		return fetch(this.API_URL + 'records/', {
+			method: 'GET',
+			headers: this.headers,
+		})
+	}
+	getPackageList({ documents_package_id }: IGetPackageList) {
+		return fetch(this.API_URL + `records/documents_package/${documents_package_id}/`, {
 			method: 'GET',
 			headers: this.headers,
 		})

@@ -12,6 +12,12 @@ interface IModalUpdateDocument {
 	modalActive: boolean
 	record: IRecordData
 }
+interface IModalUpdateDocumentG {
+	setModalActive: React.Dispatch<React.SetStateAction<boolean>>
+	modalActive: boolean
+	record: IRecordData
+	nowPackage:IDocumentPackageData
+}
 
 type LinkType = {
 	url: string
@@ -25,6 +31,7 @@ const ModalDetails = ({
 }: IModalUpdateDocument) => {
 	const RecordsManager = new Records()
 	const DocumentsManager = new Documents()
+	console.log('i', record)
 
 	const [links, setLinks] = useState<Array<LinkType>>([])
 
@@ -111,7 +118,102 @@ const ModalDetails = ({
 	)
 }
 
-export { ModalDetails }
+const ModalDetailsGovno = ({
+	setModalActive,
+	modalActive,
+	record,
+	nowPackage
+}: IModalUpdateDocumentG) => {
+	const RecordsManager = new Records()
+	const DocumentsManager = new Documents()
+	console.log('m', record)
+
+	const [links, setLinks] = useState<Array<LinkType>>([])
+
+	const [downloadTagAttr, setDownloadTagAttr] = useState<{
+		link: string
+		title: string
+	}>({ link: '', title: '' })
+
+	useEffect(() => {
+		setLinks([])
+		DocumentsManager.readPackage({ id: nowPackage.id }).then(
+			res =>
+				res.json().then((data: IDocumentPackageData) => {
+					setLinks(
+						data.documents.map(document => {
+							return {
+								url: RecordsManager.getDownloadLink({
+									record_id: record.id,
+									document_id: document.id,
+								}),
+								title: document.title,
+							}
+						})
+					)
+				})
+		)
+	}, [record])
+
+	const anchor = useRef<HTMLAnchorElement>(null)
+
+	const downloadDocument = async (link: string, title: string) => {
+		const documentLink = await RecordsManager.downloadDocument({
+			link: link,
+		})
+
+		setDownloadTagAttr({ link: documentLink, title: '' })
+
+		// window.open(documentLink, '', `download=${title}.docx`)
+	}
+
+	useEffect(() => {
+		downloadTagAttr.link && anchor.current?.click()
+	}, [downloadTagAttr])
+
+	return (
+		<Modal setActive={setModalActive} active={modalActive}>
+			<Header>
+				<Title>{nowPackage.title}</Title>
+				<div>
+					{getFullDate(record.creation_date)} {getTime(record.creation_date)}
+				</div>
+			</Header>
+			<Body>
+				{links?.map((link, i) => (
+					<DownloadRow key={i}>
+						<div>{link.title}:</div>
+						<div>
+							<Link onClick={() => downloadDocument(link.url, link.title)}>
+								<Button>{<Download />}</Button>
+							</Link>
+							<br />
+						</div>
+					</DownloadRow>
+				))}
+				<TemplateTable>
+					<tbody>
+						{record.templates_values.map(value => (
+							<Template>
+								{value.template.title}: <Value>{value.value}</Value>
+							</Template>
+						))}
+						{anchor && (
+							<a
+								href={downloadTagAttr.link}
+								download={downloadTagAttr.title}
+								ref={anchor}
+								style={{ display: 'none' }}
+							></a>
+						)}
+					</tbody>
+				</TemplateTable>
+			</Body>
+		</Modal>
+	)
+}
+
+export { ModalDetails, ModalDetailsGovno }
 
 const Header = styled.div`
 	height: 50px;

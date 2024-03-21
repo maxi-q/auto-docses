@@ -1,17 +1,14 @@
-import Documents, {
-	IDocumentPackageData,
-	IOneDocumentData,
-} from '@api/documents'
+import Documents, { IDocumentPackageData, IOneDocumentData } from '@api/documents'
 import Records, { IRecordData } from '@api/records'
+import { fetchRequestProfile } from '@api/user/profileData'
 import { getFullDate } from '@helpers/date'
 import { Button } from '@ui/Button'
-import { useEffect, useState, useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
+import { Navigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { ModalDetails } from './modules/Details'
 import { AuthContext } from '../../contexts'
-import { Navigate } from 'react-router-dom'
-import { fetchRequestProfile } from '@api/user/profileData'
+import { ModalDetails, ModalDetailsGovno } from './modules/Details'
 
 type authorType = {
 	id: string
@@ -30,23 +27,33 @@ type NavigationType = {
 	setLoggedIn: Function
 }
 
-export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
+export const RecordsForId = ({ setUser, setLoggedIn }: NavigationType) => {
 	const [records, setRecords] = useState<Array<IRecordData>>()
-
+	const params = useParams()
+	const packageId = params.id
 	const RecordsSerializer = new Records()
+	const DocumentsSerializer = new Documents()
+
 	const authContext = useContext(AuthContext)
 
 	const [record, setRecord] = useState<IRecordData>()
+	const [nowPackage, setNowPackage] = useState<IDocumentPackageData>()
 	const [detailModal, setDetailModal] = useState(false)
-
+	
 	useEffect(() => {
-		RecordsSerializer.getList().then(res =>
-			res.json().then(data => {
-				console.log(data)
-				setRecords(data.reverse())
-			})
+		if (!packageId) return
+		RecordsSerializer.getPackageList({ documents_package_id: packageId }).then(
+			res =>
+				res.json().then((data) => {
+					setRecords(data.reverse())
+				})
 		)
-		
+		DocumentsSerializer.readPackage({id: packageId}).then(
+			res =>
+				res.json().then((data) => {
+					setNowPackage(data)
+				})
+		)
 		fetchRequestProfile().then(data => {
 			if (data.status == 401) {
 				setLoggedIn(false)
@@ -64,11 +71,11 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			{!authContext && <Navigate to={'/Auth'} />}
 			<MainTable>
 				<tbody>
-					{records?.map(oneRecord => {
+					{nowPackage && records?.map(oneRecord => {
 						return (
 							<tr>
 								<th>{getFullDate(oneRecord.creation_date)}</th>
-								<th>{oneRecord.documents_package.title}</th>
+								<th>{nowPackage.title}</th>
 								<th>
 									<Button onClick={() => changeDetailModal(oneRecord.id)}>
 										Детали
@@ -79,11 +86,12 @@ export const RecordsPage = ({ setUser, setLoggedIn }: NavigationType) => {
 					})}
 				</tbody>
 			</MainTable>
-			{record && (
-				<ModalDetails
+			{record && nowPackage && (
+				<ModalDetailsGovno
 					setModalActive={setDetailModal}
 					modalActive={detailModal}
 					record={record}
+					nowPackage={nowPackage}
 				/>
 			)}
 		</Body>

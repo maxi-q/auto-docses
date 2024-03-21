@@ -3,7 +3,7 @@ import { COLORS } from '@constants/style/COLORS'
 import { ChangeDocument } from '@helpers/navigation'
 import { Button } from '@ui/Button'
 import { RedButton } from '@ui/Button/RedButtion'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 interface IDocumentTable {
@@ -16,15 +16,20 @@ export const PackageTable = ({
 	documentPackages,
 	setPackageId,
 	setModalDetailsActive,
-	updateTable
+	updateTable,
 }: IDocumentTable) => {
 	const navigate = useNavigate()
+
 
 	const DocumentsSerializer = new Documents()
 	const deletePackage = (id: string) => {
 		DocumentsSerializer.deletePackage({ id: id })
 		updateTable()
 	}
+	const OpenRecords = (packageId: string) => {
+		navigate(`/Records/${packageId}`)
+	}
+
 	return (
 		<>
 			{documentPackages &&
@@ -49,6 +54,13 @@ export const PackageTable = ({
 										}}
 									>
 										Заполнить
+									</Button>
+									<Button
+										onClick={() => {
+											 OpenRecords(documentPackage.id)
+										}}
+									>
+										Данные
 									</Button>
 									<RedButton
 										onClick={() => {
