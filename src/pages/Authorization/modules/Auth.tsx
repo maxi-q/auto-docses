@@ -31,7 +31,7 @@ export const AuthWindow = ({ onSubmit, serverError }: IAuthWindow) => {
 					placeholder='Пароль'
 					field={FieldNames.password}
 				/>
-				<RButton>Войти</RButton>
+				<button className='btn btn-primary'>Войти</button>
 			</FormWithValidate>
 			{serverError.map(x => (
 				<>

@@ -20,7 +20,8 @@ export const EmailWindow = ({ onSubmit, serverError }: IAuthWindow) => {
 					placeholder='Код'
 					field={FieldNames.field}
 				/>
-				<RButton>Подтвердить</RButton>
+				<button className='btn btn-primary'>Подтвердить</button>
+
 			</FormWithValidate>
 			{serverError.map(x => (
 				<>

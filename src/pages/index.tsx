@@ -1,5 +1,7 @@
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
 
+import { Loader } from '@components/Loader/Loader'
+import { useEffect } from 'react'
 import { Authorization, Registration } from './Authorization'
 import { LoadPage } from './LoadPage'
 import ViewDocument from './LoadPage/ViewDocument'
@@ -20,7 +22,6 @@ type NavigationType = {
 }
 
 export const Navigation = (props: NavigationType) => {
-
 	return (
 		<Routes>
 			<Route path='Auth' element={<Authorization {...props} />} />
@@ -38,10 +39,23 @@ export const Navigation = (props: NavigationType) => {
 
 			<Route path='Records' element={<RecordsPage {...props} />} />
 			<Route path='Records/:id' element={<RecordsForId {...props} />} />
-					
-				
+
+			<Route path='logout' element={<Logout {...props} />} />
 
 			<Route path='*' element={<Navigate to={'/Profile'} />} />
 		</Routes>
 	)
+}
+
+const Logout = ({ setLoggedIn }: NavigationType) => {
+	const navigate = useNavigate()
+	useEffect(() => {
+		localStorage.setItem('access', '')
+		setTimeout(() => {
+			setLoggedIn(false)
+			navigate('Auth')
+		}, 300)
+	})
+
+	return <Loader classNameDiv='my-5'/>
 }

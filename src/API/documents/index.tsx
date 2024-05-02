@@ -29,6 +29,8 @@ export type TemplateInDocumentType = {
 	description: string
 	is_official: boolean
 	name_in_document: string
+	regex: string
+	example_value: string
 }
 
 export interface IOneDocumentData {
@@ -111,7 +113,7 @@ class Documents {
 			body: JSON.stringify({
 				title: title,
 				description: description,
-				templates: templates,
+				templates: templates || [],
 				file: base64text,
 			}),
 		})

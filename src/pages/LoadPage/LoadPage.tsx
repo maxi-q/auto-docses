@@ -26,6 +26,8 @@ type keyInDocumentType = {
 	name_in_document: string
 	id: string
 	value: string
+	regex: string
+	example_value: string
 }
 
 type NavigationType = {
@@ -161,7 +163,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 					setMaxPage(data.documents.length)
 
 					let templateSet: Array<keyInDocumentType> = []
-					const values = await (await TemplateSerializer.getValuesList()).json()
+					const values: ITemplateDataWithValue[] = await TemplateSerializer.getValuesList()
 
 					data.documents.map(document =>
 						document.templates?.map(template => {
@@ -176,6 +178,8 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 									title: template.title,
 									id: template.id,
 									value: value ? value.value : '',
+									regex: template.regex || '',
+									example_value: template.example_value
 								})
 							}
 						})
@@ -242,7 +246,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 
 	useEffect(() => {
 		if (!keys) return
-
+		// console.log(keys)
 		setFormWithFills(
 			<div style={{ width: '100%' }}>
 				<FormWithValidate onSubmit={onSubmit}>
@@ -254,6 +258,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 									<Input
 										defaultValue={key.value}
 										field={FieldNames.field}
+										className='w-100'
 										placeholder={''}
 										type='textarea'
 										name={key.id}

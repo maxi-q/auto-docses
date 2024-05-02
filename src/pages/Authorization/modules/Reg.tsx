@@ -39,7 +39,7 @@ export const RegWindow = ({onSubmit, serverError}: IRegWindow) => {
 					field={FieldNames.password}
 				/>
 
-				<RButton>Регистрация</RButton>
+				<button className='btn btn-primary'>Регистрация</button>
 			</FormWithValidate>
 			<Errors>
 			{serverError.map(x => (

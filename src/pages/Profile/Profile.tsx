@@ -100,6 +100,7 @@ export const Profile = ({ setUser, setLoggedIn }: NavigationType) => {
 		),
 		fields: <DefaultTemplateValues />,
 	}
+
 	return (
 		<Body>
 			{!authContext && <Navigate to={'/Auth'} />}

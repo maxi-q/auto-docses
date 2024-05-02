@@ -79,7 +79,8 @@ const NowPage = styled.h5`
 	margin: auto 5px;
 `
 const LoadDivStyled = styled.div<{ view: boolean }>`
-	background: ${COLORS.blue100};
+	color: white;
+	background: ${COLORS.blue400};
 	padding: 4px;
 	min-height: 100vh;
 	border-radius: 12px;

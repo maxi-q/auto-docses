@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useContext } from 'react'
 import Container from 'react-bootstrap/Container'
@@ -12,7 +12,7 @@ interface IHeader {
 
 export const Header = ({ logOut }: IHeader) => {
 	const authContext = useContext(AuthContext)
-
+	const navigate = useNavigate()
 	return (
 		<Navbar
 			as='header'
@@ -52,14 +52,14 @@ export const Header = ({ logOut }: IHeader) => {
 							Личный кабинет
 						</Nav.Link>
 						{authContext && (
-							<Nav.Link onClick={() => logOut()} as={Link} to='/Auth'>
+							<Nav.Link onClick={() => navigate('/logout')}>
 								<svg
 									style={{ fontSize: '20px', marginLeft: '10px' }}
 									xmlns='http://www.w3.org/2000/svg'
 									width='16'
 									height='16'
 									fill='currentColor'
-									className='bi bi-box-arrow-left'
+									className='bi bi-box-arrow-left ms-1 ms-md-3'
 									viewBox='0 0 16 16'
 								>
 									<path

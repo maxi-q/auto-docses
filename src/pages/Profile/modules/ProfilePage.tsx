@@ -1,3 +1,4 @@
+import { Loader } from '@components/Loader/Loader'
 import { useContext } from 'react'
 import { UserContext } from '../../../contexts'
 import { ProfileCard } from '../components/ProfileCard'
@@ -9,12 +10,18 @@ export const ProfileData = ({}: IProfileData) => {
 
 	return (
 		<ProfileCard style={{ width: '90%' }}>
-			<ProfileCard.Header>{userContext?.username}</ProfileCard.Header>
-			<ProfileCard.Content>
-				<ProfileCard.Field>{userContext?.email}</ProfileCard.Field>
-				<ProfileCard.Link>Сменить пароль</ProfileCard.Link>
-				<ProfileCard.Link>Удалить учётную запись</ProfileCard.Link>
-			</ProfileCard.Content>
+			{userContext?.username ? (
+				<>
+					<ProfileCard.Header>{userContext?.username}</ProfileCard.Header>
+					<ProfileCard.Content>
+						<ProfileCard.Field>{userContext?.email}</ProfileCard.Field>
+						<ProfileCard.Link>Сменить пароль</ProfileCard.Link>
+						<ProfileCard.Link>Удалить учётную запись</ProfileCard.Link>
+					</ProfileCard.Content>
+				</>
+			) : (
+				<Loader />
+			)}
 		</ProfileCard>
 	)
 }

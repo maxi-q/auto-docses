@@ -159,6 +159,7 @@ export const Authorization = ({ setLoggedIn }: { setLoggedIn: Function }) => {
 	}, [])
 
 	const onSubmit = async (data: Object) => {
+		console.log(data)
 		if ('username' in data && 'password' in data) {
 			fetchRequestJWT({
 				username: typeof data.username == 'string' ? data.username : '',

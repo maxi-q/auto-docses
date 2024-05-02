@@ -94,11 +94,11 @@ class Templates {
 		})
 	}
 
-	getValuesList() {
-		return fetch(this.API_URL + 'default_templates_values/', {
+	async getValuesList(): Promise<ITemplateDataWithValue[]>  {
+		return await (await fetch(this.API_URL + 'default_templates_values/', {
 			method: 'GET',
 			headers: this.headers,
-		})
+		})).json()
 	}
 
 	createValue({ templateId, value }: ICreateTemplateValue) {

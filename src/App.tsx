@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, useNavigate } from 'react-router-dom'
+import { Stack } from 'react-bootstrap'
+import { BrowserRouter } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Footer, Header } from './modules'
@@ -9,7 +10,6 @@ import './API/user/fetchDecorator'
 
 import { IUser, fetchRequestProfile } from '@api/user/profileData'
 import { AuthContext, UserContext } from './contexts'
-import { getFullDate } from '@helpers/date'
 
 export function App() {
 	const [loggedIn, setLoggedIn] = useState<Boolean>(false)
@@ -36,28 +36,31 @@ export function App() {
 				.catch(_ => {
 					setLoggedIn(false)
 				})
-		}else {
+		} else {
 			setLoggedIn(false)
 		}
 	}, [])
 
 	return (
-		<AuthContext.Provider value={loggedIn}>
-			<UserContext.Provider value={user}>
-				<BrowserRouter>
-					<Header logOut={logOut} />
-					<MainStyled>
-						<Navigation setLoggedIn={setLoggedIn} setUser={setUser} />
-					</MainStyled>
-					<Footer />
-				</BrowserRouter>
-			</UserContext.Provider>
-		</AuthContext.Provider>
+		<Stack style={{ minHeight: '100vh' }}>
+			<AuthContext.Provider value={loggedIn}>
+				<UserContext.Provider value={user}>
+					<BrowserRouter>
+						<Header logOut={logOut} />
+						<MainStyled>
+							<Navigation setLoggedIn={setLoggedIn} setUser={setUser} />
+						</MainStyled>
+						<Footer />
+					</BrowserRouter>
+				</UserContext.Provider>
+			</AuthContext.Provider>
+		</Stack>
 	)
 }
 
 const MainStyled = styled.div`
 	& > * {
 		padding-top: 62px;
-	}
+	};
+	flex: 1;
 `

@@ -40,10 +40,8 @@ const DefaultTemplateValues = () => {
 			})
 		})
 
-		Template.getValuesList().then(data => {
-			data.json().then((templatesArray: Array<ITemplateDataWithValue>) => {
-				setValues(templatesArray)
-			})
+		Template.getValuesList().then(templatesArray => {
+			setValues(templatesArray)
 		})
 	}, [])
 

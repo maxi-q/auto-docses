@@ -133,7 +133,7 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 					setMaxPage(1)
 
 					let templateSet: Array<keyInDocumentType> = []
-					const values = await (await TemplateSerializer.getValuesList()).json()
+					const values = await TemplateSerializer.getValuesList()
 
 					data.templates?.map(template => {
 						if (!templateSet.find(item => item.id == template.id)) {
@@ -179,6 +179,7 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 									<Input
 										defaultValue={key.value}
 										field={FieldNames.field}
+										className='w-100'
 										placeholder={''}
 										type='textarea'
 										name={key.id}

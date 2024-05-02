@@ -60,7 +60,7 @@ const AsideStyled = styled('aside')<{ view: boolean }>`
 
 	@media (min-width: 576px) {
 		display: block;
-		width: 288px;
+		width: 35%;
 	}
 `
 const Title = styled.h2`

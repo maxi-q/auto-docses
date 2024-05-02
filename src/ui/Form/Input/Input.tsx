@@ -17,6 +17,7 @@ type InputType = {
 	type?: string
 	adminValue?: string
 	accept?: string
+	className?: string
 }
 type indefiniteInputType = {
 	type: string
@@ -31,6 +32,7 @@ export const Input = ({
 	field,
 	type,
 	placeholder,
+	className,
 	...props
 }: InputType) => {
 	const [value, setValue] = useState(defaultValue ? defaultValue : '')
@@ -62,10 +64,12 @@ export const Input = ({
 	const { register } = useFormContext()
 
 	return (
-		<>
+		<div className={className}>
 			<InputBox>
 				{/* Now, without textarea type  */}
 				<InputForm
+					className={'form-control ' + (errors?.[name] ? 'is-invalid' : '')}
+					style={{marginBottom: '0'}}
 					value={value}
 					{...register(name, {
 						...validator[field],
@@ -86,57 +90,58 @@ export const Input = ({
 			{errors?.[name] && (
 				<ErrorInput children={errors?.[name]?.message?.toString()} />
 			)}
-		</>
+		</div>
 	)
 }
 
 export const ErrorInput = styled.span`
-	font-size: 1.2rem;
-	margin: -10px 0 -5px 10px;
-	color: red;
+	margin: 0 0 0 10px;
 	white-space: pre-line;
+
+	font-size: 0.875em;
+	color: #dc3545;
 `
 const InputBox = styled.div`
 	position: relative;
 	margin-top: 0px;
 `
 const ClassFromInputs = `
-  display: block;
-  background-color: ${COLORS.gray400};
+  // display: block;
+  // background-color: ${COLORS.gray400};
 
-  width:100%;
-  padding: 3px 20px;
+  // width:100%;
+  // padding: 3px 20px;
   
-  border: 2px solid ${COLORS.gray400};
-  border-radius: 5px;
-  border-width: 0px;
+  // border: 2px solid ${COLORS.gray400};
+  // border-radius: 5px;
+  // border-width: 0px;
   
 
-  font-size: 1.08em;
-  cursor: pointer;
+  // font-size: 1.08em;
+  // cursor: pointer;
 
-  transition: all .1s linear;
+  // transition: all .1s linear;
 
-  color: ${COLORS.gray900};
+  // color: ${COLORS.gray900};
   
-  &::-webkit-input-placeholder {
-    color: ${COLORS.gray900};
-  }
-  &:focus {
-    outline: none;
-    padding-bottom: 8px;
-    padding-top: 5px;
-    background-color: ${COLORS.gray500};
-    border-color: ${COLORS.gray500};
-  }
-  &:hover {
-    background-color: ${COLORS.gray800};
-    border-color: ${COLORS.gray800};
-    color: ${COLORS.gray100};  
-    &::-webkit-input-placeholder {
-      color: ${COLORS.gray100};
-    }
-  }
+  // &::-webkit-input-placeholder {
+  //   color: ${COLORS.gray900};
+  // }
+  // &:focus {
+  //   outline: none;
+  //   padding-bottom: 8px;
+  //   padding-top: 5px;
+  //   background-color: ${COLORS.gray500};
+  //   border-color: ${COLORS.gray500};
+  // }
+  // &:hover {
+  //   background-color: ${COLORS.gray800};
+  //   border-color: ${COLORS.gray800};
+  //   color: ${COLORS.gray100};  
+  //   &::-webkit-input-placeholder {
+  //     color: ${COLORS.gray100};
+  //   }
+  // }
 `
 const InputForm = styled.input`
 	${ClassFromInputs}
