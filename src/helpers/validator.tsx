@@ -1,4 +1,4 @@
-import { RegisterOptions } from 'react-hook-form/dist/types'
+import { FieldValues, RegisterOptions } from 'react-hook-form/dist/types'
 
 type IValidator<T> = {
 	[K in keyof T]: RegisterOptions
@@ -13,7 +13,8 @@ export enum FieldNames {
 	username = 'username',
 	mayEmpty = 'mayEmpty',
 	title = 'title',
-	nameInDocument = 'nameInDocument'
+	nameInDocument = 'nameInDocument',
+	regex = 'regex'
 }
 const validator: IValidator<typeof FieldNames> = {
 	login: {
@@ -58,7 +59,7 @@ const validator: IValidator<typeof FieldNames> = {
 		maxLength: {
 			value: 24,
 			message: 'Максимум 24 символа.',
-		}
+		},
 	},
 	password: {
 		required: 'Пароль обязателен!',
@@ -85,6 +86,22 @@ const validator: IValidator<typeof FieldNames> = {
 			message: 'Только Буквы и цифры без пробелов.',
 		},
 	},
+	regex: {}
+}
+
+export interface IRegexFabric {
+	regex: RegExp
+	errormessage: string
+}
+
+export const regexFabric = ({ regex, errormessage }: IRegexFabric): RegisterOptions<FieldValues, string> => {
+	return {
+		required: 'Имя обязательно!',
+		pattern: {
+			value: regex,
+			message: errormessage,
+		},
+	}
 }
 
 export default validator

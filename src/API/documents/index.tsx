@@ -29,7 +29,7 @@ export type TemplateInDocumentType = {
 	description: string
 	is_official: boolean
 	name_in_document: string
-	regex: string
+	regex: RegExp
 	example_value: string
 }
 

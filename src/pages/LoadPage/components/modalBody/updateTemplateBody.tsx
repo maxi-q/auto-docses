@@ -34,6 +34,7 @@ const UpdateTemplateBody = ({
 			title: sendTemplate.title,
 			description: sendTemplate.description,
 			nameInDocument: sendTemplate.name_in_document,
+			regex: sendTemplate.regex
 		}).then(res => {
 			if (res.status == 200) {
 				setModalStatus('check')
@@ -67,6 +68,13 @@ const UpdateTemplateBody = ({
 				placeholder={'Имя в документе'}
 				type='textarea'
 				name={'name_in_document'}
+			/>
+			<Input
+				defaultValue={template.regex.source}
+				field={FieldNames.regex}
+				placeholder={'Регулярное выражение'}
+				type='textarea'
+				name={'regex'}
 			/>
 			{serverError.map(x => (
 				<>

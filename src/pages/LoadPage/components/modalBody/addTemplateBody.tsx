@@ -42,6 +42,7 @@ const AddTemplateBody = ({
 			title: sendTemplate.title,
 			description: sendTemplate.description,
 			nameInDocument: sendTemplate.name_in_document,
+			regex: sendTemplate.regex
 		}).then(res => {
 			if (res.ok) {
 				res.json().then(data => {
@@ -97,6 +98,12 @@ const AddTemplateBody = ({
 				placeholder={'Имя в документе'}
 				type='textarea'
 				name={'name_in_document'}
+			/>
+			<Input
+				field={FieldNames.regex}
+				placeholder={'Регулярное выражение'}
+				type='textarea'
+				name={'regex'}
 			/>
 			{serverError.map(x => (
 				<>

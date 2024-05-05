@@ -4,7 +4,7 @@ import styled from 'styled-components'
 // @constants/style/COLORS
 import { COLORS } from '../../../constants/style/COLORS'
 
-import validator, { FieldNames } from '../../../helpers/validator'
+import validator, { FieldNames, IRegexFabric, regexFabric } from '../../../helpers/validator'
 import { useKeyPress } from '../../../hooks/useKeyPress'
 import { PlaceholderMod } from '../../../ui/PlaceholderMod'
 
@@ -14,14 +14,12 @@ type InputType = {
 	placeholder: string
 	name: string
 	field: FieldNames
+	validationParams?: IRegexFabric
 	type?: string
 	adminValue?: string
 	accept?: string
 	className?: string
-}
-type indefiniteInputType = {
-	type: string
-	props: any[]
+	label?: string
 }
 
 export const Input = ({
@@ -30,9 +28,11 @@ export const Input = ({
 	errors,
 	name,
 	field,
+	validationParams,
 	type,
 	placeholder,
 	className,
+	label,
 	...props
 }: InputType) => {
 	const [value, setValue] = useState(defaultValue ? defaultValue : '')
@@ -63,16 +63,18 @@ export const Input = ({
 
 	const { register } = useFormContext()
 
+	const validation = validationParams ? regexFabric(validationParams) : validator[field]
+
 	return (
 		<div className={className}>
 			<InputBox>
-				{/* Now, without textarea type  */}
+				{/* Now without textarea type  */}
 				<InputForm
 					className={'form-control ' + (errors?.[name] ? 'is-invalid' : '')}
 					style={{marginBottom: '0'}}
 					value={value}
 					{...register(name, {
-						...validator[field],
+						...validation,
 						onChange: e => {
 							onChange(e.target)
 						},

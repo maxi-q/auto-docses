@@ -2,6 +2,7 @@ interface ITemplate {
 	title: string
 	description: string
 	nameInDocument: string
+	regex: string
 }
 
 interface ISingleTemplateByID {
@@ -75,7 +76,7 @@ class Templates {
 		})
 	}
 
-	update({ id, title, description, nameInDocument }: IUpdateTemplate) {
+	update({ id, title, description, nameInDocument, regex }: IUpdateTemplate) {
 		return fetch(this.API_URL + `templates/${id}/`, {
 			method: 'PATCH',
 			headers: this.headers,
@@ -83,6 +84,7 @@ class Templates {
 				title: title,
 				description: description,
 				name_in_document: nameInDocument,
+				regex: regex
 			}),
 		})
 	}

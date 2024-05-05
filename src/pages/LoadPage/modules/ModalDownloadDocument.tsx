@@ -52,10 +52,11 @@ const ModalDownloadDocument = ({
 
 		window.open(documentLink, '_blank')
 	}
+	
 	const navigate = useNavigate()
 	const closeModal = () => {
 		setModalActive(false)
-		navigate('/Profile')
+		// navigate('/Profile')
 	}
 
 	return (
