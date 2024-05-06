@@ -57,7 +57,7 @@ class Templates {
 		})
 	}
 
-	create({ title, description, nameInDocument }: ITemplate) {
+	create({ title, description, nameInDocument, regex }: ITemplate) {
 		return fetch(this.API_URL + 'templates/', {
 			method: 'POST',
 			headers: this.headers,
@@ -65,6 +65,7 @@ class Templates {
 				title: title,
 				description: description,
 				name_in_document: nameInDocument,
+				regex: regex,
 			}),
 		})
 	}
@@ -84,7 +85,7 @@ class Templates {
 				title: title,
 				description: description,
 				name_in_document: nameInDocument,
-				regex: regex
+				regex: regex,
 			}),
 		})
 	}
@@ -96,25 +97,27 @@ class Templates {
 		})
 	}
 
-	async getValuesList(): Promise<ITemplateDataWithValue[]>  {
-		return await (await fetch(this.API_URL + 'default_templates_values/', {
-			method: 'GET',
-			headers: this.headers,
-		})).json()
+	async getValuesList(): Promise<ITemplateDataWithValue[]> {
+		return await (
+			await fetch(this.API_URL + 'default_templates_values/', {
+				method: 'GET',
+				headers: this.headers,
+			})
+		).json()
 	}
 
-	createValue({ templateId, value }: ICreateTemplateValue) {
-		return fetch(this.API_URL + `default_templates_values/`, {
-			method: 'POST',
-			headers: this.headers,
-			body: JSON.stringify({
-				template_value: {
-					template: templateId,
-					value: value,
-				},
-			}),
-		})
-	}
+	// createValue({ templateId, value }: ICreateTemplateValue) {
+	// 	return fetch(this.API_URL + `default_templates_values/`, {
+	// 		method: 'POST',
+	// 		headers: this.headers,
+	// 		body: JSON.stringify({
+	// 			template_value: {
+	// 				template: templateId,
+	// 				value: value,
+	// 			},
+	// 		}),
+	// 	})
+	// }
 
 	getValueByTemplateId({ templateId }: IFindTemplateValue) {
 		return fetch(this.API_URL + `default_templates_values/${templateId}/`, {
@@ -122,18 +125,18 @@ class Templates {
 			headers: this.headers,
 		})
 	}
-
 	updateValue({ templateId, value }: IUpdateTemplateValue) {
-		return fetch(this.API_URL + `default_templates_values/${templateId}/`, {
-			method: 'PATCH',
-			headers: this.headers,
-			body: JSON.stringify({
-				template_value: {
-					template: templateId,
+		return fetch(
+			this.API_URL +
+				`default_templates_values/set_default_value/${templateId}/`,
+			{
+				method: 'PUT',
+				headers: this.headers,
+				body: JSON.stringify({
 					value: value,
-				},
-			}),
-		})
+				}),
+			}
+		)
 	}
 }
 

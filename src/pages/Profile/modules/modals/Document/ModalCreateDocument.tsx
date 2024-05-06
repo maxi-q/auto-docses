@@ -102,8 +102,7 @@ const ModalCreateDocument = ({
 						options={templates}
 					/>
 				)}
-
-				<Button type='submit'>Заполнить документ</Button>
+				<Button type='submit'>Добавить шаблон</Button>
 			</FormWithValidate>
 		</Modal>
 	)

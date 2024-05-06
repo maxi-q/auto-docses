@@ -73,17 +73,10 @@ const DefaultTemplateValues = () => {
 	const onSubmit = (data: object) => {
 		for (const [template_id, template_value] of Object.entries(data)) {
 			if (!template_value) continue
-			if (values?.find(x => x.template.id == template_id)) {
-				Template.updateValue({
-					templateId: templates?.find(x => x.id == template_id)?.id || '',
-					value: template_value,
-				})
-			} else {
-				Template.createValue({
-					templateId: templates?.find(x => x.id == template_id)?.id || '',
-					value: template_value,
-				})
-			}
+			Template.updateValue({
+				templateId: templates?.find(x => x.id == template_id)?.id || '',
+				value: template_value,
+			})
 		}
 	}
 

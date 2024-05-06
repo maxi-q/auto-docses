@@ -7,6 +7,7 @@ import { Button, Input } from '@ui/index'
 import { useState } from 'react'
 import { lotsSelectToArray } from '../../helpers/lotsSelectToArray'
 import { modalStatusType } from '../../modules/ModalUpdateTemplate'
+import { Console } from 'console'
 
 interface IModalAddTemplate {
 	document: IOneDocumentData
@@ -37,6 +38,7 @@ const AddTemplateBody = ({
 	const onSubmit = (data: object) => {
 		// Здесь все работает!
 		const sendTemplate: any = lotsSelectToArray(data)
+		console.log(data, sendTemplate)
 
 		TemplatesManager.create({
 			title: sendTemplate.title,
@@ -79,6 +81,7 @@ const AddTemplateBody = ({
 		})
 		// Здесь все работает!
 	}
+
 	return (
 		<FormWithValidate onSubmit={onSubmit}>
 			<Input

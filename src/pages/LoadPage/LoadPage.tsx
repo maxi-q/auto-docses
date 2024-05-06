@@ -135,7 +135,8 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 		if (!nowDocument) return
 		const fileUrl = nowDocument?.file
 		if (!fileUrl) return
-		const blob = await fetch(Server_URL + fileUrl).then(r => r.blob())
+		
+		const blob = await fetch(Server_URL + fileUrl.toString().slice(1)).then(r => r.blob())
 		const url = URL.createObjectURL(blob)
 		setUrl(url)
 		setDocumentName(nowDocument.title)
@@ -152,7 +153,10 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 		documentsSerializer
 			.readPackage({ id: prodId || '' })
 			.then(res => {
-				if (res.status == 404) navigate('/Profile')
+				if (res.status == 404) {
+					alert('Пакета документов не существует')
+					navigate('/Profile')
+				}
 
 				res.json().then(async (data: IDocumentPackageData) => {
 					setNowDocument(data)
@@ -191,6 +195,8 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 			})
 			.catch(err => {
 				console.log(err)
+				alert('Пакета документов не существует')
+				navigate('/Profile')
 			})
 	}
 	const addNewTemplate = (newTemplate: keyInDocumentType) => {
@@ -209,7 +215,7 @@ export const LoadPage = ({ setUser, setLoggedIn }: NavigationType) => {
 				value: value.value,
 			}).then(res => {
 				if (res.status == 404) {
-					TemplateSerializer.createValue({
+					TemplateSerializer.updateValue({
 						templateId: value.template,
 						value: value.value,
 					})

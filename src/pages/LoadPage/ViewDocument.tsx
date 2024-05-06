@@ -104,7 +104,7 @@ export const ViewDocument = ({ setUser, setLoggedIn }: NavigationType) => {
 		if (!nowDocument) return
 		setDocumentAuthor(nowDocument.author.id)
 		setDocument(nowDocument)
-		const fileUrl = Server_URL + nowDocument?.file
+		const fileUrl = Server_URL + nowDocument?.file.toString().slice(1)
 		if (!fileUrl) return
 		const blob = await fetch(fileUrl).then(r => r.blob())
 		const url = URL.createObjectURL(blob)
